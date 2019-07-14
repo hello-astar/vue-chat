@@ -1,0 +1,16 @@
+//修改滚动条样式
+.scrollbar {
+  &::-webkit-scrollbar {
+    width: 4px;  /* 纵向滚动条宽度 */
+    height: 4px; /* 横向滚动条宽度 */
+    background: #303942;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: #303942;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #272f36;
+  }
+}
