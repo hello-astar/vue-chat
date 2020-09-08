@@ -1,30 +1,25 @@
 <template>
   <div class="vue-chat">
     <div class="content">
-      <section class="sidebar">
+      <aside class="sidebar">
         <div class="userinfo">
-          <img src="@/assets/images/avatar.jpg" alt="">
+          <avatar shape="circle" :src="require('@/assets/images/avatar.jpg')" size="medium"/>
           天天十点睡
         </div>
-        <div class="searchbox">
-          <div class="search-icon"></div>
-          <input type="text" placeholder="搜索">
-        </div>
-        <div>
-          <ul class="contact-list scrollbar">
-            <li class="contact-item" v-for="item in 10" :key="item">
-              <img src="@/assets/images/avatar1.jpeg" alt="">
-              <div class="contact-info">
-                <header class="name">汤婆婆</header>
-                <section class="message">在吗？</section>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </section>
-      <section class="main-content">
+        <search-box class="search" v-model="searchTxt"></search-box>
+        <ul class="contact-list scrollbar">
+          <li class="contact-item" v-for="item in 1" :key="item">
+            <img src="@/assets/images/avatar1.jpeg" alt="">
+            <div class="contact-info">
+              <header class="name">公共聊天室</header>
+              <section class="message">在吗？</section>
+            </div>
+          </li>
+        </ul>
+      </aside>
+      <main class="main-content">
         <header class="contact-name">
-          汤婆婆
+          公共聊天室
         </header>
         <div class="chat-box">
           <div class="no-data">
@@ -42,25 +37,64 @@
             <button @click="sendMessage">发送</button>
           </div>
         </div>
-      </section>
+      </main>
     </div>
   </div>
 </template>
 
 <script>
-// import 
+import searchBox from '@/components/searchBox'
+import avatar from '@/components/avatar'
 export default {
   name: "Index",
   data () {
     return {
-      text: ''
+      webSocket: null,
+      text: '',
+      searchTxt: ''
+    }
+  },
+  components: {
+    avatar,
+    searchBox
+  },
+  created () {
+    let CreateWebSocket = function (urlValue) {
+      if (window.WebSocket) return new window.WebSocket(urlValue);
+      if (window.MozWebSocket) {
+        return new window.MozWebSocket(urlValue);
+      }
+      return false;
+    }
+    let host = '192.168.0.105:3000/chat'
+    this.webSocket = CreateWebSocket(`ws://${host}`);
+    console.log(this.webSocket)
+    this.webSocket.onopen = (evt) => {
+      console.log('连接成功！', evt)
+    }
+    this.webSocket.onmessage = function (evt) {
+      // 这是服务端返回的数据
+      console.log("服务端说" + evt.data)
+    }
+    // 关闭连接
+    this.webSocket.onclose = function (evt) {
+      console.log("Connection closed.", evt)
+    }
+  },
+  mounted () {
+    let xml = new XMLHttpRequest();
+    xml.open('GET', 'http://192.168.0.105:3000/user', true);
+    xml.send(null);
+    xml.onreadystatechange = function() {
+      if (xml.readyState === 4 && xml.status === 200) {
+        console.log('get 成功')
+      }
     }
   },
   methods: {
     sendMessage () {
-      // sendMessage().then(res => {
-      //   this.text = ''
-      // })
+      console.log('发送')
+      this.webSocket.send({ message: this.text })
       this.text = ''
     },
     breakMessage () {
@@ -85,48 +119,21 @@ export default {
     height: 600px;
     background: rgb(239, 243, 246);
     .sidebar {
+      display: flex;
+      flex-direction: column;
       width: 30%;
       background: #303942;
       padding: 10px;
       .userinfo {
         margin-top: 10px;
         color: rgb(244, 244, 244);
-        line-height: 60px;
-        img {
-          width: 60px;
-          height: 60px;
-          border-radius: 50%;
-          margin-right: 20px;
-          margin-left: 15px;
-        }
       }
-      .searchbox {
-        margin: 20px auto;
-        width: 100%;
-        height: 32px;
-        background-color: #26292e;
-        border-radius: 3px;
-        .search-icon {
-          display: inline-block;
-          width: 32px;
-          height: 32px;
-          background: url('../assets/images/search.png') no-repeat center;
-          background-size: 25px 25px;
-        }
-        input {
-          display: inline-block;
-          vertical-align: top;
-          height: 32px;
-          line-height: 32px;
-          background-color: #26292e;
-          outline: 0;
-          border: none;
-          padding-left: 5px;
-          color: rgb(244, 244, 244);
-        }
+      .search {
+        margin: 20px 0;
       }
       .contact-list {
-        height: 390px;
+        flex: 1;
+        overflow: auto;
         overflow: auto;
         .contact-item {
           cursor: pointer;
