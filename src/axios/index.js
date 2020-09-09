@@ -2,7 +2,7 @@
  * @author: cmx
  * @Date: 2020-09-09 17:08:05
  * @LastEditors: cmx
- * @LastEditTime: 2020-09-09 18:08:42
+ * @LastEditTime: 2020-09-09 18:15:07
  * @Description: 封装axios
  * @FilePath: \vue-chat\src\axios\index.js
  */
@@ -12,8 +12,8 @@ export const postRequest = function (url, data) {
   return instance.post(url, data).then(res => {
     return res.data;
   }, _ => {
-    console.log(res);
-    return res;
+    console.log(_);
+    return _;
   });
 };
 
