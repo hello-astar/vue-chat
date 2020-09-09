@@ -45,7 +45,7 @@
 <script>
 import { BASE_URL } from '@/config';
 import { userLoginReq } from '@/request';
-
+import { setUUID, removeUUID } from '@/utils/uuid';
 import searchBox from '@/components/searchBox'
 import avatar from '@/components/avatar'
 export default {
@@ -62,35 +62,41 @@ export default {
     searchBox
   },
   created () {
-    let CreateWebSocket = function (urlValue) {
-      const { WebSocket, MozWebSocket } = window;
-      if (WebSocket) return new WebSocket(urlValue);
-      if (MozWebSocket) return new MozWebSocket(urlValue);
-      return null;
-    }
-    this.webSocket = CreateWebSocket(`ws://${BASE_URL}/chat`);
-    if (this.webSocket) {
-      this.webSocket.onopen = (evt) => {
-        console.log('连接成功！', evt)
-      }
-      this.webSocket.onmessage = function (evt) {
-        // 这是服务端返回的数据
-        console.log("服务端说" + evt.data)
-      }
-      // 关闭连接
-      this.webSocket.onclose = function (evt) {
-        console.log("Connection closed.", evt)
-      }
-    }
-  },
-  mounted () {
     userLoginReq({
-      name: 'astar'
+      name: 'astar',
+      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQELFmCuo6ugExbw6NbyhYEvA8LHnErT7QZtQ&usqp=CAU'
     }).then(res => {
-      console.log(res, '============')
+      if (res.result === 1) {
+        setUUID(res.data.uuid);
+        this.initWebsocket();
+      }
     })
   },
   methods: {
+    initWebsocket () {
+      console.log('hhhhhhhhhh')
+      let CreateWebSocket = function (urlValue) {
+        const { WebSocket, MozWebSocket } = window;
+        if (WebSocket) return new WebSocket(urlValue);
+        if (MozWebSocket) return new MozWebSocket(urlValue);
+        return null;
+      }
+      this.webSocket = CreateWebSocket(`ws://${BASE_URL}/chat`);
+      if (this.webSocket) {
+        this.webSocket.onopen = (evt) => {
+          console.log('连接成功！', evt)
+        }
+        this.webSocket.onmessage = function (evt) {
+          // 这是服务端返回的数据
+          console.log("服务端说" + evt.data)
+        }
+        // 关闭连接
+        this.webSocket.onclose = function (evt) {
+          removeUUID()
+          console.log("Connection closed.", evt)
+        }
+      }
+    },
     sendMessage () {
       console.log('发送')
       this.webSocket.send({ message: this.text })
