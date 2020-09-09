@@ -43,6 +43,9 @@
 </template>
 
 <script>
+import { BASE_URL } from '@/config';
+import { userLoginReq } from '@/request';
+
 import searchBox from '@/components/searchBox'
 import avatar from '@/components/avatar'
 export default {
@@ -60,36 +63,32 @@ export default {
   },
   created () {
     let CreateWebSocket = function (urlValue) {
-      if (window.WebSocket) return new window.WebSocket(urlValue);
-      if (window.MozWebSocket) {
-        return new window.MozWebSocket(urlValue);
+      const { WebSocket, MozWebSocket } = window;
+      if (WebSocket) return new WebSocket(urlValue);
+      if (MozWebSocket) return new MozWebSocket(urlValue);
+      return null;
+    }
+    this.webSocket = CreateWebSocket(`ws://${BASE_URL}/chat`);
+    if (this.webSocket) {
+      this.webSocket.onopen = (evt) => {
+        console.log('连接成功！', evt)
       }
-      return false;
-    }
-    let host = '192.168.0.105:3000/chat'
-    this.webSocket = CreateWebSocket(`ws://${host}`);
-    console.log(this.webSocket)
-    this.webSocket.onopen = (evt) => {
-      console.log('连接成功！', evt)
-    }
-    this.webSocket.onmessage = function (evt) {
-      // 这是服务端返回的数据
-      console.log("服务端说" + evt.data)
-    }
-    // 关闭连接
-    this.webSocket.onclose = function (evt) {
-      console.log("Connection closed.", evt)
+      this.webSocket.onmessage = function (evt) {
+        // 这是服务端返回的数据
+        console.log("服务端说" + evt.data)
+      }
+      // 关闭连接
+      this.webSocket.onclose = function (evt) {
+        console.log("Connection closed.", evt)
+      }
     }
   },
   mounted () {
-    let xml = new XMLHttpRequest();
-    xml.open('GET', 'http://192.168.0.105:3000/user', true);
-    xml.send(null);
-    xml.onreadystatechange = function() {
-      if (xml.readyState === 4 && xml.status === 200) {
-        console.log('get 成功')
-      }
-    }
+    userLoginReq({
+      name: 'astar'
+    }).then(res => {
+      console.log(res, '============')
+    })
   },
   methods: {
     sendMessage () {
