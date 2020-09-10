@@ -6,14 +6,10 @@
           <avatar shape="circle" :src="require('@/assets/images/avatar.jpg')" size="medium"/>
           天天十点睡
         </div>
-        <search-box class="search" v-model="searchTxt"></search-box>
+        <search-box class="search" v-model="searchPerson"></search-box>
         <ul class="contact-list scrollbar">
-          <li class="contact-item" v-for="item in 1" :key="item">
-            <img src="@/assets/images/avatar1.jpeg" alt="">
-            <div class="contact-info">
-              <header class="name">公共聊天室</header>
-              <section class="message">在吗？</section>
-            </div>
+          <li class="contact-item" v-for="item in onlineList" :key="item.uuid">
+            <avatar :src="item.avatar" size="large"></avatar>
           </li>
         </ul>
       </aside>
@@ -22,8 +18,14 @@
           公共聊天室
         </header>
         <div class="chat-box">
-          <div class="no-data">
+          <!-- <div class="no-data">
             暂时没有新消息
+          </div> -->
+          <div class="chat-box__item" v-for="item in chatRecord" :key="item.id">
+            <avatar :src="require('@/assets/images/avatar.jpg')" size="medium"/>
+            <div class="chat-box__item_content">
+              你好~
+            </div>
           </div>
         </div>
         <div class="input-box">
@@ -45,16 +47,18 @@
 <script>
 import { BASE_URL } from '@/config';
 import { userLoginReq } from '@/request';
-import { setUUID, removeUUID } from '@/utils/uuid';
+import { setUUID, removeUUID, getUUID } from '@/utils/uuid';
 import searchBox from '@/components/searchBox'
 import avatar from '@/components/avatar'
 export default {
   name: "Index",
   data () {
     return {
-      webSocket: null,
-      text: '',
-      searchTxt: ''
+      webSocket: null, // 当前websocket
+      text: '', // 输入内容
+      searchPerson: '', // 搜索联系人
+      onlineList: [], // 当前在线人
+      chatRecord: [] // 当前聊天记录
     }
   },
   components: {
@@ -70,11 +74,12 @@ export default {
         setUUID(res.data.uuid);
         this.initWebsocket();
       }
+    }, _ => {
+      console.log('请求失败', _)
     })
   },
   methods: {
     initWebsocket () {
-      console.log('hhhhhhhhhh')
       let CreateWebSocket = function (urlValue) {
         const { WebSocket, MozWebSocket } = window;
         if (WebSocket) return new WebSocket(urlValue);
@@ -83,23 +88,31 @@ export default {
       }
       this.webSocket = CreateWebSocket(`ws://${BASE_URL}/chat`);
       if (this.webSocket) {
-        this.webSocket.onopen = (evt) => {
-          console.log('连接成功！', evt)
+        this.webSocket.onopen = () => {
+          console.log('连接成功！')
         }
-        this.webSocket.onmessage = function (evt) {
-          // 这是服务端返回的数据
-          console.log("服务端说" + evt.data)
+        this.webSocket.onmessage = (evt) => {
+          const res = JSON.parse(evt.data)
+          if (res.result === 1) {
+            const { type, message, onlineList } = res.data
+            if (type === 0) {
+              this.onlineList = onlineList
+            } else if (type === 1) {
+              this.chatRecord.push(message)
+            }
+          }
         }
+        this.webSocket.onerror = function (evt) {
+          console.log('通信发生错误', evt)
+        },
         // 关闭连接
-        this.webSocket.onclose = function (evt) {
+        this.webSocket.onclose = function () {
           removeUUID()
-          console.log("Connection closed.", evt)
         }
       }
     },
     sendMessage () {
-      console.log('发送')
-      this.webSocket.send({ message: this.text })
+      this.webSocket.send(JSON.stringify({ type: 1, uuid: getUUID(), content: this.text }))
       this.text = ''
     },
     breakMessage () {
@@ -139,32 +152,11 @@ export default {
       .contact-list {
         flex: 1;
         overflow: auto;
-        overflow: auto;
+        margin: 0 -5px;
         .contact-item {
+          display: inline-block;
           cursor: pointer;
-          padding: 12px 0;
-          border-top: 1px solid rgba(49, 49, 49, 0.8);
-          &:last-child {
-            border-bottom: 1px solid rgba(49, 49, 49, 0.8);
-          }
-          img {
-            width: 40px;
-            height: 40px;
-            border-radius: 3px;
-          }
-          .contact-info {
-            display: inline-block;
-            margin-left: 20px;
-            vertical-align: top;
-            color: rgb(244, 244, 244);
-            .name {
-
-            }
-            .message {
-              font-size: 12px;
-              color: rgba(244, 244, 244, .6);
-            }
-          }
+          padding: 12px 5px;
         }
       }
     }
@@ -177,7 +169,6 @@ export default {
         top: 0;
         left: 0;
         width: 100%;
-        // background: rgb(247, 252, 255);
         padding: 0 20px;
         height: 50px;
         line-height: 50px;
@@ -194,6 +185,30 @@ export default {
           margin-top: 40px;
           font-size: 12px;
           color: rgba(0, 0, 0, .2);
+        }
+        &__item {
+          display: flex;
+          padding: 10px 20px;
+          .chat-box__item_content {
+            position: relative;
+            padding: 10px;
+            background: #fff;
+            border-radius: 4px;
+            margin-left: 20px;
+            color: #999;
+            font-size: 13px;
+            &:after {
+              position: absolute;
+              top: 10px;
+              left: -12px;
+              content: '\20';
+              display: block;
+              width: 0;
+              height: 0;
+              border: 6px solid transparent;
+              border-right-color: #fff;
+            }
+          }
         }
       }
       .input-box {
