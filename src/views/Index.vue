@@ -3,7 +3,7 @@
     <div class="content">
       <aside class="sidebar">
         <div class="userinfo">
-          <avatar shape="circle" :src="require('@/assets/images/avatar.jpg')" size="medium"/>
+          <avatar shape="circle" :src="userInfo.avatar" size="medium"/>
           天天十点睡
         </div>
         <search-box class="search" v-model="searchPerson"></search-box>
@@ -17,15 +17,13 @@
         <header class="contact-name">
           公共聊天室
         </header>
-        <div class="chat-box">
-          <!-- <div class="no-data">
+        <div class="chat-box" ref="box">
+          <div class="no-data" v-show="!chatRecord.length">
             暂时没有新消息
-          </div> -->
-          <div class="chat-box__item" v-for="item in chatRecord" :key="item.id">
-            <avatar :src="require('@/assets/images/avatar.jpg')" size="medium"/>
-            <div class="chat-box__item_content">
-              你好~
-            </div>
+          </div>
+          <div class="chat-box__item" :class="item.uuid === userInfo.uuid ? 'reverse' : 'normal'" v-for="(item, idx) in chatRecord" :key="idx">
+            <avatar :src="item.avatar" size="medium"/>
+            <div class="chat-box__item_content" v-html="item.content"></div>
           </div>
         </div>
         <div class="input-box">
@@ -47,13 +45,32 @@
 <script>
 import { BASE_URL } from '@/config';
 import { userLoginReq } from '@/request';
-import { setUUID, removeUUID, getUUID } from '@/utils/uuid';
+import { WebsocketClass } from '@/utils/socket';
+import { setUUID, removeUUID } from '@/utils/uuid';
 import searchBox from '@/components/searchBox'
 import avatar from '@/components/avatar'
+
+const avatarRandomList = [
+  'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=90606386,735058472&fm=26&gp=0.jpg',
+  'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3119911064,951905419&fm=26&gp=0.jpg',
+  'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=406680416,4142076527&fm=26&gp=0.jpg',
+  'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3449046293,781770504&fm=26&gp=0.jpg',
+  'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=263274051,1344594427&fm=26&gp=0.jpg',
+  'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=4257961807,989795269&fm=26&gp=0.jpg',
+  'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1432880367,267558725&fm=26&gp=0.jpg',
+  'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3908966968,3041558363&fm=26&gp=0.jpg',
+  'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4252112164,4061229145&fm=26&gp=0.jpg',
+  'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1157958367,3068515202&fm=26&gp=0.jpg'
+]
 export default {
   name: "Index",
   data () {
     return {
+      userInfo: {
+        uuid: null,
+        avatar: null,
+        name: ''
+      },
       webSocket: null, // 当前websocket
       text: '', // 输入内容
       searchPerson: '', // 搜索联系人
@@ -66,12 +83,14 @@ export default {
     searchBox
   },
   created () {
+    this.userInfo.avatar = avatarRandomList[parseInt(Math.random() * 10)];
     userLoginReq({
       name: 'astar',
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQELFmCuo6ugExbw6NbyhYEvA8LHnErT7QZtQ&usqp=CAU'
+      avatar: this.userInfo.avatar
     }).then(res => {
       if (res.result === 1) {
         setUUID(res.data.uuid);
+        this.userInfo.uuid = res.data.uuid;
         this.initWebsocket();
       }
     }, _ => {
@@ -80,39 +99,32 @@ export default {
   },
   methods: {
     initWebsocket () {
-      let CreateWebSocket = function (urlValue) {
-        const { WebSocket, MozWebSocket } = window;
-        if (WebSocket) return new WebSocket(urlValue);
-        if (MozWebSocket) return new MozWebSocket(urlValue);
-        return null;
-      }
-      this.webSocket = CreateWebSocket(`ws://${BASE_URL}/chat`);
-      if (this.webSocket) {
-        this.webSocket.onopen = () => {
-          console.log('连接成功！')
-        }
-        this.webSocket.onmessage = (evt) => {
-          const res = JSON.parse(evt.data)
+      this.webSocket = new WebsocketClass({
+        url: `ws://${BASE_URL}/chat/room`,
+        params: {
+          uuid: this.userInfo.uuid
+        },
+        onMessage: (evt) => {
+          const res = JSON.parse(evt.data);
           if (res.result === 1) {
-            const { type, message, onlineList } = res.data
-            if (type === 0) {
-              this.onlineList = onlineList
-            } else if (type === 1) {
-              this.chatRecord.push(message)
+            const { type, content, uuid, id, avatar, onlineList } = res.data;
+            if (type === 0) { // 获取在线人
+              this.onlineList = onlineList;
+            } else if (type === 1) { // 获取聊天内容
+              this.chatRecord.push({ uuid, id, content, avatar });
+              this.$nextTick(() => {
+                this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
+              })
             }
           }
-        }
-        this.webSocket.onerror = function (evt) {
-          console.log('通信发生错误', evt)
         },
-        // 关闭连接
-        this.webSocket.onclose = function () {
-          removeUUID()
+        onClose: () => {
+          removeUUID();
         }
-      }
+      });
     },
     sendMessage () {
-      this.webSocket.send(JSON.stringify({ type: 1, uuid: getUUID(), content: this.text }))
+      this.webSocket.send(JSON.stringify({ type: 1, uuid: this.userInfo.uuid, content: this.text }));
       this.text = ''
     },
     breakMessage () {
@@ -161,16 +173,14 @@ export default {
       }
     }
     .main-content {
-      position: relative;
+      display: flex;
+      flex-direction: column;
       width: 70%;
       background: #eee;
       .contact-name {
-        position: absolute;
-        top: 0;
-        left: 0;
+        flex: 0 0 50px;
         width: 100%;
         padding: 0 20px;
-        height: 50px;
         line-height: 50px;
         border-bottom: 1px solid rgb(221, 221, 221);
         font-weight: 600;
@@ -178,8 +188,8 @@ export default {
         color: rgb(56, 56, 56);
       }
       .chat-box {
+        flex: 1;
         overflow: auto;
-        padding: 50px 0 180px;
         .no-data {
           text-align: center;
           margin-top: 40px;
@@ -194,29 +204,42 @@ export default {
             padding: 10px;
             background: #fff;
             border-radius: 4px;
-            margin-left: 20px;
             color: #999;
             font-size: 13px;
             &:after {
               position: absolute;
               top: 10px;
-              left: -12px;
               content: '\20';
               display: block;
               width: 0;
               height: 0;
               border: 6px solid transparent;
-              border-right-color: #fff;
+            }
+          }
+          &.normal {
+            .chat-box__item_content {
+              margin-left: 20px;
+              &:after {
+                left: -12px;
+                border-right-color: #fff;
+              }
+            }
+          }
+          &.reverse {
+            flex-direction: row-reverse;
+            .chat-box__item_content {
+              margin-right: 20px;
+              &:after {
+                right: -12px;
+                border-left-color: #fff;
+              }
             }
           }
         }
       }
       .input-box {
-        position: absolute;
-        left: 0;
-        bottom: 0;
+        flex: 0 0 180px;
         width: 100%;
-        height: 180px;
         background: #fff;
         textarea {
           display: block;
