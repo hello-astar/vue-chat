@@ -21,8 +21,8 @@
           <div class="no-data" v-show="!chatRecord.length">
             暂时没有新消息
           </div>
-          <div class="chat-box__item" :class="item.uuid === userInfo.uuid ? 'reverse' : 'normal'" v-for="(item, idx) in chatRecord" :key="idx">
-            <avatar :src="item.avatar" size="medium"/>
+          <div class="chat-box__item" :class="item.uuid === userInfo.uuid ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item.id">
+            <avatar class="chat-box__item_avatar" :src="item.avatar" size="medium"/>
             <div class="chat-box__item_content" v-html="item.content"></div>
           </div>
         </div>
@@ -107,11 +107,11 @@ export default {
         onMessage: (evt) => {
           const res = JSON.parse(evt.data);
           if (res.result === 1) {
-            const { type, content, uuid, id, avatar, onlineList } = res.data;
+            const { type, records, onlineList } = res.data;
             if (type === 0) { // 获取在线人
               this.onlineList = onlineList;
             } else if (type === 1) { // 获取聊天内容
-              this.chatRecord.push({ uuid, id, content, avatar });
+              this.chatRecord = records;
               this.$nextTick(() => {
                 this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
               })
@@ -136,46 +136,20 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .vue-chat {
-  position: relative;
   width: 100%;
-  min-height: 600px;
-  min-width: 800px;
-  overflow: auto;
-  padding: calc((100vh - 600px) / 2) 0;
+  height: 100%;
   .content {
     display: flex;
-    margin: 0 auto;
-    width: 800px;
-    height: 600px;
+    width: 100%;
+    height: 100%;
     background: rgb(239, 243, 246);
     .sidebar {
-      display: flex;
-      flex-direction: column;
-      width: 30%;
-      background: #303942;
-      padding: 10px;
-      .userinfo {
-        margin-top: 10px;
-        color: rgb(244, 244, 244);
-      }
-      .search {
-        margin: 20px 0;
-      }
-      .contact-list {
-        flex: 1;
-        overflow: auto;
-        margin: 0 -5px;
-        .contact-item {
-          display: inline-block;
-          cursor: pointer;
-          padding: 12px 5px;
-        }
-      }
+      display: none; // 小屏上不展示sidebar
     }
     .main-content {
       display: flex;
       flex-direction: column;
-      width: 70%;
+      width: 100%;
       background: #eee;
       .contact-name {
         flex: 0 0 50px;
@@ -199,6 +173,9 @@ export default {
         &__item {
           display: flex;
           padding: 10px 20px;
+          &_avatar {
+            flex: 0 0 auto;
+          }
           .chat-box__item_content {
             position: relative;
             padding: 10px;
@@ -206,6 +183,7 @@ export default {
             border-radius: 4px;
             color: #999;
             font-size: 13px;
+            word-break: break-all;
             &:after {
               position: absolute;
               top: 10px;
@@ -238,7 +216,7 @@ export default {
         }
       }
       .input-box {
-        flex: 0 0 180px;
+        flex: 0 0 50px;
         width: 100%;
         background: #fff;
         textarea {
@@ -248,10 +226,10 @@ export default {
           padding: 10px;
           border: none;
           outline: none;
-          font-family: "Micrsofot Yahei";
           resize: none;
         }
         .send {
+          display: none;
           width: 100%;
           height: 27%;
           line-height: 30%;
@@ -269,5 +247,56 @@ export default {
       }
     }
   }
+}
+
+// 大于ipad的设备
+@media screen and (min-width: 768px) {
+  .vue-chat {
+    position: relative;
+    min-height: 600px;
+    min-width: 800px;
+    overflow: auto;
+    .content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      width: 800px;
+      height: 600px;
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        width: 30%;
+        background: #303942;
+        padding: 10px;
+        .userinfo {
+          margin-top: 10px;
+          color: rgb(244, 244, 244);
+        }
+        .search {
+          margin: 20px 0;
+        }
+        .contact-list {
+          flex: 1;
+          overflow: auto;
+          margin: 0 -5px;
+          .contact-item {
+            display: inline-block;
+            cursor: pointer;
+            padding: 12px 5px;
+          }
+        }
+      }
+      .input-box {
+        flex: 0 0 180px;
+        .send {
+          display: block;
+        }
+      }
+    }
+  }
+  
 }
 </style>
