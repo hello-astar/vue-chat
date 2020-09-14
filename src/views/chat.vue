@@ -230,19 +230,6 @@ export default {
         }
         .send {
           display: none;
-          width: 100%;
-          height: 27%;
-          line-height: 30%;
-          padding: 8px 12px;
-          text-align: right;
-          button {
-            cursor: pointer;
-            background: #303942;
-            border: solid 1px #ddd;
-            padding: 6px 10px;
-            color: #fff;
-            border-radius: 4px;
-          }
         }
       }
     }
@@ -293,6 +280,19 @@ export default {
         flex: 0 0 180px;
         .send {
           display: block;
+          width: 100%;
+          height: 27%;
+          line-height: 30%;
+          padding: 8px 12px;
+          text-align: right;
+          button {
+            cursor: pointer;
+            background: #303942;
+            border: solid 1px #ddd;
+            padding: 6px 10px;
+            color: #fff;
+            border-radius: 4px;
+          }
         }
       }
     }
