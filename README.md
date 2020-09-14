@@ -31,3 +31,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### to-do-list
 - [ ] rem + viewport + media
+- [ ] 性能监控performance
+- [ ] 图片优化，cdn
