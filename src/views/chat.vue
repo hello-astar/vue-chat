@@ -4,7 +4,7 @@
       <aside class="sidebar">
         <div class="userinfo">
           <avatar shape="circle" :src="userInfo.avatar" size="medium"/>
-          天天十点睡
+          {{userInfo.name}}
         </div>
         <search-box class="search" v-model="searchPerson"></search-box>
         <ul class="contact-list scrollbar">
@@ -44,33 +44,27 @@
 
 <script>
 import { BASE_URL } from '@/config';
-import { userLoginReq } from '@/request';
 import { WebsocketClass } from '@/utils/socket';
-import { setUUID, removeUUID } from '@/utils/uuid';
 import searchBox from '@/components/searchBox'
 import avatar from '@/components/avatar'
+import { mapGetters } from 'vuex';
 
-const avatarRandomList = [
-  'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=90606386,735058472&fm=26&gp=0.jpg',
-  'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3119911064,951905419&fm=26&gp=0.jpg',
-  'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=406680416,4142076527&fm=26&gp=0.jpg',
-  'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3449046293,781770504&fm=26&gp=0.jpg',
-  'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=263274051,1344594427&fm=26&gp=0.jpg',
-  'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=4257961807,989795269&fm=26&gp=0.jpg',
-  'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1432880367,267558725&fm=26&gp=0.jpg',
-  'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3908966968,3041558363&fm=26&gp=0.jpg',
-  'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4252112164,4061229145&fm=26&gp=0.jpg',
-  'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1157958367,3068515202&fm=26&gp=0.jpg'
-]
+// const avatarRandomList = [
+//   'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=90606386,735058472&fm=26&gp=0.jpg',
+//   'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3119911064,951905419&fm=26&gp=0.jpg',
+//   'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=406680416,4142076527&fm=26&gp=0.jpg',
+//   'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3449046293,781770504&fm=26&gp=0.jpg',
+//   'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=263274051,1344594427&fm=26&gp=0.jpg',
+//   'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=4257961807,989795269&fm=26&gp=0.jpg',
+//   'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1432880367,267558725&fm=26&gp=0.jpg',
+//   'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3908966968,3041558363&fm=26&gp=0.jpg',
+//   'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4252112164,4061229145&fm=26&gp=0.jpg',
+//   'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1157958367,3068515202&fm=26&gp=0.jpg'
+// ]
 export default {
-  name: "Index",
+  name: "chat",
   data () {
     return {
-      userInfo: {
-        uuid: null,
-        avatar: null,
-        name: ''
-      },
       webSocket: null, // 当前websocket
       text: '', // 输入内容
       searchPerson: '', // 搜索联系人
@@ -82,20 +76,8 @@ export default {
     avatar,
     searchBox
   },
-  created () {
-    this.userInfo.avatar = avatarRandomList[parseInt(Math.random() * 10)];
-    userLoginReq({
-      name: 'astar',
-      avatar: this.userInfo.avatar
-    }).then(res => {
-      if (res.result === 1) {
-        setUUID(res.data.uuid);
-        this.userInfo.uuid = res.data.uuid;
-        this.initWebsocket();
-      }
-    }, _ => {
-      console.log('请求失败', _)
-    })
+  mounted () {
+    this.initWebsocket();
   },
   methods: {
     initWebsocket () {
@@ -113,23 +95,30 @@ export default {
             } else if (type === 1) { // 获取聊天内容
               this.chatRecord = records;
               this.$nextTick(() => {
-                this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
+                if (this.$refs.box) {
+                  this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
+                }
               })
             }
           }
         },
-        onClose: () => {
-          removeUUID();
-        }
+        onClose: () => {}
       });
     },
     sendMessage () {
-      this.webSocket.send(JSON.stringify({ type: 1, uuid: this.userInfo.uuid, content: this.text }));
-      this.text = ''
+      if (this.webSocket) {
+        this.webSocket.send(JSON.stringify({ type: 1, uuid: this.userInfo.uuid, content: this.text }));
+        this.text = ''
+      } else {
+        console.log('socket 还未初始化')
+      }
     },
     breakMessage () {
       this.text += '\n'
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo'])
   }
 }
 </script>
@@ -197,6 +186,7 @@ export default {
           &.normal {
             .chat-box__item_content {
               margin-left: 20px;
+              margin-right: 55px;
               &:after {
                 left: -12px;
                 border-right-color: #fff;
@@ -207,6 +197,7 @@ export default {
             flex-direction: row-reverse;
             .chat-box__item_content {
               margin-right: 20px;
+              margin-left: 55px;
               &:after {
                 right: -12px;
                 border-left-color: #fff;
@@ -240,7 +231,7 @@ export default {
 @media screen and (min-width: 768px) {
   .vue-chat {
     position: relative;
-    min-height: 600px;
+    min-height: 610px;
     min-width: 800px;
     overflow: auto;
     .content {
