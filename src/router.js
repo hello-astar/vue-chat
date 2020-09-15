@@ -7,7 +7,8 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
-    { path: '/', name: 'index', redirect: '/chat' },
+    { path: '/', name: 'index', redirect: '/login' },
+    { path: '/login', name: 'login', component: pipe('login') },
     { path: '/chat', name: 'chat', component: pipe('chat') }
   ]
 })
