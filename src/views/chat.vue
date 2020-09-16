@@ -48,6 +48,7 @@ import { WebsocketClass } from '@/utils/socket';
 import searchBox from '@/components/searchBox'
 import avatar from '@/components/avatar'
 import { mapGetters } from 'vuex';
+import { getUUID } from '@/utils/uuid';
 
 // const avatarRandomList = [
 //   'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=90606386,735058472&fm=26&gp=0.jpg',
@@ -84,7 +85,7 @@ export default {
       this.webSocket = new WebsocketClass({
         url: `ws://${BASE_URL}/chat/room`,
         params: {
-          uuid: this.userInfo.uuid
+          uuid: getUUID()
         },
         onMessage: (evt) => {
           const res = JSON.parse(evt.data);
@@ -102,7 +103,9 @@ export default {
             }
           }
         },
-        onClose: () => {}
+        onClose: () => {
+          console.log('断开了')
+        }
       });
     },
     sendMessage () {
