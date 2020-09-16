@@ -21,7 +21,10 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.12.0",
+    "postcss-pxtorem": "^5.1.1",
     "sass-loader": "^7.1.0",
+    "vconsole": "^3.3.4",
+    "vue-router": "^3.4.3",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
