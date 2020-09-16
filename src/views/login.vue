@@ -2,12 +2,12 @@
  * @author: cmx
  * @Date: 2020-09-15 18:10:44
  * @LastEditors: cmx
- * @LastEditTime: 2020-09-15 18:32:21
+ * @LastEditTime: 2020-09-16 10:36:35
  * @Description: 输入名字登录
  * @FilePath: \vue-chat\src\views\login.vue
 -->
 <template>
-<div>
+<div class="login">
   <input type="text" v-model="name" @keyup.enter="login">
 </div>
 </template>
