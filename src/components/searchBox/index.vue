@@ -2,7 +2,7 @@
  * @Description: 搜索框
  * @Author: astar
  * @Date: 2020-09-08 20:54:56
- * @LastEditTime: 2020-09-08 22:29:04
+ * @LastEditTime: 2020-09-16 00:09:02
  * @LastEditors: astar
 -->
 <template>
@@ -41,10 +41,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search-box-wrapper {
+  position: relative;
+  padding-left: 35px;
   width: 100%;
-  background-color: #26292e;
+  height: 32px;
   border-radius: 4px;
   .search-icon {
+    position: absolute;
+    left: 0;
+    top: 0;
     display: inline-block;
     width: 32px;
     height: 32px;
@@ -55,7 +60,7 @@ export default {
   input {
     display: inline-block;
     height: 100%;
-    background-color: #26292e;
+    background-color: transparent;
     outline: 0;
     border: none;
     padding: 0 10px 0 8px;
