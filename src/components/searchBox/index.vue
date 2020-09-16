@@ -2,14 +2,16 @@
  * @Description: 搜索框
  * @Author: astar
  * @Date: 2020-09-08 20:54:56
- * @LastEditTime: 2020-09-08 22:29:04
- * @LastEditors: astar
+ * @LastEditTime: 2020-09-16 16:03:12
+ * @LastEditors: cmx
 -->
 <template>
 <div class="search-box-wrapper">
-  <slot name="icon">
-    <div class="search-icon"></div>
-  </slot>
+  <div class="search-box__icon">
+    <slot name="icon">
+      <div class="default_icon"></div>
+    </slot>
+  </div>
   <input type="text" :placeholder="placeholder" v-model="searchTxt" @input="input">
 </div>
 </template>
@@ -41,19 +43,29 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search-box-wrapper {
+  position: relative;
+  height: 32px;
+  padding-left: 35px;
   width: 100%;
   background-color: #26292e;
   border-radius: 4px;
-  .search-icon {
-    display: inline-block;
+  .search-box__icon {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 32px;
     height: 32px;
-    background: url('~@/assets/images/search.png') no-repeat center;
-    background-size: 25px 25px;
-    vertical-align: middle;
+    .default_icon {
+      width: 32px;
+      height: 32px;
+      background: url('~@/assets/images/search.png') no-repeat center;
+      background-size: 25px 25px;
+      vertical-align: middle;
+    }
   }
   input {
     display: inline-block;
+    width: 100px;
     height: 100%;
     background-color: #26292e;
     outline: 0;
