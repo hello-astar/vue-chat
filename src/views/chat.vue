@@ -291,6 +291,5 @@ export default {
       }
     }
   }
-  
 }
 </style>
