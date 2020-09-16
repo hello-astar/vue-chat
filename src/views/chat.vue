@@ -173,7 +173,7 @@ export default {
             padding: 10px;
             background: #fff;
             border-radius: 4px;
-            color: #999;
+            color: #000;
             font-size: 13px;
             word-break: break-all;
             &:after {
@@ -201,9 +201,10 @@ export default {
             .chat-box__item_content {
               margin-right: 20px;
               margin-left: 55px;
+              background: rgb(128,177,53);
               &:after {
                 right: -12px;
-                border-left-color: #fff;
+                border-left-color: rgb(128,177,53);
               }
             }
           }

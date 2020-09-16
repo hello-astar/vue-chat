@@ -2,25 +2,24 @@
  * @author: cmx
  * @Date: 2020-09-15 18:10:44
  * @LastEditors: astar
- * @LastEditTime: 2020-09-16 20:49:25
+ * @LastEditTime: 2020-09-16 20:34:47
  * @Description: 输入名字登录
  * @FilePath: \vue-chat\src\views\login.vue
 -->
 <template>
 <div class="login-wrapper">
   <div class="login-container">
-    <header class="login-container__header">登录</header>
+    <header class="login-container__header">注册</header>
     <div class="login-container__input">
-      <input type="text" v-model="name" placeholder="请输入用户名" @keyup.enter="login">
+      <input type="text" v-model="name" placeholder="请输入用户名" @keyup.enter="register">
     </div>
-    <button class="login-container__btn" @click="login">登录</button>
-    <div class="tip" @click="gotoRegister">还没有账号？点我注册</div>
+    <button class="login-container__btn" @click="register">注册</button>
+    <div class="tip" @click="gotoLogin">有账号了？点我登录</div>
   </div>
 </div>
 </template>
 <script>
-import { userLoginReq } from '@/request';
-import { setUUID } from '@/utils/uuid';
+import { userRegisterReq } from '@/request';
 
 export default {
   name: 'login',
@@ -29,21 +28,21 @@ export default {
       name: ''
     }
   },
+  created () {
+
+  },
   methods: {
-    gotoRegister () {
-      this.$router.push('/register');
+    gotoLogin () {
+      this.$router.push('/login')
     },
-    login () {
-      userLoginReq({
-        name: this.name
+    register () {
+      userRegisterReq({
+        name: this.name,
+        avatar: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3119911064,951905419&fm=26&gp=0.jpg'
       }).then(res => {
         if (res.result === 1) {
-          setUUID(res.data.uuid);
-          this.$store.commit('user/SET_USER_INFO', res.data);
-          this.$router.push('/chat');
+          this.gotoLogin()
         }
-      }, _ => {
-        console.log('请求失败', _)
       })
     }
   }
