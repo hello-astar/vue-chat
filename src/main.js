@@ -6,7 +6,9 @@ import router from './router';
 import store from '@/store';
 import VConsole from 'vconsole';
 import { getUUID } from '@/utils/uuid';
+import setRem from '@/utils/setRem';
 
+setRem(document, window);
 var vConsole = new VConsole();
 console.log(vConsole);
 

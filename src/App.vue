@@ -12,7 +12,7 @@ export default {
 
 <style>
 #app {
-  height: 100vh;
+  height: 100%;
   background: url('./assets/images/bg.jpg') no-repeat center;
   background-size: 100% 100%;
   overflow: auto;
