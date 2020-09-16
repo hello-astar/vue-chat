@@ -2,7 +2,7 @@
  * @author: cmx
  * @Date: 2020-09-15 18:10:44
  * @LastEditors: astar
- * @LastEditTime: 2020-09-16 01:20:50
+ * @LastEditTime: 2020-09-16 20:08:29
  * @Description: 输入名字登录
  * @FilePath: \vue-chat\src\views\login.vue
 -->
