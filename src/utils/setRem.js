@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: astar
  * @Date: 2020-09-16 20:07:43
- * @LastEditTime: 2020-09-17 01:00:32
- * @LastEditors: astar
+ * @LastEditTime: 2020-09-17 18:32:02
+ * @LastEditors: cmx
  */
 import { os } from '@/utils/browser';
 export default function (doc, win) {
@@ -13,16 +13,14 @@ export default function (doc, win) {
   let dpr = 0;
   let scale = 0;
   // 对iOS设备进行dpr的判断，对于Android系列，始终认为其dpr为1
-  if (!dpr && !scale) {
-    let devicePixelRatio = win.devicePixelRatio;
-    
-    if(os.ios || os.android){
-      dpr = devicePixelRatio;
-    } else {
-      dpr = 1;
-    }
-    scale = 1 / dpr;
+  let devicePixelRatio = win.devicePixelRatio;
+  
+  if(os.ios || os.android) {
+    dpr = devicePixelRatio;
+  } else {
+    dpr = 1;
   }
+  scale = 1 / dpr;
   docEl.setAttribute('data-dpr', dpr);
   if (!metaEl) {
     metaEl = doc.createElement('meta');
@@ -33,16 +31,15 @@ export default function (doc, win) {
     metaEl.setAttribute('content', 'width=device-width, initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no');
   }
   let refreshRem = function () {
-    let clientWidth = win.innerWidth
-                      || doc.documentElement.clientWidth
+    let clientWidth = win.innerWidth // visual viewport
+                      || doc.documentElement.clientWidth // layout viewport
                       || doc.body.clientWidth;
-
     if (!clientWidth) return;
     let fz;
     let width = clientWidth;
     let baseWidth = 0;
     if (width >= 768 * dpr) {
-      baseWidth = 1500;
+      baseWidth = 1520;
     } else {
       baseWidth = 375;
     }
