@@ -231,66 +231,69 @@ export default {
   }
 }
 
-// 大于ipad的设备
-@media screen and (min-width: 768px) {
-  .vue-chat {
-    position: relative;
-    min-height: 610px;
-    min-width: 800px;
-    overflow: auto;
-    .content {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: auto;
-      width: 800px;
-      height: 600px;
-      .sidebar {
-        display: flex;
-        flex-direction: column;
-        width: 30%;
-        background: #303942;
-        padding: 10px;
-        .userinfo {
-          margin-top: 10px;
-          color: rgb(244, 244, 244);
-        }
-        .search {
-          margin: 20px 0;
-          background-color: #26292e;
-        }
-        .contact-list {
-          flex: 1;
-          overflow: auto;
-          margin: 0 -5px;
-          .contact-item {
-            display: inline-block;
-            cursor: pointer;
-            padding: 12px 5px;
+// 兼容屏幕大于ipad的设备
+$dprs: 1, 2, 3, 4;
+@each $dpr in $dprs {
+  @media screen and (min-width:#{$dpr * 768}px) and (resolution:#{$dpr}dppx) {
+    .vue-chat {
+      position: relative;
+      min-height: 610px;
+      min-width: 800px;
+      overflow: auto;
+      .content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: 800px;
+        height: 600px;
+        .sidebar {
+          display: flex;
+          flex-direction: column;
+          width: 30%;
+          background: #303942;
+          padding: 10px;
+          .userinfo {
+            margin-top: 10px;
+            color: rgb(244, 244, 244);
+          }
+          .search {
+            margin: 20px 0;
+            background-color: #26292e;
+          }
+          .contact-list {
+            flex: 1;
+            overflow: auto;
+            margin: 0 -5px;
+            .contact-item {
+              display: inline-block;
+              cursor: pointer;
+              padding: 12px 5px;
+            }
           }
         }
-      }
-      .main-content {
-        .input-box {
-          flex: 0 0 180px;
-          .send {
-            display: block;
-            width: 100%;
-            height: 27%;
-            line-height: 30%;
-            padding: 8px 12px;
-            text-align: right;
-            button {
-              height: 100%;
-              outline: 0;
-              cursor: pointer;
-              background: #303942;
-              border: solid 1px #ddd;
-              padding: 6px 10px;
-              color: #fff;
-              border-radius: 4px;
+        .main-content {
+          .input-box {
+            flex: 0 0 180px;
+            .send {
+              display: block;
+              width: 100%;
+              height: 27%;
+              line-height: 30%;
+              padding: 8px 12px;
+              text-align: right;
+              button {
+                height: 100%;
+                outline: 0;
+                cursor: pointer;
+                background: #303942;
+                border: solid 1px #ddd;
+                padding: 6px 10px;
+                color: #fff;
+                border-radius: 4px;
+              }
             }
           }
         }
