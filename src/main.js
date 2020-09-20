@@ -4,23 +4,37 @@ import "@/assets/styles/reset.css";
 import "@/assets/styles/common.scss";
 import router from './router';
 import store from '@/store';
-import VConsole from 'vconsole';
-import { getUUID } from '@/utils/uuid';
+import { getToken, removeToken } from '@/utils/token';
 import setRem from '@/utils/setRem';
-
+import inputCell from '@/components/inputCell';
+import toastPlugin from '@/components/toast/plugin';
 setRem(document, window);
-var vConsole = new VConsole();
-console.log(vConsole);
+
+// import VConsole from 'vconsole';
+// var vConsole = new VConsole();
+// console.log(vConsole);
+
+Vue.component(inputCell.name, inputCell);
+Vue.use(toastPlugin);
 
 Vue.config.productionTip = false;
 
 router.beforeEach ((to, from, next) => {
-  if (to.name === 'login' || getUUID()) {
-    next()
+  if (['login', 'register'].includes(to.name)) {
+    next();
+  } else if (!getToken()) {
+    next('/login');
   } else {
-    next('/login')
+    store.dispatch('user/getUserInfo').then(() => {
+      next();
+    }, () => {
+      removeToken();
+      next('/login');
+    });
+    next();
   }
 })
+
 new Vue({
   render: h => h(App),
   router,

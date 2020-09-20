@@ -1,0 +1,83 @@
+.toast {
+  position: fixed;
+  left: 50%;
+  padding: 15px 20px;
+  background-color: rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+  color: #fff;
+  text-align: center;
+  min-width: 100px;
+  &__center {
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  &__top {
+    top: 50px;
+    transform: translate(-50%, 0);
+    &_animation {
+      &-enter-active {
+        transition: all 0.3s ease;
+      }
+      &-leave-active {
+        transition: all 0.2s ease;
+      }
+      &-enter,
+      &-leave-to {
+        transform: translate(-50%, -10px);
+        opacity: 0;
+      }
+    }
+  }
+  &__bottom {
+    bottom: 50px;
+    transform: translate(-50%, 0);
+    &_animation {
+      &-enter-active {
+        transition: all 0.3s ease;
+      }
+      &-leave-active {
+        transition: all 0.2s ease;
+      }
+      &-enter,
+      &-leave-to {
+        transform: translate(-50%, 10px);
+        opacity: 0;
+      }
+    }
+  }
+  &__center {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    &_animation {
+      &-enter-active {
+        transition: all 0.3s ease;
+      }
+      &-leave-active {
+        transition: all 0.2s ease;
+      }
+      &-enter,
+      &-leave-to {
+        opacity: 0;
+      }
+    }
+  }
+  &-content {
+    &__icon {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 10px;
+      &__loading {
+        @keyframes spin {
+          from {
+            transform: rotate(360deg);
+          }
+          to {
+            transform: rotate(0deg);
+          }
+        }
+        margin-bottom: 0;
+        animation: spin 0.5s steps(10) infinite;
+      }
+    }
+  }
+}

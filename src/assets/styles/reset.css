@@ -87,6 +87,7 @@ button, input, optgroup, select, textarea {
   color: inherit;
   font: inherit;
   margin: 0;
+  border: 0;
   vertical-align: middle;
 }
 button, input, select {
