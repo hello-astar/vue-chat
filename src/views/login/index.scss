@@ -1,0 +1,36 @@
+.panel-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 12px;
+  width: 100%;
+  .panel-container {
+    width: 350px;
+    max-width: calc(100% - 40px);
+    border-radius: 4px;
+    text-align: center;
+    &__input {
+      .input__cell {
+        margin-bottom: 15px;
+      }
+    }
+    &__btn {
+      display: block;
+      width: 150px;
+      line-height: 30px;
+      margin: 20px auto;
+      border-radius: 4px;
+      background:rgb(29, 29, 29);
+      color: rgba(255,255,255,.8);
+      outline: 0;
+      border: 0;
+    }
+    &__tip {
+      display: inline-block;
+      line-height: 20px;
+      cursor: pointer;
+      color: #666;
+    }
+  }
+}

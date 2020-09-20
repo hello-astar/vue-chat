@@ -30,12 +30,8 @@
           <textarea
             v-model="text"
             @keyup.enter.exact="sendMessage"
-            @keyup.ctrl.enter="breakMessage"
-            placeholder="按Enter发送，Ctrl+Enter可换行"
+            placeholder="按Enter发送"
           />
-          <div class="send">
-            <button @click="sendMessage">发送</button>
-          </div>
         </div>
       </main>
     </div>
@@ -48,20 +44,8 @@ import { WebsocketClass } from '@/utils/socket';
 import searchBox from '@/components/searchBox';
 import avatar from '@/components/avatar';
 import { mapGetters } from 'vuex';
-import { getUUID } from '@/utils/uuid';
+import { getToken } from '@/utils/token';
 
-// const avatarRandomList = [
-//   'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=90606386,735058472&fm=26&gp=0.jpg',
-//   'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3119911064,951905419&fm=26&gp=0.jpg',
-//   'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=406680416,4142076527&fm=26&gp=0.jpg',
-//   'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3449046293,781770504&fm=26&gp=0.jpg',
-//   'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=263274051,1344594427&fm=26&gp=0.jpg',
-//   'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=4257961807,989795269&fm=26&gp=0.jpg',
-//   'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1432880367,267558725&fm=26&gp=0.jpg',
-//   'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3908966968,3041558363&fm=26&gp=0.jpg',
-//   'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4252112164,4061229145&fm=26&gp=0.jpg',
-//   'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1157958367,3068515202&fm=26&gp=0.jpg'
-// ]
 export default {
   name: "chat",
   data () {
@@ -73,10 +57,6 @@ export default {
       chatRecord: [] // 当前聊天记录
     }
   },
-  components: {
-    avatar,
-    searchBox
-  },
   mounted () {
     this.initWebsocket();
   },
@@ -85,7 +65,7 @@ export default {
       this.webSocket = new WebsocketClass({
         url: `ws://${BASE_URL}/chat/room`,
         params: {
-          uuid: getUUID()
+          token: getToken()
         },
         onMessage: (evt) => {
           const res = JSON.parse(evt.data);
@@ -101,42 +81,83 @@ export default {
                 }
               })
             }
+          } else {
+            this.$toast.text(res.msg, 'top');
+            this.$router.push('/login');
           }
         },
         onClose: () => {
-          console.log('断开了')
+          this.$toast.text('服务异常', 'top');
+          this.$router.push('/login');
         }
       });
     },
     sendMessage () {
       if (this.webSocket) {
-        this.webSocket.send(JSON.stringify({ type: 1, uuid: this.userInfo.uuid, content: this.text }));
+        if (!this.text.trim()) {
+          this.$toast.text('不能发送空数据', 'top');
+          this.text = this.text.trim();
+          return;
+        }
+        this.webSocket.send(JSON.stringify({ type: 1, content: this.text.trim() }));
         this.text = ''
       } else {
         console.log('socket 还未初始化')
       }
-    },
-    breakMessage () {
-      this.text += '\n'
     }
   },
   computed: {
     ...mapGetters(['userInfo'])
+  },
+  components: {
+    avatar,
+    searchBox
   }
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .vue-chat {
-  width: 100%;
+  position: relative;
+  min-height: 610px;
+  min-width: 800px;
   height: 100%;
+  width: 100%;
+  overflow: auto;
   .content {
     display: flex;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 800px;
+    height: 600px;
     background: rgb(239, 243, 246);
     .sidebar {
-      display: none; // 小屏上不展示sidebar
+      display: flex;
+      flex-direction: column;
+      width: 30%;
+      background: #303942;
+      padding: 10px;
+      .userinfo {
+        margin-top: 10px;
+        color: rgb(244, 244, 244);
+      }
+      .search {
+        margin: 20px 0;
+        background-color: #26292e;
+      }
+      .contact-list {
+        flex: 1;
+        overflow: auto;
+        margin: 0 -5px;
+        .contact-item {
+          display: inline-block;
+          cursor: pointer;
+          padding: 12px 5px;
+        }
+      }
     }
     .main-content {
       display: flex;
@@ -211,7 +232,7 @@ export default {
         }
       }
       .input-box {
-        flex: 0 0 50px;
+        flex: 0 0 180px;
         width: 100%;
         background: #fff;
         textarea {
@@ -223,77 +244,36 @@ export default {
           outline: none;
           resize: none;
         }
-        .send {
-          display: none;
-        }
       }
     }
   }
 }
-
-// 兼容屏幕大于ipad的设备
+// 兼容屏幕小于ipad的设备
 $dprs: 1, 2, 3, 4;
 @each $dpr in $dprs {
-  @media screen and (min-width:#{$dpr * 768}px) and (resolution:#{$dpr}dppx) {
+  @media screen and (max-width:#{$dpr * 768}px) and (min-resolution:#{$dpr}dppx) {
     .vue-chat {
-      position: relative;
-      min-height: 610px;
-      min-width: 800px;
-      overflow: auto;
+      min-width: auto;
+      min-height: auto;
       .content {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto;
-        width: 800px;
-        height: 600px;
+        width: 100%;
+        height: 100%;
         .sidebar {
-          display: flex;
-          flex-direction: column;
-          width: 30%;
-          background: #303942;
-          padding: 10px;
-          .userinfo {
-            margin-top: 10px;
-            color: rgb(244, 244, 244);
-          }
-          .search {
-            margin: 20px 0;
-            background-color: #26292e;
-          }
-          .contact-list {
-            flex: 1;
-            overflow: auto;
-            margin: 0 -5px;
-            .contact-item {
-              display: inline-block;
-              cursor: pointer;
-              padding: 12px 5px;
-            }
-          }
+          display: none; // 小屏上不展示sidebar
         }
         .main-content {
           .input-box {
-            flex: 0 0 180px;
-            .send {
+            flex: 0 0 50px;
+            width: 100%;
+            background: #fff;
+            textarea {
               display: block;
               width: 100%;
-              height: 27%;
-              line-height: 30%;
-              padding: 8px 12px;
-              text-align: right;
-              button {
-                height: 100%;
-                outline: 0;
-                cursor: pointer;
-                background: #303942;
-                border: solid 1px #ddd;
-                padding: 6px 10px;
-                color: #fff;
-                border-radius: 4px;
-              }
+              height: 100%;
+              padding: 10px;
+              border: none;
+              outline: none;
+              resize: none;
             }
           }
         }
