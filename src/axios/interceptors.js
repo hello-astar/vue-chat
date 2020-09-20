@@ -1,8 +1,8 @@
 /*
  * @author: cmx
  * @Date: 2020-09-09 17:27:10
- * @LastEditors: cmx
- * @LastEditTime: 2020-09-09 18:08:54
+ * @LastEditors: astar
+ * @LastEditTime: 2020-09-20 23:59:47
  * @Description: 定义拦截器
  * @FilePath: \vue-chat\src\axios\interceptors.js
  */

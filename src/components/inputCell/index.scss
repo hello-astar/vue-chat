@@ -1,0 +1,31 @@
+.input-cell {
+  position: relative;
+  display: inline-block;
+  &__label {
+
+  }
+  .input {
+    box-sizing: content-box;
+    background-color: transparent;
+    border-bottom: 1px solid #999;
+    padding: 15px 10px;
+    background-clip: content-box;
+    height: 0;
+  }
+  input ~ .input-cell__line {
+    position: absolute;
+    left: 50%;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    width: 0;
+    background: #000;
+    transform: translateX(-50%);
+    transform-origin: right center;
+    transition: width 0.3s ease-in-out;
+  }
+  input:focus ~ .input-cell__line {
+    width: 100%;
+    transform-origin: left center;
+  }
+}

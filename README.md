@@ -1,10 +1,11 @@
 # vue-chat
 
 ## to-do-list
-- [ ] rem + viewport + media
+- [x] rem + viewport + media
 - [ ] 性能监控performance
-- [ ] 图片优化，cdn
-
+- [x] 图片qiniuyun
+- [ ] 七牛云改为服务器端上传+私密空间
+- [ ] 背景图拉伸问题
 
 ## Project setup
 ```
