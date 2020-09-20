@@ -5,6 +5,7 @@
 - [ ] 性能监控performance
 - [x] 图片qiniuyun
 - [ ] 七牛云改为服务器端上传+私密空间
+- [ ] 密码加密
 - [ ] 背景图拉伸问题
 
 ## Project setup
