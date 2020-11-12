@@ -2,8 +2,8 @@
  * @Description: 上传图片
  * @Author: astar
  * @Date: 2020-09-20 18:24:39
- * @LastEditTime: 2020-09-20 21:38:40
- * @LastEditors: astar
+ * @LastEditTime: 2020-10-13 15:08:47
+ * @LastEditors: cmx
 -->
 <template>
 <div class="upload-img">
@@ -22,7 +22,7 @@
 </template>
 <script>
 import avatar from '@/components/avatar';
-import * as qiniu from 'qiniu-js';
+// import qiniu from 'qiniu-js';
 import { qiniuTokenReq, qiniuUploadReq } from '@/request';
 
 export default {
@@ -41,7 +41,7 @@ export default {
       var fileReader = new FileReader();
       this.file = e.target.files[0];
       fileReader.readAsDataURL(this.file);
-      fileReader.onload = function (e) {
+      fileReader.onload = function () {
         _this.temp = this.result;
         _this.$emit('change', this.result);
       }
