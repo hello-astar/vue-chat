@@ -13,8 +13,5 @@ export default {
 <style>
 #app {
   height: 100%;
-  background: url('./assets/images/bg.jpg') no-repeat center;
-  background-size: cover;
-  overflow: auto;
 }
 </style>

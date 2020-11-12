@@ -1,10 +1,10 @@
 <!--
  * @author: cmx
  * @Date: 2020-09-15 18:10:44
- * @LastEditors: astar
- * @LastEditTime: 2020-09-21 00:06:17
+ * @LastEditors: cmx
+ * @LastEditTime: 2020-11-12 11:18:50
  * @Description: 输入名字登录
- * @FilePath: \vue-chat\src\views\login.vue
+ * @FilePath: \vue-chat\src\views\login\index.vue
 -->
 <template>
 <div class="panel-wrapper login-wrapper">
@@ -45,7 +45,7 @@ export default {
         if (res.result === 1) {
           setToken(res.data.token);
           this.$store.commit('user/SET_USER_INFO', res.data);
-          this.$router.push('/chat');
+          this.$router.push('/home');
         } else {
           this.$toast.text(res.msg, 'top');
         }
