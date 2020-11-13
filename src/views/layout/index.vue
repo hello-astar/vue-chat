@@ -2,17 +2,17 @@
  * @author: cmx
  * @Date: 2020-10-13 14:39:31
  * @LastEditors: cmx
- * @LastEditTime: 2020-11-12 20:52:52
- * @Description: 网站首页
+ * @LastEditTime: 2020-11-13 18:12:00
+ * @Description: layout
  * @FilePath: \vue-chat\src\views\layout\index.vue
 -->
 <template>
   <div class="layout">
     <nav class="layout-nav">
       <div class="layout-nav__content">
-        <div class="icon" @click="$router.push('/')"><img src="@/assets/images/avatar.jpg" alt="">Astar</div>
+        <div class="avatar" @click="$router.push('/')"><img src="@/assets/images/avatar.jpg" alt="">Astar</div>
         <ul class="list">
-          <li><img src="@/assets/images/logout.svg" alt="" style="width:20px; height:20px" @click="logout"></li>
+          <li><img src="@/assets/images/logout.svg" alt="" class="icon" @click="logout"></li>
         </ul>
       </div>
     </nav>
@@ -36,21 +36,18 @@ export default {
   flex-direction: column;
   height: 100%;
   box-sizing: border-box;
-  min-width: 1290px;
-  background: url('~@/assets/images/bg.jpg') no-repeat center;
-  background-size: cover;
   overflow: auto;
+  background: #090723;
+  color: #fff;
   &-nav {
-    // background: #090723;
-    padding: 10px 60px;
-    box-shadow: rgba(0,0,0,.2)  0 1px 5px 0px;
+    padding: 10px 2%;
+    box-shadow: rgba(255,255,255,.2)  0 1px 5px 0px;
     &__content {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 1000px;
       margin: 0 auto;
-      .icon {
+      .avatar {
         cursor: pointer;
         img {
           width: 40px;
@@ -61,15 +58,17 @@ export default {
       }
       .list li {
         display: inline-block;
+        cursor: pointer;
+        .icon {
+          width:20px;
+          height:20px
+        }
       }
     }
   }
   &-main {
     flex: 1;
     overflow: auto;
-  }
-  &-footer {
-
   }
 }
 </style>
