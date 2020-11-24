@@ -2,7 +2,7 @@
  * @author: cmx
  * @Date: 2020-10-13 14:37:02
  * @LastEditors: cmx
- * @LastEditTime: 2020-11-13 15:37:41
+ * @LastEditTime: 2020-11-24 18:03:26
  * @Description: about页面
  * @FilePath: \vue-chat\src\views\about\index.vue
 -->
@@ -42,11 +42,12 @@ export default {
 
 <style lang="scss" scoped>
 .about-container {
+  position: relative;
   height: 100%;
   width: 100%;
   overflow-y: auto;
   &__scroll {
-    section {
+    .bg {
       width: 100%;
       height: 100vh;
       background: rgba(0, 0, 0, .7);
@@ -54,19 +55,18 @@ export default {
       line-height: 100vh;
       text-align: center;
       font-size: 40px;
-    }
-    .bg {
+      line-height: 100vh;
       background-size: cover;
       background-position: center center;
       background-attachment: fixed;
       &.bg-1 {
-        background-image: url('https://w.wallhaven.cc/full/2e/wallhaven-2eroxm.jpg');
+        background-image: url('~@/assets/images/about-1.jpg');
       }
       &.bg-2 {
-        background-image: url('https://w.wallhaven.cc/full/ym/wallhaven-ym1wp7.jpg');
+        background-image: url('~@/assets/images/about-2.jpg');
       }
       &.bg-3 {
-        background-image: url('https://w.wallhaven.cc/full/vg/wallhaven-vg7lv3.jpg');
+        background-image: url('~@/assets/images/about-3.jpg');
       }
       &.lazy {
         background-image: none;

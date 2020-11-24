@@ -1,29 +1,33 @@
 /*
  * @author: cmx
  * @Date: 2020-09-09 17:47:49
- * @LastEditors: astar
- * @LastEditTime: 2020-09-20 20:47:33
+ * @LastEditors: cmx
+ * @LastEditTime: 2020-11-24 16:41:35
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
-import { postRequest } from '@/axios';
+import { postRequest, getRequest } from '@/axios';
 
-export const userRegisterReq = function (data = {}) {
+export const userRegisterReq = (data = {}) => {
   return postRequest('/user/register', data, { notToken: true });
 }
 
-export const userLoginReq = function (data = {}) {
+export const userLoginReq = (data = {}) => {
   return postRequest('/user/login', data, { notToken: true });
 }
 
-export const userInfoReq = function (data = {}) {
+export const userInfoReq = (data = {}) => {
   return postRequest('/user/getUserInfo', data);
 }
 
-export const qiniuTokenReq = function (data = {}) {
+export const qiniuTokenReq = (data = {}) => {
   return postRequest('/qiniu/getToken', data);
 }
 
-export const qiniuUploadReq = function (data = {}) {
+export const qiniuUploadReq = (data = {}) => {
   return postRequest('http://upload-z2.qiniu.com', data, { notToken: true });
+}
+
+export const getCaptchaImg = (data = {}) => {
+  return getRequest('/captcha/get', data, { notToken: true })
 }
