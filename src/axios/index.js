@@ -1,8 +1,8 @@
 /*
  * @author: cmx
  * @Date: 2020-09-09 17:08:05
- * @LastEditors: astar
- * @LastEditTime: 2020-09-21 01:32:46
+ * @LastEditors: cmx
+ * @LastEditTime: 2020-11-24 17:59:01
  * @Description: 封装axios
  * @FilePath: \vue-chat\src\axios\index.js
  */
@@ -12,7 +12,7 @@ import { getToken } from '@/utils/token';
 export const postRequest = function (url, data, config = {}) {
   if (!config.notToken) {
     config.headers = {
-      authorization: 'Bearer ' + getToken()
+      authorization: 'Bearer ' + getToken() // jwt校验token
     }
   }
 
@@ -23,9 +23,18 @@ export const postRequest = function (url, data, config = {}) {
   });
 };
 
-export const getRequest = function (url, data) {
-  console.log(url, data)
-  // instance.get(url, data)
+export const getRequest = function (url, data, config = {}) {
+  if (!config.notToken) {
+    config.headers = {
+      authorization: 'Bearer ' + getToken()
+    }
+  }
+
+  return instance.get(url, data, config).then(res => {
+    return res.data;
+  }, _ => {
+    return Promise.reject(_);
+  });
 };
 
 export default instance;
