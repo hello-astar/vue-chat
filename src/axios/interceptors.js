@@ -1,8 +1,8 @@
 /*
  * @author: cmx
  * @Date: 2020-09-09 17:27:10
- * @LastEditors: astar
- * @LastEditTime: 2020-09-20 23:59:47
+ * @LastEditors: cmx
+ * @LastEditTime: 2021-01-11 18:22:45
  * @Description: 定义拦截器
  * @FilePath: \vue-chat\src\axios\interceptors.js
  */
@@ -15,7 +15,8 @@ const instance = axios.create({
   timeout: 3000,
   headers: {
     'content-type': 'application/json'
-  }
+  },
+  withCredentials: true
 });
 
 export default instance;
