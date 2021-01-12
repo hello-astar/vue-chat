@@ -2,11 +2,14 @@
  * @Description: 输入框
  * @Author: astar
  * @Date: 2020-09-20 17:16:54
- * @LastEditTime: 2020-09-21 01:33:52
- * @LastEditors: astar
+ * @LastEditTime: 2021-01-12 16:47:53
+ * @LastEditors: cmx
 -->
 <template>
 <div class="input-cell">
+  <div>
+    <slot name="label"></slot>
+  </div>
   <input
     :class="['input']"
     :type="type"
@@ -15,6 +18,9 @@
     :autocomplete="autocomplete"
     @input="input"
   >
+  <div>
+    <slot></slot>
+  </div>
   <span class="input-cell__line"></span>
 </div>
 </template>
@@ -30,7 +36,8 @@ export default {
         return ['text', 'password', 'number'].includes(value);
       }
     },
-    autocomplete: String
+    autocomplete: String,
+    label: String
   },
   data () {
     return {

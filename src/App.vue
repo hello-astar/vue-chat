@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <div class="app-content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -10,11 +12,33 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 #app {
+  position: relative;
   height: 100%;
-  background: url('~@/assets/images/bg.jpg') no-repeat center;
+  background: url('https://w.wallhaven.cc/full/l3/wallhaven-l3mkqp.png') no-repeat center;
+  background: #eee;
   background-size: cover;
   overflow: auto;
+  z-index: 1;
+  &:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: ' ';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    filter: blur(2px);
+    z-index: 2;
+  }
+  .app-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+  }
 }
 </style>
