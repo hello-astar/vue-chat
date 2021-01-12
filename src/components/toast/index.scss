@@ -7,6 +7,7 @@
   color: #fff;
   text-align: center;
   min-width: 100px;
+  z-index: 1000;
   &__center {
     top: 50%;
     transform: translate(-50%, -50%);

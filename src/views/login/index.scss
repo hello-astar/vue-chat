@@ -3,11 +3,12 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 0 12px;
-  width: 100%;
+  // padding: 0 12px;
+  width: 300px;
   .panel-container {
-    width: 350px;
-    max-width: calc(100% - 40px);
+    box-sizing: border-box;
+    width: 100%;
+    padding: 20px;
     border-radius: 4px;
     text-align: center;
     &__input {
