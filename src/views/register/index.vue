@@ -2,7 +2,7 @@
  * @author: cmx
  * @Date: 2020-09-15 18:10:44
  * @LastEditors: cmx
- * @LastEditTime: 2021-01-12 17:24:23
+ * @LastEditTime: 2021-01-13 18:02:51
  * @Description: 输入名字登录
  * @FilePath: \vue-chat\src\views\register\index.vue
 -->
@@ -27,6 +27,7 @@
 <script>
 import { userRegisterReq, captchaGetImg } from '@/request';
 import uploadImg from '@/components/uploadImg';
+import PUBLIC_KEY from '@/config/rsaPublicKey';
 
 export default {
   name: 'register',
@@ -67,10 +68,13 @@ export default {
         return this.$toast.text('请输入验证码', 'top');
       }
       // this.$refs.avatar.upload().then(res => {
+      // eslint-disable-next-line no-undef
+      let encrypt = new JSEncrypt();
+      encrypt.setPublicKey(PUBLIC_KEY);
       userRegisterReq({
         captcha: this.captcha.trim(),
         name: this.name.trim(),
-        password: this.password.trim(),
+        password: encrypt.encrypt(JSON.stringify({ password: this.password.trim()})),
         avatar: 'https://w.wallhaven.cc/full/ox/wallhaven-oxkjgm.jpg' // `http://qgyfalxn6.hn-bkt.clouddn.com/${res.key}`
       }).then(res => {
         if (res.result === 1) {
