@@ -2,7 +2,7 @@
  * @author: cmx
  * @Date: 2020-09-15 18:10:44
  * @LastEditors: cmx
- * @LastEditTime: 2021-01-13 18:02:51
+ * @LastEditTime: 2021-01-16 14:50:27
  * @Description: 输入名字登录
  * @FilePath: \vue-chat\src\views\register\index.vue
 -->
@@ -16,7 +16,7 @@
       <input-cell type="text" autocomplete="off" class="input__cell" v-model="name" placeholder="请输入用户名"></input-cell>
       <input-cell type="password" autocomplete="off" class="input__cell" v-model="password" placeholder="请输入密码"></input-cell>
       <input-cell type="text" sutocomplete="off" class="input__cell" v-model="captcha" placeholder="请输入验证码">
-        <img :src="captchaImg" alt="" @click="getCaptchaImg">
+        <img :src="captchaImg" alt="验证码" @click="getCaptchaImg">
       </input-cell>
     </div>
     <button class="panel-container__btn" @click="register">注册</button>
@@ -71,11 +71,14 @@ export default {
       // eslint-disable-next-line no-undef
       let encrypt = new JSEncrypt();
       encrypt.setPublicKey(PUBLIC_KEY);
+      let params = {
+        name: this.name.trim(),
+        password: this.password.trim(),
+        avatar: 'https://w.wallhaven.cc/full/ox/wallhaven-oxkjgm.jpg' // `http://qgyfalxn6.hn-bkt.clouddn.com/${res.key}`
+      }
       userRegisterReq({
         captcha: this.captcha.trim(),
-        name: this.name.trim(),
-        password: encrypt.encrypt(JSON.stringify({ password: this.password.trim()})),
-        avatar: 'https://w.wallhaven.cc/full/ox/wallhaven-oxkjgm.jpg' // `http://qgyfalxn6.hn-bkt.clouddn.com/${res.key}`
+        registerData: encrypt.encrypt(JSON.stringify(params))
       }).then(res => {
         if (res.result === 1) {
           this.gotoLogin();

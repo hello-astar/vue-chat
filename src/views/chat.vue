@@ -88,7 +88,7 @@ export default {
         },
         onClose: () => {
           this.$toast.text('服务异常', 'top');
-          this.$router.push('/login');
+          // this.$router.push('/login');
         }
       });
     },
@@ -253,8 +253,8 @@ $dprs: 1, 2, 3, 4;
 @each $dpr in $dprs {
   @media screen and (max-width:#{$dpr * 768}px) and (min-resolution:#{$dpr}dppx) {
     .vue-chat {
-      min-width: auto;
-      min-height: auto;
+      // min-width: auto;
+      // min-height: auto;
       .content {
         width: 100%;
         height: 100%;
