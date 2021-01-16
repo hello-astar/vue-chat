@@ -39,12 +39,13 @@
 </template>
 
 <script>
+import { io } from 'socket.io-client';
 import { BASE_URL } from '@/config';
-import { WebsocketClass } from '@/utils/socket';
+// import { WebsocketClass } from '@/utils/socket';
 import searchBox from '@/components/searchBox';
 import avatar from '@/components/avatar';
 import { mapGetters } from 'vuex';
-import { getToken } from '@/utils/token';
+// import { getToken } from '@/utils/token';
 
 export default {
   name: "chat",
@@ -62,35 +63,46 @@ export default {
   },
   methods: {
     initWebsocket () {
-      this.webSocket = new WebsocketClass({
-        url: `ws://${BASE_URL}/chat/room`,
-        params: {
-          token: getToken()
-        },
-        onMessage: (evt) => {
-          const res = JSON.parse(evt.data);
-          if (res.result === 1) {
-            const { type, records, onlineList } = res.data;
-            if (type === 0) { // 获取在线人
-              this.onlineList = onlineList;
-            } else if (type === 1) { // 获取聊天内容
-              this.chatRecord = records;
-              this.$nextTick(() => {
-                if (this.$refs.box) {
-                  this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
-                }
-              })
-            }
-          } else {
-            this.$toast.text(res.msg, 'top');
-            this.$router.push('/login');
-          }
-        },
-        onClose: () => {
-          this.$toast.text('服务异常', 'top');
-          // this.$router.push('/login');
+      console.log('hh')
+      this.webSocket = io(`http://${BASE_URL}`, {
+        withCredentials: true,
+        extraHeaders: {
+          "my-custom-header": "abcd"
         }
       });
+      console.log(this.webSocket)
+      this.webSocket.on("connect", () => {
+        console.log('hello'); // x8WIv7-mJelg7on_ALbx
+      });
+      // this.webSocket = new WebsocketClass({
+      //   url: `ws://${BASE_URL}/chat/room`,
+      //   params: {
+      //     token: getToken()
+      //   },
+      //   onMessage: (evt) => {
+      //     const res = JSON.parse(evt.data);
+      //     if (res.result === 1) {
+      //       const { type, records, onlineList } = res.data;
+      //       if (type === 0) { // 获取在线人
+      //         this.onlineList = onlineList;
+      //       } else if (type === 1) { // 获取聊天内容
+      //         this.chatRecord = records;
+      //         this.$nextTick(() => {
+      //           if (this.$refs.box) {
+      //             this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
+      //           }
+      //         })
+      //       }
+      //     } else {
+      //       this.$toast.text(res.msg, 'top');
+      //       this.$router.push('/login');
+      //     }
+      //   },
+      //   onClose: () => {
+      //     this.$toast.text('服务异常', 'top');
+      //     // this.$router.push('/login');
+      //   }
+      // });
     },
     sendMessage () {
       if (this.webSocket) {
