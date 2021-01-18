@@ -45,77 +45,104 @@ import { BASE_URL } from '@/config';
 import searchBox from '@/components/searchBox';
 import avatar from '@/components/avatar';
 import { mapGetters } from 'vuex';
-// import { getToken } from '@/utils/token';
+import { getToken } from '@/utils/token';
 
 export default {
   name: "chat",
   data () {
     return {
-      webSocket: null, // 当前websocket
+      socket: null, // socket
+      reConnectId: null,
       text: '', // 输入内容
       searchPerson: '', // 搜索联系人
       onlineList: [], // 当前在线人
       chatRecord: [] // 当前聊天记录
     }
   },
-  mounted () {
-    this.initWebsocket();
+  created () {
+    this.initSocket();
   },
   methods: {
-    initWebsocket () {
-      console.log('hh')
-      this.webSocket = io(`http://${BASE_URL}`, {
+    initSocket () {
+      this.socket = io(`http://${BASE_URL}`, {
         withCredentials: true,
         extraHeaders: {
-          "my-custom-header": "abcd"
+          'authorization': 'Bearer ' + getToken()
         }
       });
-      console.log(this.webSocket)
-      this.webSocket.on("connect", () => {
-        console.log('hello'); // x8WIv7-mJelg7on_ALbx
+      this.socket.on("connect", () => {
+        console.log('hello', this.socket.id); // x8WIv7-mJelg7on_ALbx
       });
-      // this.webSocket = new WebsocketClass({
-      //   url: `ws://${BASE_URL}/chat/room`,
-      //   params: {
-      //     token: getToken()
-      //   },
-      //   onMessage: (evt) => {
-      //     const res = JSON.parse(evt.data);
-      //     if (res.result === 1) {
-      //       const { type, records, onlineList } = res.data;
-      //       if (type === 0) { // 获取在线人
-      //         this.onlineList = onlineList;
-      //       } else if (type === 1) { // 获取聊天内容
-      //         this.chatRecord = records;
-      //         this.$nextTick(() => {
-      //           if (this.$refs.box) {
-      //             this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
-      //           }
-      //         })
-      //       }
-      //     } else {
-      //       this.$toast.text(res.msg, 'top');
-      //       this.$router.push('/login');
-      //     }
-      //   },
-      //   onClose: () => {
-      //     this.$toast.text('服务异常', 'top');
-      //     // this.$router.push('/login');
-      //   }
-      // });
+
+      this.socket.on("data", res => {
+        console.log(res)
+        if (res.result === 1) {
+          const { type, records, onlineList } = res.data;
+          if (type === 0) { // 获取在线人
+            this.onlineList = onlineList;
+          } else if (type === 1) { // 获取聊天内容
+            this.chatRecord = records;
+            this.$nextTick(() => {
+              if (this.$refs.box) {
+                this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
+              }
+            })
+          }
+        } else {
+          this.$toast.text(res.msg, 'top');
+          this.$router.push('/login');
+        }
+      });
+
+      this.socket.on("online-list", list => {
+        this.onlineList = list
+      });
+
+      this.socket.on("message", record => {
+        this.chatRecord = record
+        this.$nextTick(() => {
+          if (this.$refs.box) {
+            this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
+          }
+        });
+      });
+
+      this.socket.on("logout", res => {
+        console.log(res, 'hhhhhh')
+      });
+
+      this.socket.on("disconnect", (reason) => {
+        console.log('bye', reason);
+      });
+
+      this.socket.on("connect_error", () => {
+        if (this.reConnectId) {
+          clearTimeout(this.reConnectId)
+        }
+        this.reConnectId = setTimeout(() => {
+          console.log('重新连接');
+          this.socket.connect();
+        }, 500);
+      });
     },
     sendMessage () {
-      if (this.webSocket) {
+      if (this.socket) {
         if (!this.text.trim()) {
           this.$toast.text('不能发送空数据', 'top');
           this.text = this.text.trim();
           return;
         }
-        this.webSocket.send(JSON.stringify({ type: 1, content: this.text.trim() }));
+        this.socket.emit('message', this.text.trim());
         this.text = ''
       } else {
         console.log('socket 还未初始化')
       }
+    }
+  },
+  beforeDestroy () {
+    this.socket.disconnect()
+    if (this.reConnectId) {
+      clearTimeout(this.reConnectId)
     }
   },
   computed: {
@@ -265,8 +292,8 @@ $dprs: 1, 2, 3, 4;
 @each $dpr in $dprs {
   @media screen and (max-width:#{$dpr * 768}px) and (min-resolution:#{$dpr}dppx) {
     .vue-chat {
-      // min-width: auto;
-      // min-height: auto;
+      min-width: auto;
+      min-height: auto;
       .content {
         width: 100%;
         height: 100%;
