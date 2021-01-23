@@ -2,8 +2,8 @@
  * @Description: 保存uuid
  * @Author: astar
  * @Date: 2020-09-09 21:27:01
- * @LastEditTime: 2020-09-21 00:07:28
- * @LastEditors: astar
+ * @LastEditTime: 2021-01-19 10:50:11
+ * @LastEditors: cmx
  */
 const TOKEN_NAME = 'VUE_CHAT_USER_TOKEN';
 
@@ -16,5 +16,5 @@ export function getToken () {
 }
 
 export function removeToken () {
-  // localStorage.removeItem(TOKEN_NAME);
+  localStorage.removeItem(TOKEN_NAME);
 }

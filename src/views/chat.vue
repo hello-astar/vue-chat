@@ -8,7 +8,7 @@
         </div>
         <search-box class="search" v-model="searchPerson"></search-box>
         <ul class="contact-list scrollbar">
-          <li class="contact-item" v-for="item in onlineList" :key="item.uuid">
+          <li class="contact-item" v-for="item in onlineList" :key="item._id">
             <avatar :src="item.avatar" size="large"></avatar>
           </li>
         </ul>
@@ -21,7 +21,7 @@
           <div class="no-data" v-show="!chatRecord.length">
             暂时没有新消息
           </div>
-          <div class="chat-box__item" :class="item.uuid === userInfo.uuid ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item.id">
+          <div class="chat-box__item" :class="item._id === userInfo._id ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item.id">
             <avatar class="chat-box__item_avatar" :src="item.avatar" size="medium"/>
             <div class="chat-box__item_content" v-html="item.content"></div>
           </div>
@@ -52,6 +52,7 @@ export default {
   data () {
     return {
       socket: null, // socket
+      reConnectCount: 10,
       reConnectId: null,
       text: '', // 输入内容
       searchPerson: '', // 搜索联系人
@@ -60,6 +61,7 @@ export default {
     }
   },
   created () {
+    this.reConnectCount = 10;
     this.initSocket();
   },
   methods: {
@@ -70,35 +72,16 @@ export default {
           'authorization': 'Bearer ' + getToken()
         }
       });
-      this.socket.on("connect", () => {
-        console.log('hello', this.socket.id); // x8WIv7-mJelg7on_ALbx
-      });
 
-      this.socket.on("data", res => {
-        console.log(res)
-        if (res.result === 1) {
-          const { type, records, onlineList } = res.data;
-          if (type === 0) { // 获取在线人
-            this.onlineList = onlineList;
-          } else if (type === 1) { // 获取聊天内容
-            this.chatRecord = records;
-            this.$nextTick(() => {
-              if (this.$refs.box) {
-                this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
-              }
-            })
-          }
-        } else {
-          this.$toast.text(res.msg, 'top');
-          this.$router.push('/login');
-        }
+      this.socket.on("connect", () => {
+        console.log('hello', this.socket.id);
       });
 
       this.socket.on("online-list", list => {
         this.onlineList = list
       });
 
-      this.socket.on("message", record => {
+      this.socket.on("record-list", record => {
         this.chatRecord = record
         this.$nextTick(() => {
           if (this.$refs.box) {
@@ -107,22 +90,29 @@ export default {
         });
       });
 
-      this.socket.on("logout", res => {
-        console.log(res, 'hhhhhh')
+      this.socket.on("logout", data => {
+        this.$toast.text(data)
       });
 
       this.socket.on("disconnect", (reason) => {
         console.log('bye', reason);
       });
 
-      this.socket.on("connect_error", () => {
+      this.socket.on("connect_error", error => {
+        console.log(error)
         if (this.reConnectId) {
-          clearTimeout(this.reConnectId)
+          clearTimeout(this.reConnectId);
+          this.reConnectId = null;
         }
-        this.reConnectId = setTimeout(() => {
-          console.log('重新连接');
-          this.socket.connect();
-        }, 500);
+        if (this.reConnectCount) {
+          this.reConnectId = setTimeout(() => {
+            console.log('重新连接');
+            this.reConnectCount--;
+            this.socket.connect();
+          }, 1000);
+        } else {
+          this.$toast.text('连接失败，请重新连接')
+        }
       });
     },
     sendMessage () {
@@ -140,9 +130,11 @@ export default {
     }
   },
   beforeDestroy () {
-    this.socket.disconnect()
+    this.socket.disconnect();
+    this.socket = null;
     if (this.reConnectId) {
-      clearTimeout(this.reConnectId)
+      clearTimeout(this.reConnectId);
+      this.reConnectId = null;
     }
   },
   computed: {
