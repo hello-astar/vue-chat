@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: astar
  * @Date: 2020-09-16 21:13:56
- * @LastEditTime: 2021-01-13 15:22:34
- * @LastEditors: cmx
+ * @LastEditTime: 2021-01-27 13:54:48
+ * @LastEditors: astar
  */
 module.exports = {
     publicPath: './',

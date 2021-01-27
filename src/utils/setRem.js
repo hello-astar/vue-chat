@@ -3,7 +3,7 @@
  * @Author: astar
  * @Date: 2020-09-16 20:07:43
  * @LastEditTime: 2020-09-17 18:32:02
- * @LastEditors: cmx
+ * @LastEditors: astar
  */
 import { os } from '@/utils/browser';
 export default function (doc, win) {

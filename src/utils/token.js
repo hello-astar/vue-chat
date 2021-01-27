@@ -3,7 +3,7 @@
  * @Author: astar
  * @Date: 2020-09-09 21:27:01
  * @LastEditTime: 2021-01-19 10:50:11
- * @LastEditors: cmx
+ * @LastEditors: astar
  */
 const TOKEN_NAME = 'VUE_CHAT_USER_TOKEN';
 

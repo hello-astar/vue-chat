@@ -18,13 +18,13 @@
     position: absolute;
     left: 50%;
     right: 0;
-    bottom: 0;
+    bottom: -1px;
     height: 1px;
     width: 0;
-    background: #000;
+    background: #333;
     transform: translateX(-50%);
     transform-origin: right center;
-    transition: width 0.3s ease-in-out;
+    transition: width 0.5s ease-in-out;
   }
   input:focus ~ .input-cell__line {
     width: 100%;

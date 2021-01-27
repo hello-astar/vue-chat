@@ -1,7 +1,7 @@
 <!--
- * @author: cmx
+ * @Author: astar
  * @Date: 2020-11-12 11:19:43
- * @LastEditors: cmx
+ * @LastEditors: astar
  * @LastEditTime: 2020-11-13 15:42:58
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\home\index.vue

@@ -1,7 +1,7 @@
 /*
- * @author: cmx
+ * @Author: astar
  * @Date: 2020-09-14 10:30:03
- * @LastEditors: cmx
+ * @LastEditors: astar
  * @LastEditTime: 2020-09-14 11:47:51
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\utils\socket.js

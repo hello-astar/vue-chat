@@ -1,8 +1,8 @@
 /*
- * @author: cmx
+ * @Author: astar
  * @Date: 2020-09-09 17:08:05
- * @LastEditors: cmx
- * @LastEditTime: 2020-11-24 17:59:01
+ * @LastEditors: astar
+ * @LastEditTime: 2021-01-27 13:56:40
  * @Description: 封装axios
  * @FilePath: \vue-chat\src\axios\index.js
  */
@@ -16,7 +16,14 @@ export const postRequest = function (url, data, config = {}) {
     }
   }
 
-  return instance.post(url, data, config).then(res => {
+  return instance.post(
+    url,
+    data,
+    {
+      validateStatus: function (status) { return status < 500 } ,
+      ...config
+    }
+  ).then(res => {
     return res.data;
   }, _ => {
     return Promise.reject(_);
@@ -30,7 +37,10 @@ export const getRequest = function (url, data, config = {}) {
     }
   }
 
-  return instance.get(url, data, config).then(res => {
+  return instance.get(url, data, {
+    validateStatus: function (status) { return status < 500 } ,
+    ...config
+  }).then(res => {
     return res.data;
   }, _ => {
     return Promise.reject(_);

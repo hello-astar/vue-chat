@@ -1,8 +1,8 @@
 /*
- * @author: cmx
+ * @Author: astar
  * @Date: 2020-09-09 17:47:49
- * @LastEditors: cmx
- * @LastEditTime: 2021-01-11 18:00:26
+ * @LastEditors: astar
+ * @LastEditTime: 2021-01-27 11:51:12
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
@@ -22,7 +22,7 @@ export const userInfoReq = (data = {}) => {
 }
 
 export const qiniuTokenReq = (data = {}) => {
-  return postRequest('/qiniu/getToken', data);
+  return postRequest('/qiniu/getToken', data, { notToken: true });
 }
 
 export const qiniuUploadReq = (data = {}) => {

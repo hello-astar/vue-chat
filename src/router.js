@@ -17,8 +17,8 @@ export default new Router({
         { path: 'about', name: 'about', component: pipe('about') },
       ]
     },
-    { path: '/register', name: 'register', component: pipe('register') },
-    { path: '/login', name: 'login', component: pipe('login') },
+    { path: '/register', name: 'register', component: pipe('sign/register') },
+    { path: '/login', name: 'login', component: pipe('sign/login') },
     { path: '/chat', name: 'chat', component: pipe('chat') }
   ]
 })
