@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-01-27 13:58:32
+ * @LastEditTime: 2021-01-27 16:30:59
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -10,10 +10,10 @@
 <div class="panel-wrapper register-wrapper">
   <div class="panel-container">
     <div class="panel-container__input">
-      <div class="input__cell" v-if="formConfig.avatar.show">
-        <upload-img ref="avatar" v-model="formData.avatar"></upload-img>
+      <div class="input__cell">
+        <upload-img ref="avatar" v-model="formData.avatar" v-if="formConfig.avatar.show"></upload-img>
+        <i class="iconfont icon-login" v-else></i>
       </div>
-      <i class="iconfont icon-login" v-else></i>
       <input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.name" placeholder="请输入用户名" v-if="formConfig.name.show"></input-cell>
       <input-cell type="password" autocomplete="off" class="input__cell" v-model="formData.password" placeholder="请输入密码" v-if="formConfig.password.show"></input-cell>
       <input-cell type="text" sutocomplete="off" class="input__cell" v-model="formData.captcha" placeholder="请输入验证码" v-if="formConfig.captcha.show">
@@ -127,8 +127,8 @@ export default {
       })
     },
     register (formData) {
-      this.$refs.avatar.upload().then(res => {
-        console.log(res)
+      // this.$refs.avatar.upload().then(res => {
+      //   console.log(res)
         userRegisterReq({
           captcha: formData.captcha.trim(),
           registerData: encrypt.encrypt(JSON.stringify(formData))
@@ -139,7 +139,7 @@ export default {
             this.$toast.text(res.msg, 'top');
           }
         })
-      });
+      // });
     }
   },
   components: {

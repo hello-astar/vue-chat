@@ -21,7 +21,7 @@
           <div class="no-data" v-show="!chatRecord.length">
             暂时没有新消息
           </div>
-          <div class="chat-box__item" :class="item._id === userInfo._id ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item.id">
+          <div class="chat-box__item" :class="item.userId === userInfo._id ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item._id">
             <avatar class="chat-box__item_avatar" :src="item.avatar" size="medium"/>
             <div class="chat-box__item_content" v-html="item.content"></div>
           </div>
@@ -91,7 +91,7 @@ export default {
       });
 
       this.socket.on("logout", data => {
-        this.$toast.text(data)
+        this.$toast.text(data);
       });
 
       this.socket.on("disconnect", (reason) => {

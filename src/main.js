@@ -29,7 +29,8 @@ router.beforeEach ((to, from, next) => {
   } else {
     store.dispatch('user/getUserInfo').then(() => {
       next();
-    }, () => {
+    }, _ => {
+      console.log(_)
       removeToken();
       next('/login');
     });

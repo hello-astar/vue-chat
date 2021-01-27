@@ -20,6 +20,9 @@
     &__input {
       .input__cell {
         margin-bottom: 15px;
+        .icon-login {
+          font-size: 50px;
+        }
       }
     }
     &__btn {

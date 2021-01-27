@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-10-13 14:39:31
  * @LastEditors: astar
- * @LastEditTime: 2020-11-13 18:12:00
+ * @LastEditTime: 2021-01-27 14:27:50
  * @Description: layout
  * @FilePath: \vue-chat\src\views\layout\index.vue
 -->
@@ -22,10 +22,12 @@
   </div>
 </template>
 <script>
+import { removeToken } from '@/utils/token';
 export default {
   methods: {
     logout () {
-      console.log('退出登录')
+      removeToken()
+      this.$router.push('/login')
     }
   }
 }
