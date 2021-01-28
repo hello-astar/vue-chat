@@ -2,7 +2,7 @@
  * @Description: 输入框
  * @Author: astar
  * @Date: 2020-09-20 17:16:54
- * @LastEditTime: 2021-01-12 16:47:53
+ * @LastEditTime: 2021-01-28 09:58:42
  * @LastEditors: astar
 -->
 <template>
@@ -37,7 +37,16 @@ export default {
       }
     },
     autocomplete: String,
-    label: String
+    label: String,
+    value: String
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler: function (val) {
+        this.text = val
+      }
+    }
   },
   data () {
     return {

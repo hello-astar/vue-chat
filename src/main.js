@@ -25,7 +25,7 @@ router.beforeEach ((to, from, next) => {
   } else if (!getToken()) {
     next('/login');
   } else if (store.getters.userInfo._id) {
-    next()
+    next();
   } else {
     store.dispatch('user/getUserInfo').then(() => {
       next();

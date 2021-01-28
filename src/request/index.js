@@ -2,11 +2,11 @@
  * @Author: astar
  * @Date: 2020-09-09 17:47:49
  * @LastEditors: astar
- * @LastEditTime: 2021-01-27 11:51:12
+ * @LastEditTime: 2021-01-28 10:45:12
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
-import { postRequest } from '@/axios';
+import { postRequest, getRequest } from '@/axios';
 import { BASE_URL } from '@/config';
 
 export const userRegisterReq = (data = {}) => {
@@ -18,11 +18,11 @@ export const userLoginReq = (data = {}) => {
 }
 
 export const userInfoReq = (data = {}) => {
-  return postRequest('/user/getUserInfo', data);
+  return getRequest('/user/getUserInfo', data);
 }
 
 export const qiniuTokenReq = (data = {}) => {
-  return postRequest('/qiniu/getToken', data, { notToken: true });
+  return getRequest('/qiniu/getToken', data, { notToken: true });
 }
 
 export const qiniuUploadReq = (data = {}) => {
