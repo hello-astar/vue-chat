@@ -26,13 +26,14 @@
             <div class="chat-box__item_content" v-html="item.content"></div>
           </div>
         </div>
-        <div class="input-box">
+        <input-box @send="sendMessage" class="input-box"></input-box>
+        <!-- <div class="input-box">
           <textarea
             v-model="text"
             @keyup.enter.exact="sendMessage"
             placeholder="按Enter发送"
           />
-        </div>
+        </div> -->
       </main>
     </div>
   </div>
@@ -46,6 +47,7 @@ import searchBox from '@/components/searchBox';
 import avatar from '@/components/avatar';
 import { mapGetters } from 'vuex';
 import { getToken } from '@/utils/token';
+import inputBox from './components/inputBox';
 
 export default {
   name: "chat",
@@ -142,7 +144,8 @@ export default {
   },
   components: {
     avatar,
-    searchBox
+    searchBox,
+    inputBox
   }
 }
 </script>
@@ -265,16 +268,7 @@ export default {
       .input-box {
         flex: 0 0 180px;
         width: 100%;
-        background: #fff;
-        textarea {
-          display: block;
-          width: 100%;
-          height: 73%;
-          padding: 10px;
-          border: none;
-          outline: none;
-          resize: none;
-        }
+        overflow: hidden;
       }
     }
   }

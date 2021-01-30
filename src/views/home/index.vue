@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-11-12 11:19:43
  * @LastEditors: astar
- * @LastEditTime: 2020-11-13 15:42:58
+ * @LastEditTime: 2021-01-28 14:01:24
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\home\index.vue
 -->
@@ -99,6 +99,7 @@ export default {
       &__item {
         position: relative;
         flex-grow: 1;
+        min-width: 200px;
         height: 150px;
         margin: 15px 10px;
         overflow: hidden;

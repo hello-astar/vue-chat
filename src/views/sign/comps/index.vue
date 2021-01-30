@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-01-27 16:30:59
+ * @LastEditTime: 2021-01-30 14:25:44
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -17,10 +17,10 @@
       <input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.name" placeholder="请输入用户名" v-if="formConfig.name.show"></input-cell>
       <input-cell type="password" autocomplete="off" class="input__cell" v-model="formData.password" placeholder="请输入密码" v-if="formConfig.password.show"></input-cell>
       <input-cell type="text" sutocomplete="off" class="input__cell" v-model="formData.captcha" placeholder="请输入验证码" v-if="formConfig.captcha.show">
-        <img :src="captchaImg" alt="验证码" @click="getCaptchaImg">
+        <img :src="captchaImg" alt="验证码" v-throttle="[getCaptchaImg, 'click', 1000]">
       </input-cell>
     </div>
-    <button class="panel-container__btn" @click="submit">{{ mapTypeName }}</button>
+    <button class="panel-container__btn" v-throttle="[submit, 'click', 1000]">{{ mapTypeName }}</button>
     <div class="panel-container__tip" @click="linkTo">{{ mapTip }}</div>
   </div>
 </div>
@@ -58,8 +58,8 @@ export default {
       captchaImg: '', // 验证图片
       formData: {
         avatar: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3155998395,3600507640&fm=26&gp=0.jpg',
-        name: '',
-        password: '',
+        name: 'astar',
+        password: '123456',
         captcha: ''
       },
       formConfig: {
@@ -95,6 +95,7 @@ export default {
       this.captchaImg = `${captchaGetImg}?timer=${new Date().getTime()}`
     },
     submit () {
+      console.log('hhhhh')
       // 校验数据
       let formData = {}
       for (let key in this.formData) {

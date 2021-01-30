@@ -8,6 +8,8 @@ import { getToken, removeToken } from '@/utils/token';
 import setRem from '@/utils/setRem';
 import inputCell from '@/components/inputCell';
 import toastPlugin from '@/components/toast/plugin';
+import * as directives from '@/directives';
+
 setRem(document, window);
 
 // import VConsole from 'vconsole';
@@ -16,6 +18,11 @@ setRem(document, window);
 
 Vue.component(inputCell.name, inputCell);
 Vue.use(toastPlugin);
+
+// 注册自定义指令
+for (const key in directives) {
+  Vue.use(directives[key]);
+}
 
 Vue.config.productionTip = false;
 
