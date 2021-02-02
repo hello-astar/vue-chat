@@ -2,16 +2,20 @@
  * @Author: astar
  * @Date: 2021-01-30 16:24:58
  * @LastEditors: astar
- * @LastEditTime: 2021-01-30 18:17:57
+ * @LastEditTime: 2021-02-01 14:19:22
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\components\popup\index.vue
 -->
 <template>
-  <div class="popup" v-if="visible">
-    <div class="popup-container" :style="style">
-      <slot></slot>
-    </div>
+<transition name="mask">
+  <div class="popup" @click.self="visible=false" :style="popupStyle" v-show="visible">
+    <transition name="slide">
+      <div class="popup-container" :style="style" v-show="visible">
+        <slot></slot>
+      </div>
+    </transition>
   </div>
+</transition>
 </template>
 <script>
 export default {
@@ -21,12 +25,22 @@ export default {
     }
   },
   computed: {
+    popupStyle () {
+      return {
+        top: this.top,
+        left: this.left,
+        bottom: this.bottom,
+        right: this.right,
+        height: `calc(100% - ${this.top || `0px`} - ${this.bottom || `0px`})`,
+        width: `calc(100% - ${this.left || `0px`} - ${this.right || `0px`})`
+      }
+    },
     style () {
       const mapPlace = {
-        'top': { top: this.top || 0, left: 0 },
-        'left': { top: 0, left: this.left || 0 },
-        'right': { top: 0, right: this.right || 0 },
-        'bottom': { bottom: this.bottom || 0, left: 0 }
+        'top': { top: 0, left: 0 },
+        'left': { top: 0, left: 0 },
+        'right': { top: 0, right: 0 },
+        'bottom': { bottom: 0, left: 0 }
       }
       return {
         ...mapPlace[this.place],
@@ -74,12 +88,7 @@ export default {
 <style lang="scss" scoped>
 .popup {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  &-modal {
-  }
+  overflow: hidden;
   &-container {
     box-sizing: border-box;
     padding: 10px;
@@ -87,5 +96,14 @@ export default {
     background: #fff;
     width: 100%;
   }
+}
+.mask-leave-active {
+  transition: visibility .3s;
+}
+.slide-enter-active, .slide-leave-active {
+  transition: transform .3s;
+}
+.slide-enter, .slide-leave-to {
+  transform: translateY(100%);
 }
 </style>

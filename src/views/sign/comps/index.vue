@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-01-30 14:25:44
+ * @LastEditTime: 2021-02-01 10:40:00
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -95,7 +95,6 @@ export default {
       this.captchaImg = `${captchaGetImg}?timer=${new Date().getTime()}`
     },
     submit () {
-      console.log('hhhhh')
       // 校验数据
       let formData = {}
       for (let key in this.formData) {

@@ -2,21 +2,23 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-01-30 18:03:51
+ * @LastEditTime: 2021-02-02 18:32:07
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
 <template>
 <div class="input-box" ref="inputbox">
-  <i class="iconfont icon-biaoqing" @click="showExpression = true"></i>
+  <i class="iconfont icon-biaoqing" @click="showExpression = !showExpression"></i>
   <div
+    ref="input"
     class="input"
     contenteditable
-    @keyup.enter="$emit('send')"
+    @keydown.enter="sendMessage"
     placeholder="按Enter发送"
+    @click="getLastEditRange"
   />
   <popup v-model="showExpression" place="bottom" :bottom="popupBottom">
-    <expression></expression>
+    <expression :onSelectExpression="onSelectExpression"></expression>
   </popup>
 </div>
 </template>
@@ -26,15 +28,122 @@ import popup from '@/components/popup';
 export default {
   data () {
     return {
-      text: '',
       popupBottom: '0px',
-      showExpression: false
+      showExpression: false,
+      lastEditRange: 0,
+      insertAtCursor: null,
     }
   },
   created () {
     this.$nextTick(() => {
+      this.dealWithPasteProblem()
       this.popupBottom = window.getComputedStyle(this.$refs.inputbox).height
+      this.$refs.input.focus()
+      this.getLastEditRange()
     })
+  },
+  methods: {
+    /**
+     * 解决复制粘贴文本把样式也复制过来的问题
+     * @author astar
+     * @date 2021-02-02 17:52
+     */
+    dealWithPasteProblem () {
+      document.querySelector('div[contenteditable="true"]').addEventListener("paste", function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var text = '', event = (e.originalEvent || e);
+        if (event.clipboardData && event.clipboardData.getData) {
+            text = event.clipboardData.getData('text/plain');
+        } else if (window.clipboardData && window.clipboardData.getData) {
+            text = window.clipboardData.getData('Text');
+        }
+        if (document.queryCommandSupported('insertText')) {
+            document.execCommand('insertText', false, text);
+        } else {
+            document.execCommand('paste', false, text);
+        }
+      });
+    },
+    /**
+     * 按enter键发送数据，文本框不允许换行
+     * @author astar
+     * @date 2021-02-02 17:53
+     * @param {Event} e - keydown事件
+     */
+    sendMessage (e) {
+      console.log(this.getJSONFromInput())
+      e.preventDefault();
+      this.$emit('send', e.target.innerHTML);
+      e.target.innerHTML = null;
+    },
+    /**
+     * 保存输入框光标最后所在位置，存入insertAtCursor函数
+     * @author astar
+     * @date 2021-02-02 14:23
+     */
+    getLastEditRange () {
+      if (window.getSelection && window.getSelection().getRangeAt) { // chrome等
+        let range = window.getSelection().getRangeAt(0)
+        range.collapse(false)
+        this.insertAtCursor = function (text) {
+          let node = range.createContextualFragment(text)
+          let c = node.lastChild
+          console.log(c)
+          range.insertNode(node)
+          if (c) {
+            range.setEndAfter(c)
+            range.setStartAfter(c)
+          }
+          let j = window.getSelection()
+          j.removeAllRanges()
+          j.addRange(range)
+        }
+      } else if (document.selection && document.selection.createRange) { // IE
+        let range = document.selection.createRange()
+        this.insertAtCursor = function (text) {
+          range.pasteHTML(text)
+        }
+      }
+    },
+    /**
+     * 选择emoji后的回调函数，将选择的emoji插入最后光标所在处
+     * @author astar
+     * @date 2021-02-02 17:56
+     * @param {*}
+     * @returns {*}
+     */
+    onSelectExpression (expression) {
+      this.showExpression = false
+      this.insertAtCursor(expression)
+    },
+    /**
+     * 将输入框内容转换为JSON格式数据
+     * @author astar
+     * @date 2021-02-02 18:02
+     */
+    getJSONFromInput () {
+      const $ele = this.$refs.input
+      const $children = $ele.childNodes
+      console.log($children)
+      let result = []
+      $children.forEach(child => {
+        let nodeType = child.nodeType
+        console.log(nodeType)
+        if (nodeType === 3) { // 普通文本
+          result.push({
+            type: 'text',
+            content: child.textContent // 还需转义,到时候再说吧
+          })
+        } else if (nodeType === 1) { // 元素节点, 目前只有emoji类型，后期考虑其他
+          result.push({
+            type: 'emoji',
+            content: child.name
+          })
+        }
+      })
+      return result
+    }
   },
   components: {
     expression,
@@ -71,6 +180,7 @@ export default {
     overflow: auto;
     background: #fff;
     font-size: 12px;
+    line-height: 20px;
   }
 }
 </style> 

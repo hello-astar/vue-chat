@@ -23,17 +23,10 @@
           </div>
           <div class="chat-box__item" :class="item.userId === userInfo._id ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item._id">
             <avatar class="chat-box__item_avatar" :src="item.avatar" size="medium"/>
-            <div class="chat-box__item_content" v-html="item.content"></div>
+            <div class="chat-box__item_content">{{item.content}}</div>
           </div>
         </div>
         <input-box @send="sendMessage" class="input-box"></input-box>
-        <!-- <div class="input-box">
-          <textarea
-            v-model="text"
-            @keyup.enter.exact="sendMessage"
-            placeholder="按Enter发送"
-          />
-        </div> -->
       </main>
     </div>
   </div>
@@ -56,7 +49,6 @@ export default {
       socket: null, // socket
       reConnectCount: 10,
       reConnectId: null,
-      text: '', // 输入内容
       searchPerson: '', // 搜索联系人
       onlineList: [], // 当前在线人
       chatRecord: [] // 当前聊天记录
@@ -117,17 +109,15 @@ export default {
         }
       });
     },
-    sendMessage () {
+    sendMessage (text) {
       if (this.socket) {
-        if (!this.text.trim()) {
+        if (!text.trim()) {
           this.$toast.text('不能发送空数据', 'top');
-          this.text = this.text.trim();
           return;
         }
-        this.socket.emit('message', this.text.trim());
-        this.text = ''
+        this.socket.emit('message', text);
       } else {
-        console.log('socket 还未初始化')
+        console.log('socket 还未初始化');
       }
     }
   },

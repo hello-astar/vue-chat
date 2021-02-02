@@ -16,7 +16,7 @@ export default {
 #app {
   position: relative;
   height: 100%;
-  background: url('https://w.wallhaven.cc/full/l3/wallhaven-l3mkqp.png') no-repeat center;
+  background: url('~@/assets/images/bg.png') no-repeat center;
   // background: #eee;
   background-size: cover;
   overflow: auto;
