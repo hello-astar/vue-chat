@@ -25,8 +25,8 @@
             <avatar class="chat-box__item_avatar" :src="item.avatar" size="medium"/>
             <div class="chat-box__item_content">
               <template v-for="(ele, idx) in item.content">
-                <span v-if="ele.type==='text'" :key="idx">{{ele.content}}</span>
-                <span v-if="ele.type==='emoji'" :key="idx" class="emoji-icon" :style="{ 'background-position': `0 ${-30 * expressions.findIndex(item => item === ele.content) / 100}rem` }"></span>
+                <span v-if="ele.kind==='text'" :key="idx">{{ele.value}}</span>
+                <span v-if="ele.kind==='emoji'" :key="idx" class="emoji-icon" :style="{ 'background-position': `0 ${-30 * expressions.findIndex(item => item === ele.value) / 100}rem` }"></span>
               </template>
             </div>
           </div>
@@ -89,6 +89,10 @@ export default {
             this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
           }
         });
+      });
+
+      this.socket.on("error", () => {
+        this.$toast.text('发送失败');
       });
 
       this.socket.on("logout", data => {

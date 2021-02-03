@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 16:24:58
  * @LastEditors: astar
- * @LastEditTime: 2021-02-01 14:19:22
+ * @LastEditTime: 2021-02-03 15:48:56
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\components\popup\index.vue
 -->
@@ -98,10 +98,10 @@ export default {
   }
 }
 .mask-leave-active {
-  transition: visibility .3s;
+  transition: visibility .1s;
 }
 .slide-enter-active, .slide-leave-active {
-  transition: transform .3s;
+  transition: transform .1s;
 }
 .slide-enter, .slide-leave-to {
   transform: translateY(100%);

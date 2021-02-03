@@ -2,13 +2,13 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-02-03 14:51:15
+ * @LastEditTime: 2021-02-03 15:50:04
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
 <template>
 <div class="input-box" ref="inputbox">
-  <i class="iconfont icon-biaoqing" @click="showExpression = !showExpression"></i>
+  <i class="iconfont icon-biaoqing" @click="toggleShowExpression"></i>
   <div
     ref="input"
     class="input"
@@ -44,6 +44,12 @@ export default {
     })
   },
   methods: {
+    toggleShowExpression () {
+      this.showExpression = !this.showExpression
+      if (this.showExpression) { // 点击表情包，输入框不失去焦点
+        this.insertAtCursor('')
+      }
+    },
     /**
      * 解决复制粘贴文本把样式也复制过来的问题
      * @author astar
@@ -76,6 +82,8 @@ export default {
       e.preventDefault();
       this.$emit('send', this.getJSONFromInput());
       e.target.innerHTML = null;
+      this.showExpression = false;
+      this.$refs.input.blur();
     },
     /**
      * 保存输入框光标最后所在位置，存入insertAtCursor函数
@@ -133,15 +141,15 @@ export default {
         console.log(nodeType)
         if (nodeType === 3 && child.textContent) { // 普通文本
           result.push({
-            type: 'text',
-            content: child.textContent // 还需转义,到时候再说吧
+            kind: 'text',
+            value: child.textContent // 还需转义,到时候再说吧
           })
           console.log(child.textContent)
         } else if (nodeType === 1) { // 元素节点, 目前只有emoji类型，后期考虑其他
           if ((new RegExp(/^emoji-.*/)).test(child.name)) {
             result.push({
-              type: 'emoji',
-              content: child.name.replace(/^emoji-/, '')
+              kind: 'emoji',
+              value: child.name.replace(/^emoji-/, '')
             })
             console.log(child.name)
           }
