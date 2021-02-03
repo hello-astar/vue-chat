@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-02-02 18:32:07
+ * @LastEditTime: 2021-02-03 14:51:15
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -14,8 +14,9 @@
     class="input"
     contenteditable
     @keydown.enter="sendMessage"
-    placeholder="按Enter发送"
     @click="getLastEditRange"
+    @input="getLastEditRange"
+    placeholder="按Enter发送"
   />
   <popup v-model="showExpression" place="bottom" :bottom="popupBottom">
     <expression :onSelectExpression="onSelectExpression"></expression>
@@ -72,9 +73,8 @@ export default {
      * @param {Event} e - keydown事件
      */
     sendMessage (e) {
-      console.log(this.getJSONFromInput())
       e.preventDefault();
-      this.$emit('send', e.target.innerHTML);
+      this.$emit('send', this.getJSONFromInput());
       e.target.innerHTML = null;
     },
     /**
@@ -84,20 +84,22 @@ export default {
      */
     getLastEditRange () {
       if (window.getSelection && window.getSelection().getRangeAt) { // chrome等
-        let range = window.getSelection().getRangeAt(0)
-        range.collapse(false)
-        this.insertAtCursor = function (text) {
-          let node = range.createContextualFragment(text)
-          let c = node.lastChild
-          console.log(c)
-          range.insertNode(node)
-          if (c) {
-            range.setEndAfter(c)
-            range.setStartAfter(c)
+        let selection = window.getSelection();
+        if (selection.rangeCount) {
+          let range = selection.getRangeAt(0);
+          range.collapse(false);
+          this.insertAtCursor = function (text) {
+            let node = range.createContextualFragment(text);
+            let c = node.lastChild;
+            range.insertNode(node);
+            if (c) {
+              range.setEndAfter(c);
+              range.setStartAfter(c);
+            }
+            let j = window.getSelection();
+            j.removeAllRanges();
+            j.addRange(range);
           }
-          let j = window.getSelection()
-          j.removeAllRanges()
-          j.addRange(range)
         }
       } else if (document.selection && document.selection.createRange) { // IE
         let range = document.selection.createRange()
@@ -114,7 +116,7 @@ export default {
      * @returns {*}
      */
     onSelectExpression (expression) {
-      this.showExpression = false
+      // this.showExpression = false
       this.insertAtCursor(expression)
     },
     /**
@@ -125,21 +127,24 @@ export default {
     getJSONFromInput () {
       const $ele = this.$refs.input
       const $children = $ele.childNodes
-      console.log($children)
       let result = []
       $children.forEach(child => {
         let nodeType = child.nodeType
         console.log(nodeType)
-        if (nodeType === 3) { // 普通文本
+        if (nodeType === 3 && child.textContent) { // 普通文本
           result.push({
             type: 'text',
             content: child.textContent // 还需转义,到时候再说吧
           })
+          console.log(child.textContent)
         } else if (nodeType === 1) { // 元素节点, 目前只有emoji类型，后期考虑其他
-          result.push({
-            type: 'emoji',
-            content: child.name
-          })
+          if ((new RegExp(/^emoji-.*/)).test(child.name)) {
+            result.push({
+              type: 'emoji',
+              content: child.name.replace(/^emoji-/, '')
+            })
+            console.log(child.name)
+          }
         }
       })
       return result
@@ -160,16 +165,6 @@ export default {
     left: 10px;
     cursor: pointer;
   }
-  // textarea {
-  //   display: inline-block;
-  //   box-sizing: border-box;
-  //   width: 100%;
-  //   height: 100%;
-  //   padding: 10px 35px 10px;
-  //   border: none;
-  //   outline: none;
-  //   resize: none;
-  // }
   .input {
     display: inline-block;
     box-sizing: border-box;

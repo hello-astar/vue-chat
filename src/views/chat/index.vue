@@ -23,7 +23,12 @@
           </div>
           <div class="chat-box__item" :class="item.userId === userInfo._id ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item._id">
             <avatar class="chat-box__item_avatar" :src="item.avatar" size="medium"/>
-            <div class="chat-box__item_content">{{item.content}}</div>
+            <div class="chat-box__item_content">
+              <template v-for="(ele, idx) in item.content">
+                <span v-if="ele.type==='text'" :key="idx">{{ele.content}}</span>
+                <span v-if="ele.type==='emoji'" :key="idx" class="emoji-icon" :style="{ 'background-position': `0 ${-30 * expressions.findIndex(item => item === ele.content) / 100}rem` }"></span>
+              </template>
+            </div>
           </div>
         </div>
         <input-box @send="sendMessage" class="input-box"></input-box>
@@ -41,11 +46,13 @@ import avatar from '@/components/avatar';
 import { mapGetters } from 'vuex';
 import { getToken } from '@/utils/token';
 import inputBox from './components/inputBox';
+import expressions from './components/expression/config';
 
 export default {
   name: "chat",
   data () {
     return {
+      expressions,
       socket: null, // socket
       reConnectCount: 10,
       reConnectId: null,
@@ -109,13 +116,13 @@ export default {
         }
       });
     },
-    sendMessage (text) {
+    sendMessage (message) {
       if (this.socket) {
-        if (!text.trim()) {
+        if (!message || !message.length) {
           this.$toast.text('不能发送空数据', 'top');
           return;
         }
-        this.socket.emit('message', text);
+        this.socket.emit('message', message);
       } else {
         console.log('socket 还未初始化');
       }

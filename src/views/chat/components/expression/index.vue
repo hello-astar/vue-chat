@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 14:59:41
  * @LastEditors: astar
- * @LastEditTime: 2021-02-02 18:33:55
+ * @LastEditTime: 2021-02-03 14:51:37
  * @Description: 表情包popup
  * @FilePath: \vue-chat\src\views\chat\components\expression\index.vue
 -->
@@ -11,7 +11,7 @@
   <span
     v-for="(item, index) in expressions"
     :key="index"
-    :style="{ 'background-position': `0 ${-25 * index / 100}rem` }"
+    :style="{ 'background-position': `0 ${-30 * index / 100}rem` }"
     class="emoji-icon"
     @click="selectExpression(index, item)"
   ></span>
@@ -34,28 +34,18 @@ export default {
   },
   methods: {
     selectExpression (index, item) {
-      this.onSelectExpression(`<span name=${item} class="emoji-icon" style="{background-position: 0 ${-25 * index / 100}rem }"></span>`)
+      this.onSelectExpression(`<img name="emoji-${item}" class="emoji-icon" style="background-position: 0 ${-30 * index / 100}rem"/>`)
     }
   }
 }
 </script>
 <style lang="scss">
-.expression {
-  .emoji-icon {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    background: url('~@/assets/images/biaoqing.png');
-    background-size: 25px auto;
-    background-repeat: no-repeat;
-  }
-}
 .emoji-icon {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    background: url('~@/assets/images/biaoqing.png');
-    background-size: 25px auto;
-    background-repeat: no-repeat;
-  }
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background: url('~@/assets/images/biaoqing.png');
+  background-size: 30px auto;
+  background-repeat: no-repeat;
+}
 </style>
