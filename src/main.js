@@ -6,8 +6,8 @@ import router from './router';
 import store from '@/store';
 import { getToken, removeToken } from '@/utils/token';
 import setRem from '@/utils/setRem';
-import inputCell from '@/components/inputCell';
 import toastPlugin from '@/components/toast/plugin';
+import installComponent from '@/components';
 import * as directives from '@/directives';
 
 setRem(document, window);
@@ -16,8 +16,8 @@ setRem(document, window);
 // var vConsole = new VConsole();
 // console.log(vConsole);
 
-Vue.component(inputCell.name, inputCell);
 Vue.use(toastPlugin);
+installComponent(Vue);
 
 // 注册自定义指令
 for (const key in directives) {

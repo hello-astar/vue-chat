@@ -2,7 +2,7 @@
  * @Description: 输入框
  * @Author: astar
  * @Date: 2020-09-20 17:16:54
- * @LastEditTime: 2021-01-28 09:58:42
+ * @LastEditTime: 2021-02-04 14:28:25
  * @LastEditors: astar
 -->
 <template>
@@ -26,7 +26,7 @@
 </template>
 <script>
 export default {
-  name: 'input-cell',
+  name: 's-input-cell',
   props: {
     placeholder: String,
     type: {

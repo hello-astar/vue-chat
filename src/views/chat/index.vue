@@ -3,26 +3,26 @@
     <div class="content">
       <aside class="sidebar">
         <div class="userinfo">
-          <avatar shape="circle" :src="userInfo.avatar" size="medium"/>
+          <s-avatar shape="circle" :src="userInfo.avatar" size="medium"/>
           {{userInfo.name}}
         </div>
         <search-box class="search" v-model="searchPerson"></search-box>
         <ul class="contact-list scrollbar">
           <li class="contact-item" v-for="item in onlineList" :key="item._id">
-            <avatar :src="item.avatar" size="large"></avatar>
+            <s-avatar :src="item.avatar" size="large"></s-avatar>
           </li>
         </ul>
       </aside>
       <main class="main-content">
         <header class="contact-name">
-          公共聊天室
+          群聊
         </header>
         <div class="chat-box" ref="box">
           <div class="no-data" v-show="!chatRecord.length">
             暂时没有新消息
           </div>
           <div class="chat-box__item" :class="item.userId === userInfo._id ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item._id">
-            <avatar class="chat-box__item_avatar" :src="item.avatar" size="medium"/>
+            <s-avatar class="chat-box__item_avatar" :src="item.avatar" size="medium"/>
             <div class="chat-box__item_content">
               <template v-for="(ele, idx) in item.content">
                 <span v-if="ele.kind==='text'" :key="idx">{{ele.value}}</span>
@@ -42,7 +42,6 @@ import { io } from 'socket.io-client';
 import { BASE_URL } from '@/config';
 // import { WebsocketClass } from '@/utils/socket';
 import searchBox from '@/components/searchBox';
-import avatar from '@/components/avatar';
 import { mapGetters } from 'vuex';
 import { getToken } from '@/utils/token';
 import inputBox from './components/inputBox';
@@ -144,7 +143,6 @@ export default {
     ...mapGetters(['userInfo'])
   },
   components: {
-    avatar,
     searchBox,
     inputBox
   }

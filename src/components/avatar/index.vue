@@ -2,7 +2,7 @@
  * @Description: 头像组件
  * @Author: astar
  * @Date: 2020-09-08 21:10:10
- * @LastEditTime: 2020-09-20 19:05:57
+ * @LastEditTime: 2021-02-04 14:28:05
  * @LastEditors: astar
 -->
 <template>
@@ -14,6 +14,7 @@
 </template>
 <script>
 export default {
+  name: 's-avatar',
   props: {
     shape: { // 形状
       type: String,

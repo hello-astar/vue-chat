@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-02-03 15:50:04
+ * @LastEditTime: 2021-02-04 13:56:31
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -41,6 +41,7 @@ export default {
       this.popupBottom = window.getComputedStyle(this.$refs.inputbox).height
       this.$refs.input.focus()
       this.getLastEditRange()
+      this.$refs.input.blur()
     })
   },
   methods: {
@@ -125,7 +126,7 @@ export default {
      */
     onSelectExpression (expression) {
       // this.showExpression = false
-      this.insertAtCursor(expression)
+      this.insertAtCursor && this.insertAtCursor(expression)
     },
     /**
      * 将输入框内容转换为JSON格式数据

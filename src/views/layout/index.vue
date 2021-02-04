@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-10-13 14:39:31
  * @LastEditors: astar
- * @LastEditTime: 2021-01-27 14:27:50
+ * @LastEditTime: 2021-02-04 18:36:21
  * @Description: layout
  * @FilePath: \vue-chat\src\views\layout\index.vue
 -->
@@ -10,25 +10,38 @@
   <div class="layout">
     <nav class="layout-nav">
       <div class="layout-nav__content">
-        <div class="avatar" @click="$router.push('/')"><img src="@/assets/images/avatar.jpg" alt="">Astar</div>
+        <div class="avatar" @click="$router.push('/')"><s-avatar class="avatar-img" shape="circle" :src="userInfo.avatar" size="medium"></s-avatar>{{userInfo.name}}</div>
         <ul class="list">
-          <li><img src="@/assets/images/logout.svg" alt="" class="icon" @click="logout"></li>
+          <li><img src="@/assets/images/logout.svg" alt="" class="icon" @click="showLogoutDialog=true"></li>
         </ul>
       </div>
     </nav>
     <main class="layout-main">
       <router-view></router-view>
     </main>
+    <s-dialog title="退出登录" v-model="showLogoutDialog" @confirm="logout" @cancel="showLogoutDialog=false">
+      真的要离开吗亲？
+    </s-dialog>
   </div>
 </template>
 <script>
 import { removeToken } from '@/utils/token';
+import { mapGetters } from 'vuex';
+
 export default {
+  data () {
+    return {
+      showLogoutDialog: false
+    }
+  },
   methods: {
     logout () {
       removeToken()
       this.$router.push('/login')
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo'])
   }
 }
 </script>
@@ -51,10 +64,7 @@ export default {
       margin: 0 auto;
       .avatar {
         cursor: pointer;
-        img {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
+        &-img {
           margin-right: 20px;
         }
       }

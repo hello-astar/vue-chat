@@ -2,7 +2,7 @@
  * @Description: 上传图片
  * @Author: astar
  * @Date: 2020-09-20 18:24:39
- * @LastEditTime: 2021-01-27 13:48:57
+ * @LastEditTime: 2021-02-04 14:27:54
  * @LastEditors: astar
 -->
 <template>
@@ -15,13 +15,12 @@
   </div>
   <div class="upload-img__preview" @click="beforeUpload">
     <slot name="preview">
-      <avatar shape="circle" :src="dataURL" size="large"/>
+      <s-avatar shape="circle" :src="dataURL" size="large"/>
     </slot>
   </div>
 </div>
 </template>
 <script>
-import avatar from '@/components/avatar';
 // import qiniu from 'qiniu-js';
 import { qiniuTokenReq, qiniuUploadReq } from '@/request';
 
@@ -78,9 +77,6 @@ export default {
         return qiniuUploadReq(formData);
       })
     }
-  },
-  components: {
-    avatar
   }
 }
 </script>
