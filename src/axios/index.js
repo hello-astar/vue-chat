@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 17:08:05
  * @LastEditors: astar
- * @LastEditTime: 2021-01-28 10:08:14
+ * @LastEditTime: 2021-02-06 16:41:27
  * @Description: 封装axios
  * @FilePath: \vue-chat\src\axios\index.js
  */
@@ -30,7 +30,7 @@ export const getRequest = function (url, data, config = {}) {
       authorization: 'Bearer ' + getToken()
     }
   }
-  return instance.get(url, { ...data, validateStatus, ...config }).then(res => {
+  return instance.get(url, { params: data, validateStatus, ...config }).then(res => {
     return res.data;
   }, _ => {
     return Promise.reject(_);

@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-10-13 14:39:31
  * @LastEditors: astar
- * @LastEditTime: 2021-02-04 18:36:21
+ * @LastEditTime: 2021-02-06 15:29:18
  * @Description: layout
  * @FilePath: \vue-chat\src\views\layout\index.vue
 -->
@@ -36,8 +36,8 @@ export default {
   },
   methods: {
     logout () {
-      removeToken()
-      this.$router.push('/login')
+      removeToken();
+      this.$router.push('/login');
     }
   },
   computed: {

@@ -21,15 +21,17 @@
           <div class="no-data" v-show="!chatRecord.length">
             暂时没有新消息
           </div>
-          <div class="chat-box__item" :class="item.userId === userInfo._id ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item._id">
-            <s-avatar class="chat-box__item_avatar" :src="item.avatar" size="medium"/>
-            <div class="chat-box__item_content">
-              <template v-for="(ele, idx) in item.content">
-                <span v-if="ele.kind==='text'" :key="idx">{{ele.value}}</span>
-                <span v-if="ele.kind==='emoji'" :key="idx" class="emoji-icon" :style="{ 'background-position': `0 ${-30 * expressions.findIndex(item => item === ele.value) / 100}rem` }"></span>
-              </template>
+          <pull-refresh :refreshNext="refreshNext">
+            <div slot="main" class="chat-box__item" :class="item.userId === userInfo._id ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item._id">
+              <s-avatar class="chat-box__item_avatar" :src="item.avatar" size="medium"/>
+              <div class="chat-box__item_content">
+                <template v-for="(ele, idx) in item.content">
+                  <span v-if="ele.kind==='text'" :key="idx">{{ele.value}}</span>
+                  <span v-if="ele.kind==='emoji'" :key="idx" class="emoji-icon" :style="{ 'background-position': `0 ${-30 * expressions.findIndex(item => item === ele.value) / 100}rem` }"></span>
+                </template>
+              </div>
             </div>
-          </div>
+          </pull-refresh>
         </div>
         <input-box @send="sendMessage" class="input-box"></input-box>
       </main>
@@ -40,17 +42,20 @@
 <script>
 import { io } from 'socket.io-client';
 import { BASE_URL } from '@/config';
-// import { WebsocketClass } from '@/utils/socket';
 import searchBox from '@/components/searchBox';
 import { mapGetters } from 'vuex';
 import { getToken } from '@/utils/token';
 import inputBox from './components/inputBox';
 import expressions from './components/expression/config';
+import { removeToken } from '@/utils/token';
+import { getHistoryChatByCount } from '@/request';
 
 export default {
   name: "chat",
   data () {
     return {
+      pageSize: 20,
+      totalDone: false,
       expressions,
       socket: null, // socket
       reConnectCount: 10,
@@ -63,8 +68,36 @@ export default {
   created () {
     this.reConnectCount = 10;
     this.initSocket();
+    this.refreshNext().then(() => {
+      this.$nextTick(() => {
+        if (this.$refs.box) {
+          this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
+        }
+      });
+    }, _ => {
+      this.$toast.text(_);
+    });
   },
   methods: {
+    refreshNext () {
+      return new Promise((resolve, reject) => {
+        if (!this.totalDone) {
+          getHistoryChatByCount({ exitsCount: this.chatRecord.length, fetchCount: this.pageSize }).then(res => {
+            if (res.result === 1) {
+              this.chatRecord = res.data.concat(this.chatRecord);
+              if (!res.data.length) {
+                this.totalDone = true;
+              }
+              resolve(res.data && res.data.length ? true : false);
+            } else {
+              reject(res.msg);
+            }
+          })
+        } else {
+          resolve(false)
+        }
+      })
+    },
     initSocket () {
       this.socket = io(`http://${BASE_URL}`, {
         withCredentials: true,
@@ -73,16 +106,12 @@ export default {
         }
       });
 
-      this.socket.on("connect", () => {
-        console.log('hello', this.socket.id);
-      });
-
       this.socket.on("online-list", list => {
-        this.onlineList = list
+        this.onlineList = list;
       });
 
-      this.socket.on("record-list", record => {
-        this.chatRecord = record
+      this.socket.on("message", message => {
+        this.chatRecord.push(message);
         this.$nextTick(() => {
           if (this.$refs.box) {
             this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
@@ -90,16 +119,12 @@ export default {
         });
       });
 
-      this.socket.on("error", () => {
-        this.$toast.text('发送失败');
-      });
-
-      this.socket.on("logout", data => {
-        this.$toast.text(data);
-      });
-
-      this.socket.on("disconnect", (reason) => {
-        console.log('bye', reason);
+      this.socket.on("error", error => {
+        this.$toast.text(error);
+        if (error.type === 'logout') {
+          removeToken();
+          this.$router.push('/login');
+        }
       });
 
       this.socket.on("connect_error", error => {
