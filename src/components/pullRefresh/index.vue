@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-06 10:50:18
  * @LastEditors: astar
- * @LastEditTime: 2021-02-06 17:47:09
+ * @LastEditTime: 2021-02-06 18:00:26
  * @Description: 下拉刷新
  * @FilePath: \vue-chat\src\components\pullRefresh\index.vue
 -->
@@ -145,7 +145,7 @@ export default {
               this.loading = 4
             }
             this.backToTop(500)
-          }).catch(_ => {
+          }).catch(() => {
             this.loading = 5
             this.backToTop(500)
           })
@@ -158,7 +158,7 @@ export default {
               this.loading = 4
             }
             this.initData()
-          }).catch(_ => {
+          }).catch(() => {
             this.loading = 5
             this.initData()
           })
@@ -170,6 +170,7 @@ export default {
       }
     },
     backToTop (duration) {
+      console.log(duration)
       if (this.timer) {
         clearTimeout(this.timer)
       }

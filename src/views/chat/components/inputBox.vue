@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-02-04 13:56:31
+ * @LastEditTime: 2021-02-07 11:22:19
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -84,7 +84,6 @@ export default {
       this.$emit('send', this.getJSONFromInput());
       e.target.innerHTML = null;
       this.showExpression = false;
-      this.$refs.input.blur();
     },
     /**
      * 保存输入框光标最后所在位置，存入insertAtCursor函数
