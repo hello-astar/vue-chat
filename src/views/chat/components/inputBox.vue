@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-02-10 16:30:41
+ * @LastEditTime: 2021-02-10 23:06:34
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -39,14 +39,22 @@ export default {
   created () {
     this.$nextTick(() => {
       this.dealWithPasteProblem();
-      this.popupWidth = window.getComputedStyle(this.$refs.inputbox).width;
-      this.pos = getElementPagePosition(this.$refs.inputbox);
+      this.computePopupStyle();
+
+      window.onresize = () => {
+        this.computePopupStyle();
+      }
+
       this.$refs.input.focus();
       this.getLastEditRange();
       this.$refs.input.blur();
     })
   },
   methods: {
+    computePopupStyle () {
+      this.popupWidth = window.getComputedStyle(this.$refs.inputbox).width;
+      this.pos = getElementPagePosition(this.$refs.inputbox);
+    },
     toggleShowExpression () {
       this.showExpression = !this.showExpression
       if (this.showExpression) { // 点击表情包，输入框不失去焦点
