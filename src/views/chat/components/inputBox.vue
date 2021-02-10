@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-02-07 11:22:19
+ * @LastEditTime: 2021-02-10 14:52:48
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -18,7 +18,7 @@
     @input="getLastEditRange"
     placeholder="按Enter发送"
   />
-  <popup v-model="showExpression" place="bottom" :bottom="popupBottom">
+  <popup class="expression-popup" v-model="showExpression" place="bottom" :x="pos.x" :y="pos.y" height="1.1rem" :width="popupWidth">
     <expression :onSelectExpression="onSelectExpression"></expression>
   </popup>
 </div>
@@ -26,10 +26,12 @@
 <script>
 import expression from './expression';
 import popup from '@/components/popup';
+import { getElementPagePosition } from '@/utils';
 export default {
   data () {
     return {
-      popupBottom: '0px',
+      popupWidth: '0px',
+      pos: { x: 0, y: 0 }, // popup左下角位置
       showExpression: false,
       lastEditRange: 0,
       insertAtCursor: null,
@@ -37,11 +39,12 @@ export default {
   },
   created () {
     this.$nextTick(() => {
-      this.dealWithPasteProblem()
-      this.popupBottom = window.getComputedStyle(this.$refs.inputbox).height
-      this.$refs.input.focus()
-      this.getLastEditRange()
-      this.$refs.input.blur()
+      this.dealWithPasteProblem();
+      this.popupWidth = window.getComputedStyle(this.$refs.inputbox).width;
+      this.pos = getElementPagePosition(this.$refs.inputbox);
+      this.$refs.input.focus();
+      this.getLastEditRange();
+      this.$refs.input.blur();
     })
   },
   methods: {

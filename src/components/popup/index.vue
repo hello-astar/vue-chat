@@ -2,18 +2,20 @@
  * @Author: astar
  * @Date: 2021-01-30 16:24:58
  * @LastEditors: astar
- * @LastEditTime: 2021-02-03 15:48:56
+ * @LastEditTime: 2021-02-10 14:48:51
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\components\popup\index.vue
 -->
 <template>
 <transition name="mask">
   <div class="popup" @click.self="visible=false" :style="popupStyle" v-show="visible">
-    <transition name="slide">
-      <div class="popup-container" :style="style" v-show="visible">
-        <slot></slot>
-      </div>
-    </transition>
+    <div class="popup-container" :style="style">
+      <transition name="slide">
+        <div class="popup-container__content" v-show="visible">
+          <slot></slot>
+        </div>
+      </transition>
+    </div>
   </div>
 </transition>
 </template>
@@ -27,12 +29,6 @@ export default {
   computed: {
     popupStyle () {
       return {
-        top: this.top,
-        left: this.left,
-        bottom: this.bottom,
-        right: this.right,
-        height: `calc(100% - ${this.top || `0px`} - ${this.bottom || `0px`})`,
-        width: `calc(100% - ${this.left || `0px`} - ${this.right || `0px`})`
       }
     },
     style () {
@@ -44,7 +40,10 @@ export default {
       }
       return {
         ...mapPlace[this.place],
-        height: this.height
+        left: this.x + 'px',
+        bottom: `calc(100% - ${this.y + 'px'})`,
+        height: this.height,
+        width: this.width
       }
     }
   },
@@ -70,17 +69,20 @@ export default {
       type: Boolean,
       required: true
     },
-    place: {
+    place: { // 从哪个角度弹出
       type: String,
       default: 'bottom',
       validate: value => ['top, bottom', 'left', 'right'].includes(value)
     },
-    bottom: String,
-    top: String,
-    left: String,
-    right: String,
-    height: {
-      type: String
+    x: Number, // 内容左下角x
+    y: Number, // 内容左下角y
+    height: { // 内容高度
+      type: String,
+      default: '200px'
+    },
+    width: { // 内容宽度
+      type: String,
+      default: '200px'
     }
   }
 }
@@ -89,12 +91,22 @@ export default {
 .popup {
   position: fixed;
   overflow: hidden;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
   &-container {
     box-sizing: border-box;
-    padding: 10px;
     position: absolute;
-    background: #fff;
-    width: 100%;
+    overflow: hidden;
+    background: transparent;
+    &__content {
+      background: #fff;
+      height: 100%;
+      padding: 10px;
+      overflow: auto;
+    }
   }
 }
 .mask-leave-active {
