@@ -2,13 +2,13 @@
  * @Author: astar
  * @Date: 2021-01-30 16:24:58
  * @LastEditors: astar
- * @LastEditTime: 2021-02-10 14:48:51
+ * @LastEditTime: 2021-02-10 16:29:35
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\components\popup\index.vue
 -->
 <template>
 <transition name="mask">
-  <div class="popup" @click.self="visible=false" :style="popupStyle" v-show="visible">
+  <div class="popup" @click.self="visible=false" v-show="visible">
     <div class="popup-container" :style="style">
       <transition name="slide">
         <div class="popup-container__content" v-show="visible">
@@ -21,16 +21,13 @@
 </template>
 <script>
 export default {
+  name: 's-popup',
   data () {
     return {
       visible: false
     }
   },
   computed: {
-    popupStyle () {
-      return {
-      }
-    },
     style () {
       const mapPlace = {
         'top': { top: 0, left: 0 },
