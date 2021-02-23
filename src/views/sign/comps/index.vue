@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-02-04 14:29:51
+ * @LastEditTime: 2021-02-23 18:30:44
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -11,7 +11,7 @@
   <div class="panel-container">
     <div class="panel-container__input">
       <div class="input__cell">
-        <upload-img ref="avatar" v-model="formData.avatar" v-if="formConfig.avatar.show"></upload-img>
+        <s-upload-img ref="avatar" v-model="formData.avatar" v-if="formConfig.avatar.show"></s-upload-img>
         <i class="iconfont icon-login" v-else></i>
       </div>
       <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.name" placeholder="请输入用户名" v-if="formConfig.name.show"></s-input-cell>
@@ -28,7 +28,6 @@
 <script>
 import { userRegisterReq, userLoginReq, captchaGetImg } from '@/request';
 import { setToken } from '@/utils/token';
-import uploadImg from '@/components/uploadImg';
 import PUBLIC_KEY from '@/config/rsaPublicKey';
 
 const REGISTER = 'register'
@@ -80,7 +79,7 @@ export default {
         },
         captcha: {
           show: true,
-          validate: value => value && value.trim() && !isNaN(value),
+          validate: value => value && value.trim(),
           msg: '请输入验证码'
         }
       }
@@ -102,48 +101,40 @@ export default {
         if (this.formConfig[key].show && !this.formConfig[key].validate(this.formData[key])) {
           return this.$toast.text(this.formConfig[key].msg, 'top')
         }
-        formData[key] = this.formData[key]
+        formData[key] = this.formData[key].trim()
       }
+      formData.password = encrypt.encrypt(formData.password)
       this.type === LOGIN ? this.login(formData) : this.register(formData)
     },
     linkTo () {
       this.$router.push(this.type === LOGIN ? '/register' : '/login')
     },
     login (formData) {
-      userLoginReq({
-        captcha: formData.captcha.trim(),
-        loginData: encrypt.encrypt(JSON.stringify(formData))
-      }).then(res => {
-        console.log(res)
+      userLoginReq(formData).then(res => {
         if (res.result === 1) {
           setToken(res.data.token);
           this.$store.commit('user/SET_USER_INFO', res.data);
           this.$router.push('/home');
         } else {
+          this.getCaptchaImg();
           this.$toast.text(res.msg, 'top');
         }
-      }, _ => {
-        this.$toast.text(_.message, 'top')
       })
     },
     register (formData) {
       // this.$refs.avatar.upload().then(res => {
       //   console.log(res)
-        userRegisterReq({
-          captcha: formData.captcha.trim(),
-          registerData: encrypt.encrypt(JSON.stringify(formData))
-        }).then(res => {
+        userRegisterReq(formData).then(res => {
           if (res.result === 1) {
+            this.$toast.text('注册成功');
             this.$router.push('/login');
           } else {
-            this.$toast.text(res.msg, 'top');
+            this.getCaptchaImg();
+            this.$toast.text(res.result, 'top');
           }
         })
       // });
     }
-  },
-  components: {
-    uploadImg
   }
 }
 </script>

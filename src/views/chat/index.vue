@@ -6,7 +6,7 @@
           <s-avatar shape="circle" :src="userInfo.avatar" size="medium"/>
           {{userInfo.name}}
         </div>
-        <search-box class="search" v-model="searchPerson"></search-box>
+        <s-search-box class="search" v-model="searchPerson"></s-search-box>
         <ul class="contact-list scrollbar">
           <li class="contact-item" v-for="item in onlineList" :key="item._id">
             <s-avatar :src="item.avatar" size="large"></s-avatar>
@@ -42,9 +42,8 @@
 <script>
 import { io } from 'socket.io-client';
 import { BASE_URL } from '@/config';
-import searchBox from '@/components/searchBox';
 import { mapGetters } from 'vuex';
-import { getToken } from '@/utils/token';
+import { getAuthorization } from '@/utils';
 import inputBox from './components/inputBox';
 import expressions from './components/expression/config';
 import { removeToken } from '@/utils/token';
@@ -99,10 +98,10 @@ export default {
       })
     },
     initSocket () {
-      this.socket = io(`http://${BASE_URL}`, {
+      this.socket = io(BASE_URL, {
         withCredentials: true,
         extraHeaders: {
-          'authorization': 'Bearer ' + getToken()
+          'authorization': getAuthorization()
         }
       });
 
@@ -168,7 +167,6 @@ export default {
     ...mapGetters(['userInfo'])
   },
   components: {
-    searchBox,
     inputBox
   }
 }

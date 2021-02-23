@@ -2,7 +2,7 @@
  * @Description: 上传图片
  * @Author: astar
  * @Date: 2020-09-20 18:24:39
- * @LastEditTime: 2021-02-04 14:27:54
+ * @LastEditTime: 2021-02-23 17:08:06
  * @LastEditors: astar
 -->
 <template>
@@ -25,6 +25,7 @@
 import { qiniuTokenReq, qiniuUploadReq } from '@/request';
 
 export default {
+  name: 's-upload-img',
   props: {
     value: {
       type: String,

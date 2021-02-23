@@ -2,20 +2,20 @@
  * @Author: astar
  * @Date: 2021-02-04 14:09:13
  * @LastEditors: astar
- * @LastEditTime: 2021-02-10 16:30:18
+ * @LastEditTime: 2021-02-23 17:16:48
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\components\index.js
  */
-import inputCell from '@/components/inputCell';
-import dialog from '@/components/dialog';
-import avatar from '@/components/avatar';
-import pullRefresh from '@/components/pullRefresh';
-import popup from '@/components/popup';
+import { requireAll } from '@/utils';
 
-export default Vue => {
-  Vue.component(inputCell.name, inputCell);
-  Vue.component(dialog.name, dialog);
-  Vue.component(avatar.name, avatar);
-  Vue.component(pullRefresh.name, pullRefresh);
-  Vue.component(popup.name, popup);
+export const installComponent = Vue => {
+  requireAll(require.context('./', true, /index.vue/)).forEach(module => {
+    Vue.component(module.default.name, module.default);
+  });
+}
+
+export const installPlugin = Vue => {
+  requireAll(require.context('./', true, /plugin.js/)).forEach(module => {
+    Vue.use(module.default);
+  });
 }

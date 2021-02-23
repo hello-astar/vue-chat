@@ -2,7 +2,7 @@
  * @Description: 搜索框
  * @Author: astar
  * @Date: 2020-09-08 20:54:56
- * @LastEditTime: 2020-09-16 20:08:15
+ * @LastEditTime: 2021-02-23 17:07:05
  * @LastEditors: astar
 -->
 <template>
@@ -17,6 +17,7 @@
 </template>
 <script>
 export default {
+  name: 's-search-box',
   data () {
     return {
       searchTxt: ''
