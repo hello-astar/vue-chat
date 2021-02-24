@@ -41,7 +41,6 @@
 
 <script>
 import { io } from 'socket.io-client';
-import { BASE_URL } from '@/config';
 import { mapGetters } from 'vuex';
 import { getAuthorization } from '@/utils';
 import inputBox from './components/inputBox';
@@ -98,7 +97,7 @@ export default {
       })
     },
     initSocket () {
-      this.socket = io(BASE_URL, {
+      this.socket = io(process.env.VUE_APP_BASE_API, {
         withCredentials: true,
         extraHeaders: {
           'authorization': getAuthorization()
