@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-02-23 18:30:44
+ * @LastEditTime: 2021-02-24 15:00:01
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -111,27 +111,21 @@ export default {
     },
     login (formData) {
       userLoginReq(formData).then(res => {
-        if (res.result === 1) {
-          setToken(res.data.token);
-          this.$store.commit('user/SET_USER_INFO', res.data);
-          this.$router.push('/home');
-        } else {
-          this.getCaptchaImg();
-          this.$toast.text(res.msg, 'top');
-        }
+        setToken(res.data.token);
+        this.$store.commit('user/SET_USER_INFO', res.data);
+        this.$router.push('/home');
+      }).catch(() => {
+        this.getCaptchaImg();
       })
     },
     register (formData) {
       // this.$refs.avatar.upload().then(res => {
       //   console.log(res)
-        userRegisterReq(formData).then(res => {
-          if (res.result === 1) {
-            this.$toast.text('注册成功');
-            this.$router.push('/login');
-          } else {
-            this.getCaptchaImg();
-            this.$toast.text(res.result, 'top');
-          }
+        userRegisterReq(formData).then(() => {
+          this.$toast.text('注册成功');
+          this.$router.push('/login');
+        }).catch(() => {
+          this.getCaptchaImg();
         })
       // });
     }

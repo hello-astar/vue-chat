@@ -66,7 +66,7 @@ export default {
     },
     upload () {
       return qiniuTokenReq().then(res => {
-        if (res.result === 1) {
+        if (res.code === 1) {
           return res.data;
         } else {
           this.$toast.text(res.msg, 'top');

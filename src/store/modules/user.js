@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-15 18:19:35
  * @LastEditors: astar
- * @LastEditTime: 2020-09-20 15:37:56
+ * @LastEditTime: 2021-02-24 14:39:49
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\store\modules\user.js
  */
@@ -15,11 +15,7 @@ const user = {
   actions: {
     getUserInfo ({ commit }) {
       return userInfoReq().then(res => {
-        if (res.result === 1) {
-          commit('SET_USER_INFO', res.data);
-          return res.data;
-        }
-        return Promise.reject(res.msg);
+        commit('SET_USER_INFO', res.data);
       })
     }
   },

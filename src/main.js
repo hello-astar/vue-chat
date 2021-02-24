@@ -1,8 +1,8 @@
 /*
  * @Author: astar
  * @Date: 2020-09-09 16:50:59
- * @LastEditors: cmx
- * @LastEditTime: 2021-02-23 18:28:58
+ * @LastEditors: astar
+ * @LastEditTime: 2021-02-24 15:12:31
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\main.js
  */
@@ -13,7 +13,7 @@ import "@/assets/styles/common.scss";
 import store from '@/store';
 import setRem from '@/utils/setRem';
 import { installComponent, installPlugin } from '@/components';
-import installRouter from './router';
+import installRouter from '@/router';
 import * as directives from '@/directives';
 
 setRem(document, window);

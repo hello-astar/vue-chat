@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-02-10 14:50:36
- * @LastEditTime: 2021-02-23 16:52:31
+ * @LastEditTime: 2021-02-24 11:42:59
  * @LastEditors: astar
  */
 import { getToken } from '@/utils/token'
@@ -34,4 +34,7 @@ export function getAuthorization () {
 }
 
 // 通过require.context读取文件夹下的内容
-export const requireAll = reqContextfunc => reqContextfunc.keys().map(reqContextfunc)
+export const requireAll = reqContextfunc => reqContextfunc.keys().map(reqContextfunc);
+
+// 路由懒加载
+export const pipe = path => () => import(`@/views/${path}`);

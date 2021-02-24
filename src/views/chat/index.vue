@@ -82,7 +82,7 @@ export default {
       return new Promise((resolve, reject) => {
         if (!this.totalDone) {
           getHistoryChatByCount({ exitsCount: this.chatRecord.length, fetchCount: this.pageSize }).then(res => {
-            if (res.result === 1) {
+            if (res.code === 1) {
               this.chatRecord = res.data.concat(this.chatRecord);
               if (!res.data.length) {
                 this.totalDone = true;
