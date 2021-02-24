@@ -1,9 +1,10 @@
 /*
- * @Description: 
  * @Author: astar
- * @Date: 2020-09-16 21:13:56
- * @LastEditTime: 2021-02-23 18:27:54
+ * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
+ * @LastEditTime: 2021-02-24 16:29:47
+ * @Description: webpack配置
+ * @FilePath: \vue-chat\vue.config.js
  */
 module.exports = {
   publicPath: './',
