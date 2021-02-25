@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-02-10 14:50:36
- * @LastEditTime: 2021-02-24 11:42:59
+ * @LastEditTime: 2021-02-25 18:33:54
  * @LastEditors: astar
  */
 import { getToken } from '@/utils/token'
@@ -38,3 +38,13 @@ export const requireAll = reqContextfunc => reqContextfunc.keys().map(reqContext
 
 // 路由懒加载
 export const pipe = path => () => import(`@/views/${path}`);
+
+// 加载js链接
+export const loadScript = (url, cb) => {
+  const elem = window.document.createElement('script');
+  elem.type = 'text/javascript';
+  elem.addEventListener('load', cb, false);
+  elem.src = url;
+  elem.crossOrigin = 'anonymous';
+  window.document.body.appendChild(elem);
+}

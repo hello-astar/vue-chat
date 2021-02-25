@@ -2,26 +2,28 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-02-24 15:00:01
+ * @LastEditTime: 2021-02-25 18:32:40
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
 <template>
-<div class="panel-wrapper register-wrapper">
-  <div class="panel-container">
-    <div class="panel-container__input">
-      <div class="input__cell">
-        <s-upload-img ref="avatar" v-model="formData.avatar" v-if="formConfig.avatar.show"></s-upload-img>
-        <i class="iconfont icon-login" v-else></i>
+<div class="sign-page">
+  <div class="panel-wrapper register-wrapper">
+    <div class="panel-container">
+      <div class="panel-container__input">
+        <div class="input__cell">
+          <s-upload-img ref="avatar" v-model="formData.avatar" v-if="formConfig.avatar.show"></s-upload-img>
+          <i class="iconfont icon-login" v-else></i>
+        </div>
+        <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.name" placeholder="请输入用户名" v-if="formConfig.name.show"></s-input-cell>
+        <s-input-cell type="password" autocomplete="off" class="input__cell" v-model="formData.password" placeholder="请输入密码" v-if="formConfig.password.show"></s-input-cell>
+        <s-input-cell type="text" sutocomplete="off" class="input__cell" v-model="formData.captcha" placeholder="请输入验证码" v-if="formConfig.captcha.show">
+          <img :src="captchaImg" alt="验证码" v-throttle="[getCaptchaImg, 'click', 1000]">
+        </s-input-cell>
       </div>
-      <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.name" placeholder="请输入用户名" v-if="formConfig.name.show"></s-input-cell>
-      <s-input-cell type="password" autocomplete="off" class="input__cell" v-model="formData.password" placeholder="请输入密码" v-if="formConfig.password.show"></s-input-cell>
-      <s-input-cell type="text" sutocomplete="off" class="input__cell" v-model="formData.captcha" placeholder="请输入验证码" v-if="formConfig.captcha.show">
-        <img :src="captchaImg" alt="验证码" v-throttle="[getCaptchaImg, 'click', 1000]">
-      </s-input-cell>
+      <button class="panel-container__btn" v-throttle="[submit, 'click', 1000]">{{ mapTypeName }}</button>
+      <div class="panel-container__tip" @click="linkTo">{{ mapTip }}</div>
     </div>
-    <button class="panel-container__btn" v-throttle="[submit, 'click', 1000]">{{ mapTypeName }}</button>
-    <div class="panel-container__tip" @click="linkTo">{{ mapTip }}</div>
   </div>
 </div>
 </template>
@@ -29,12 +31,9 @@
 import { userRegisterReq, userLoginReq, captchaGetImg } from '@/request';
 import { setToken } from '@/utils/token';
 import PUBLIC_KEY from '@/config/rsaPublicKey';
-
+import asyncLoadJS from '@/utils/asyncLoadJS';
 const REGISTER = 'register'
 const LOGIN = 'login'
-// eslint-disable-next-line no-undef
-let encrypt = new JSEncrypt();
-encrypt.setPublicKey(PUBLIC_KEY);
 
 export default {
   props: {
@@ -103,7 +102,15 @@ export default {
         }
         formData[key] = this.formData[key].trim()
       }
-      formData.password = encrypt.encrypt(formData.password)
+      // formData.password = encrypt.encrypt(formData.password)
+      console.log('hello')
+      asyncLoadJS('jsEncrypt').then(() => {
+        import('JSEncrypt').then(res => {
+          console.log(res)
+        })
+        // let encrypt = new jsEncrypt();
+        // encrypt.setPublicKey(PUBLIC_KEY);
+      })
       this.type === LOGIN ? this.login(formData) : this.register(formData)
     },
     linkTo () {
