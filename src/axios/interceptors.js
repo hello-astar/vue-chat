@@ -2,11 +2,11 @@
  * @Author: astar
  * @Date: 2020-09-09 17:27:10
  * @LastEditors: astar
- * @LastEditTime: 2021-02-24 17:31:35
+ * @LastEditTime: 2021-02-25 15:28:59
  * @Description: 定义拦截器
  * @FilePath: \vue-chat\src\axios\interceptors.js
  */
-import Vue from 'vue';
+import { vm } from '../main.js';
 import axios from 'axios';
 import { removeToken } from '@/utils/token';
 import { getAuthorization } from '@/utils';
@@ -33,7 +33,7 @@ instance.interceptors.request.use(config => {
   return config;
 }, _ => { // 请求失败操作
   console.error('服务器请求失败', _)
-  Vue.$toast.text('服务器请求失败')
+  vm.$toast.text('服务器请求失败')
   return Promise.reject(_);
 });
 
@@ -43,25 +43,23 @@ instance.interceptors.response.use(response => {
     case CUSTOM_CODE_MAP.SUCCESS: // 可在此添加自定义的code，返回成功
       return res;
     case CUSTOM_CODE_MAP.ERROR:
-      Vue.$toast.text(res.msg || '请求失败');
+      vm.$toast.text(res.msg || '请求失败');
       return Promise.reject(res);
     default:
-      Vue.$toast.text(res.msg || '未知错误');
+      vm.$toast.text(res.msg || '未知错误');
       return Promise.reject(res);
   }
 }, _ => {
   console.error('服务器响应失败', _);
-  if (_ && _.response) {
-    Vue.$toast.text((_.response.data && _.response.data.msg) || '请求失败');
-    if (_.response.status === 401) { // 登录过期, 跳转登录页面
+  if (_ && _.response && _.response.data) {
+    vm.$toast.text((_.response.data && _.response.data.msg) || '请求失败');
+    if (_.response.data.code === 401) { // 登录过期
       removeToken();
-      setTimeout(() => {
-        location.href = location.origin;
-      }, 1000);
+      vm.$router.push('/401');
     }
-    return Promise.reject(_);
+    return Promise.reject(_.response);
   }
-  Vue.$toast.text('服务器响应失败');
+  vm.$toast.text('服务器响应失败');
   return Promise.reject(_);
 });
 

@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 16:50:59
  * @LastEditors: astar
- * @LastEditTime: 2021-02-24 15:12:31
+ * @LastEditTime: 2021-02-25 15:26:20
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\main.js
  */
@@ -15,7 +15,7 @@ import setRem from '@/utils/setRem';
 import { installComponent, installPlugin } from '@/components';
 import installRouter from '@/router';
 import * as directives from '@/directives';
-
+import '@/icons'; // 引入svg图片，svg-sprite-loader自动将多个svg图片打包成svg-sprite
 setRem(document, window);
 
 // import VConsole from 'vconsole';
@@ -36,7 +36,7 @@ const router = installRouter(Vue);
 Vue.config.productionTip = false;
 
 
-new Vue({
+export const vm = new Vue({
   render: h => h(App),
   router,
   store
