@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-02-25 18:32:40
+ * @LastEditTime: 2021-02-26 11:18:37
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -102,16 +102,16 @@ export default {
         }
         formData[key] = this.formData[key].trim()
       }
-      // formData.password = encrypt.encrypt(formData.password)
-      console.log('hello')
       asyncLoadJS('jsEncrypt').then(() => {
-        import('JSEncrypt').then(res => {
-          console.log(res)
+        import('jsEncrypt').then(module => {
+          let jsEncrypt = module.default;
+          let encrypt = new jsEncrypt();
+          encrypt.setPublicKey(PUBLIC_KEY);
+          this.type === LOGIN ? this.login(formData) : this.register(formData);
         })
-        // let encrypt = new jsEncrypt();
-        // encrypt.setPublicKey(PUBLIC_KEY);
+      }).catch(e => {
+        console.log('js加载失败', e);
       })
-      this.type === LOGIN ? this.login(formData) : this.register(formData)
     },
     linkTo () {
       this.$router.push(this.type === LOGIN ? '/register' : '/login')

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-02-10 14:50:36
- * @LastEditTime: 2021-02-25 18:33:54
+ * @LastEditTime: 2021-02-26 11:11:01
  * @LastEditors: astar
  */
 import { getToken } from '@/utils/token'
@@ -43,7 +43,8 @@ export const pipe = path => () => import(`@/views/${path}`);
 export const loadScript = (url, cb) => {
   const elem = window.document.createElement('script');
   elem.type = 'text/javascript';
-  elem.addEventListener('load', cb, false);
+  elem.addEventListener('load', function () { cb(true) }, false);
+  elem.addEventListener('error', function () { cb(false) }, false);
   elem.src = url;
   elem.crossOrigin = 'anonymous';
   window.document.body.appendChild(elem);

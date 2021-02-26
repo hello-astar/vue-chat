@@ -1,13 +1,12 @@
 /*
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
- * @LastEditors: cmx
- * @LastEditTime: 2021-02-25 18:36:12
+ * @LastEditors: astar
+ * @LastEditTime: 2021-02-26 11:00:22
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
 const path = require('path');
-// const CompressionPlugin = require('compression-webpack-plugin');
 const resolve = (dir) => path.join(__dirname, dir);
 const judgeEnv = env => process.env.NODE_ENV === env;
 const IS_DEVELOPMENT = judgeEnv('development');
@@ -43,7 +42,7 @@ module.exports = {
   },
   configureWebpack: {
     externals: {
-      JSEncrypt: 'jsEncrypt'
+      jsEncrypt: 'JSEncrypt'
     }
   },
   chainWebpack (config) {
@@ -70,19 +69,5 @@ module.exports = {
           .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
           .end()
       })
-    // config
-    //   .when(IS_PRODUCTION, config => {
-    //     config
-    //       .plugin('compressionPlugin')
-    //       .use(new CompressionPlugin({
-    //         // filename: '[path].gz[query]',
-    //         algorithm: 'gzip',
-    //         test: new RegExp(/\.(js)$/),
-    //         threshold: 10240,
-    //         minRatio: 0.8,
-    //         // deleteOriginalAssets: true
-    //       }))
-    //       .end()
-    //   })
   }
 }

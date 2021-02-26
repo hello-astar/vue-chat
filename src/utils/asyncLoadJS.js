@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-25 18:08:42
  * @LastEditors: astar
- * @LastEditTime: 2021-02-25 18:25:52
+ * @LastEditTime: 2021-02-26 11:17:15
  * @Description: 加载js文件，返回promise
  * @FilePath: \vue-chat\src\utils\asyncLoadJS.js
  */
@@ -14,30 +14,42 @@ const config = {
     isReady: false
   }
 }
-const loadFunc = function (url, callback) {
-  const target = config[url];
+const loadFunc = function (key, success, fail) {
+  const target = config[key];
 
   if (!target) {
-    return console.error('模块不存在');
+    fail(`模块${key}不存在`);
+    return;
   }
 
   if (!target.depUrl) {
-    return console.error('没有外部依赖');
+    fail(`${key}没有外部依赖`);
+    return;
   }
 
   if (target.isReady) {
-    return callback();
+    success(key);
+    return;
   }
 
-  loadScript(target.depUrl, () => {
-    target.isReady = true
-    callback()
-  })
+  loadScript(target.depUrl, (res) => {
+    target.isReady = true;
+    res ? success(key) : fail(`模块${key}加载失败`);
+    return;
+  });
+  
 }
 
 const asyncLoadJS = function (conf) {
-  return new Promise((resolve) => {
-    loadFunc(conf, resolve);
-  })
+  // 加载多个
+  if (Array.isArray(conf)) {
+    return Promise.all(
+      conf.map(item => new Promise((resolve, reject) => loadFunc(item, resolve, reject)))
+    );
+  } else { // 加载一个
+    return new Promise((resolve, reject) => {
+      loadFunc(conf, resolve, reject);
+    });
+  }
 }
 export default asyncLoadJS;
