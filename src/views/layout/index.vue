@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-10-13 14:39:31
  * @LastEditors: astar
- * @LastEditTime: 2021-02-06 15:29:18
+ * @LastEditTime: 2021-02-26 13:45:35
  * @Description: layout
  * @FilePath: \vue-chat\src\views\layout\index.vue
 -->
@@ -12,7 +12,9 @@
       <div class="layout-nav__content">
         <div class="avatar" @click="$router.push('/')"><s-avatar class="avatar-img" shape="circle" :src="userInfo.avatar" size="medium"></s-avatar>{{userInfo.name}}</div>
         <ul class="list">
-          <li><img src="@/assets/images/logout.svg" alt="" class="icon" @click="showLogoutDialog=true"></li>
+          <li>
+            <svg-icon class="icon" icon-name="logout" @click="showLogoutDialog=true"></svg-icon>
+          </li>
         </ul>
       </div>
     </nav>

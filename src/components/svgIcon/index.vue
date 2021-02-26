@@ -2,12 +2,12 @@
  * @Author: astar
  * @Date: 2021-02-25 11:57:11
  * @LastEditors: astar
- * @LastEditTime: 2021-02-25 15:06:42
+ * @LastEditTime: 2021-02-26 13:41:40
  * @Description: 展示svg图片
  * @FilePath: \vue-chat\src\components\svgIcon\index.vue
 -->
 <template>
-<svg class="svg-icon" aria-hidden="true">
+<svg class="svg-icon" aria-hidden="true" v-on="$listeners">
   <use :xlink:href="icon"></use>
 </svg>
 </template>

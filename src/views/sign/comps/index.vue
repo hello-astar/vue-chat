@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-02-26 11:18:37
+ * @LastEditTime: 2021-02-26 11:57:15
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -107,6 +107,7 @@ export default {
           let jsEncrypt = module.default;
           let encrypt = new jsEncrypt();
           encrypt.setPublicKey(PUBLIC_KEY);
+          formData.password = encrypt.encrypt(formData.password);
           this.type === LOGIN ? this.login(formData) : this.register(formData);
         })
       }).catch(e => {
