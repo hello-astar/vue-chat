@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2021-02-26 11:00:22
+ * @LastEditTime: 2021-02-26 18:24:16
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -34,7 +34,7 @@ module.exports = {
         plugins: [
           require('postcss-pxtorem')({
             rootValue: 100, // 换算的基数
-            propList: ['*'],
+            propList: ['*']
           }),
         ]
       }
@@ -60,6 +60,16 @@ module.exports = {
       .loader('svg-sprite-loader')
       .options({
         symbolId: 'icon-[name]'
+      })
+      .end()
+    
+    config.module
+      .rule('vue')
+      .test(/\.vue$/)
+      .use('inline-style-to-rem')
+      .loader(resolve('loader/inline-style-to-rem'))
+      .options({
+        rootValue: 100
       })
       .end()
     config

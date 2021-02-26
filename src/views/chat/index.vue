@@ -171,6 +171,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import "@/assets/styles/mixin.scss";
 .vue-chat {
   position: relative;
   min-height: 610px;
@@ -178,6 +179,7 @@ export default {
   height: 100%;
   width: 100%;
   overflow: auto;
+  @include bg-filter('~@/assets/images/chat_bg.jpg');
   .content {
     display: flex;
     position: absolute;
