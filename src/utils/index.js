@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-02-10 14:50:36
- * @LastEditTime: 2021-02-26 11:11:01
+ * @LastEditTime: 2021-03-01 17:46:14
  * @LastEditors: astar
  */
 import { getToken } from '@/utils/token'
@@ -25,7 +25,7 @@ export const getElementPagePosition = function (element) {
     current = current.offsetParent;
   }
   //返回结果
-  return { x: actualLeft, y: actualTop }
+  return { x: actualLeft + 'px', y: actualTop + 'px' }
 }
 
 // 获取authorization

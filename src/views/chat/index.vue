@@ -27,7 +27,7 @@
               <div class="chat-box__item_content">
                 <template v-for="(ele, idx) in item.content">
                   <span v-if="ele.kind==='text'" :key="idx">{{ele.value}}</span>
-                  <span v-if="ele.kind==='emoji'" :key="idx" class="emoji-icon" :style="{ 'background-position': `0 ${-30 * expressions.findIndex(item => item === ele.value) / 100}rem` }"></span>
+                  <span v-if="ele.kind==='emoji'" :key="idx" class="emoji-icon" :style="{ 'background-position': `0 ${-30 * expressions.findIndex(item => item === ele.value)}px` }"></span>
                 </template>
               </div>
             </div>

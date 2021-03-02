@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-02-10 23:06:34
+ * @LastEditTime: 2021-03-01 17:47:26
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -18,7 +18,7 @@
     @input="getLastEditRange"
     placeholder="按Enter发送"
   />
-  <s-popup class="expression-popup" v-model="showExpression" place="bottom" :x="pos.x" :y="pos.y" height="1.1rem" :width="popupWidth">
+  <s-popup class="expression-popup" v-model="showExpression" place="bottom" :x="pos.x" :y="pos.y" height="110px" :width="popupWidth">
     <expression :onSelectExpression="onSelectExpression"></expression>
   </s-popup>
 </div>
@@ -30,7 +30,7 @@ export default {
   data () {
     return {
       popupWidth: '0px',
-      pos: { x: 0, y: 0 }, // popup左下角位置
+      pos: { x: '0', y: '0' }, // popup左下角位置
       showExpression: false,
       lastEditRange: 0,
       insertAtCursor: null,

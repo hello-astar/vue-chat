@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-06 10:50:18
  * @LastEditors: astar
- * @LastEditTime: 2021-02-06 18:00:26
+ * @LastEditTime: 2021-03-02 15:52:12
  * @Description: 下拉刷新
  * @FilePath: \vue-chat\src\components\pullRefresh\index.vue
 -->
@@ -16,8 +16,8 @@
   >
     <div class="content" ref="content">
       <!-- 下拉显示 -->
-      <div class="status" :style="{'height': marginTop / toRem + 'rem'}">
-        <div class="msg" :style="{'line-height': height / toRem  + 'rem'}">
+      <div class="status" :style="{'height': marginTop + 'px'}">
+        <div class="msg" :style="{'line-height': height + 'px'}">
           <i class="icon iconfont icon-chongwutubiao16" :class="loading !== 2 ? 'stop' : ''"/>
           {{msg}}
         </div>
@@ -25,8 +25,8 @@
       <!-- 显示的数据 -->
       <slot name="main" />
       <!-- 上拉显示 -->
-      <div class="status" v-show="gesture === 2" :style="{'height': height / toRem + 'rem'}">
-        <div class="msg" :style="{'line-height': height / toRem + 'rem'}">
+      <div class="status" v-show="gesture === 2" :style="{'height': height + 'px'}">
+        <div class="msg" :style="{'line-height': height + 'px'}">
           <i class="icon iconfont icon-chongwutubiao16" />
           {{msg}}
         </div>
@@ -47,8 +47,7 @@ export default {
       timer: 0,
       gesture: 0,
       marginTop: 104, // 下拉的最大长度
-      height: 44, // 最小长度
-      toRem: 100 // 转为rem
+      height: 44 // 最小长度
     }
   },
   props: {
@@ -95,7 +94,7 @@ export default {
   methods: {
     initData () {
       const $content = this.$refs.content
-      $content.style.marginTop = -1 * this.marginTop / this.toRem + 'rem'
+      $content.style.marginTop = `${-1 * this.marginTop}px`
       $content.style.transition = 'none'
       this.loading = 0
       this.touchStart = 0
@@ -119,7 +118,7 @@ export default {
         this.distance = distance
         this.gesture = 1
         if (this.distance < this.marginTop) {
-          $content.style.marginTop = (this.distance - this.marginTop) / this.toRem + 'rem'
+          $content.style.marginTop = `${this.distance - this.marginTop}px`
           if (this.distance >= this.height) {
             this.loading = 1
           }
@@ -137,7 +136,7 @@ export default {
         // 根据手势判断上拉还是下拉
         if (this.gesture === 1 && this.refreshNext) {
           const $content = this.$refs.content
-          $content.style.marginTop = (-1 * this.marginTop + this.height) / this.toRem + 'rem'
+          $content.style.marginTop = `${-1 * this.marginTop + this.height}px`
           this.refreshNext().then(res => {
             if (res) {
               this.loading = 3
@@ -176,7 +175,7 @@ export default {
       }
       const _this = this
       const $content = _this.$refs.content
-      $content.style.marginTop = -1 * this.marginTop / this.toRem + 'rem'
+      $content.style.marginTop = `${-1 * this.marginTop}px`
       $content.style.transition = 'margin-top .2s .8s ease-in'
       this.timer = setTimeout(function () {
         _this.initData()

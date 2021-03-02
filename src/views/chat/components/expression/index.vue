@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 14:59:41
  * @LastEditors: astar
- * @LastEditTime: 2021-02-03 14:51:37
+ * @LastEditTime: 2021-03-01 16:26:10
  * @Description: 表情包popup
  * @FilePath: \vue-chat\src\views\chat\components\expression\index.vue
 -->
@@ -11,7 +11,7 @@
   <span
     v-for="(item, index) in expressions"
     :key="index"
-    :style="{ 'background-position': `0 ${-30 * index / 100}rem` }"
+    :style="{ 'background-position': `0 ${-30 * index}px` }"
     class="emoji-icon"
     @click="selectExpression(index, item)"
   ></span>
@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     selectExpression (index, item) {
-      this.onSelectExpression(`<img name="emoji-${item}" class="emoji-icon" style="background-position: 0 ${-30 * index / 100}rem"/>`)
+      this.onSelectExpression(`<img name="emoji-${item}" class="emoji-icon" style="background-position: 0 ${-30 * index}px"/>`)
     }
   }
 }

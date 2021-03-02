@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 16:24:58
  * @LastEditors: astar
- * @LastEditTime: 2021-02-10 16:29:35
+ * @LastEditTime: 2021-03-01 17:47:01
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\components\popup\index.vue
 -->
@@ -37,8 +37,8 @@ export default {
       }
       return {
         ...mapPlace[this.place],
-        left: this.x + 'px',
-        bottom: `calc(100% - ${this.y + 'px'})`,
+        left: this.x,
+        bottom: `calc(100% - ${this.y})`,
         height: this.height,
         width: this.width
       }
@@ -71,8 +71,8 @@ export default {
       default: 'bottom',
       validate: value => ['top, bottom', 'left', 'right'].includes(value)
     },
-    x: Number, // 内容左下角x
-    y: Number, // 内容左下角y
+    x: String, // 内容左下角x
+    y: String, // 内容左下角y
     height: { // 内容高度
       type: String,
       default: '200px'

@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-11-12 11:19:43
  * @LastEditors: astar
- * @LastEditTime: 2021-01-28 14:01:24
+ * @LastEditTime: 2021-03-02 17:06:21
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\home\index.vue
 -->
@@ -33,7 +33,7 @@ export default {
     return {
       imgList: [
         { img: 'https://th.wallhaven.cc/lg/9m/9mxz8k.jpg', label: '聊天室', route: '/chat' },
-        { img: 'https://th.wallhaven.cc/small/96/96qy3w.jpg', label: '关于', route: '/about' },
+        { img: 'https://th.wallhaven.cc/small/96/96qy3w.jpg', label: '关于', route: '/home/about' },
         { img: 'https://th.wallhaven.cc/small/6k/6k8kkx.jpg', label: '敬请期待' },
         { img: 'https://w.wallhaven.cc/full/ox/wallhaven-oxkjgm.jpg', label: 'D' }
       ]
