@@ -2,7 +2,7 @@
  * @Description: 上传图片
  * @Author: astar
  * @Date: 2020-09-20 18:24:39
- * @LastEditTime: 2021-02-23 17:08:06
+ * @LastEditTime: 2021-03-03 17:46:42
  * @LastEditors: astar
 -->
 <template>
@@ -65,13 +65,8 @@ export default {
       }
     },
     upload () {
-      return qiniuTokenReq().then(res => {
-        if (res.code === 1) {
-          return res.data;
-        } else {
-          this.$toast.text(res.msg, 'top');
-        }
-      }).then(({ token }) => {
+      return qiniuTokenReq().then((res) => {
+        let token = res.data.token;
         const formData = new FormData();
         formData.append('token', token);
         formData.append('file', this.file);

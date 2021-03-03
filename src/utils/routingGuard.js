@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 17:47:13
  * @LastEditors: astar
- * @LastEditTime: 2021-02-25 15:14:51
+ * @LastEditTime: 2021-03-03 17:44:39
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\utils\routingGuard.js
  */
@@ -21,6 +21,8 @@ export default (to, from, next) => {
   } else {
     store.dispatch('user/getUserInfo').then(() => {
       next();
+    }).catch(() => {
+      next('/login');
     });
   }
 }

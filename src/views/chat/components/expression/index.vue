@@ -2,18 +2,18 @@
  * @Author: astar
  * @Date: 2021-01-30 14:59:41
  * @LastEditors: astar
- * @LastEditTime: 2021-03-01 16:26:10
+ * @LastEditTime: 2021-03-03 18:31:49
  * @Description: 表情包popup
  * @FilePath: \vue-chat\src\views\chat\components\expression\index.vue
 -->
 <template>
-<div class="expression">
+<div class="expression" @click="selectExpression">
   <span
     v-for="(item, index) in expressions"
     :key="index"
     :style="{ 'background-position': `0 ${-30 * index}px` }"
     class="emoji-icon"
-    @click="selectExpression(index, item)"
+    :data-index="index"
   ></span>
 </div>
 </template>
@@ -33,8 +33,11 @@ export default {
     }
   },
   methods: {
-    selectExpression (index, item) {
-      this.onSelectExpression(`<img name="emoji-${item}" class="emoji-icon" style="background-position: 0 ${-30 * index}px"/>`)
+    selectExpression ({ target }) {
+      if (target.nodeName.toLowerCase() === 'span') {
+        const index = target.dataset.index
+        this.onSelectExpression(`<img name="emoji-${this.expressions[index]}" class="emoji-icon" style="background-position: 0 ${-30 * index}px"/>`)
+      }
     }
   }
 }

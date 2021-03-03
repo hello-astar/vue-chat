@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-11-12 11:19:43
  * @LastEditors: astar
- * @LastEditTime: 2021-03-02 17:06:21
+ * @LastEditTime: 2021-03-03 18:21:45
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\home\index.vue
 -->
@@ -17,9 +17,9 @@
       ></li>
     </ul>
     <main class="home-page__main">
-      <ul class="img-list">
-        <li v-for="(item, index) in imgList" :key="index" class="img-list__item" @click="item.route && $router.push(item.route)">
-          <img :src="item.img" alt="">
+      <ul class="img-list" @click="dealWithClick">
+        <li v-for="(item, index) in imgList" :key="index" class="img-list__item">
+          <img :src="item.img" alt="" :data-route="item.route">
           <p class="label">{{item.label}}</p>
         </li>
       </ul>
@@ -33,10 +33,23 @@ export default {
     return {
       imgList: [
         { img: 'https://th.wallhaven.cc/lg/9m/9mxz8k.jpg', label: '聊天室', route: '/chat' },
+        { img: 'https://th.wallhaven.cc/lg/9m/9mxz8k.jpg', label: 'swiper', route: '/test/aaa' },
+        { img: 'https://th.wallhaven.cc/small/6k/6k8kkx.jpg', label: '测试' },
         { img: 'https://th.wallhaven.cc/small/96/96qy3w.jpg', label: '关于', route: '/home/about' },
-        { img: 'https://th.wallhaven.cc/small/6k/6k8kkx.jpg', label: '敬请期待' },
-        { img: 'https://w.wallhaven.cc/full/ox/wallhaven-oxkjgm.jpg', label: 'D' }
+        { img: 'https://th.wallhaven.cc/small/6k/6k8kkx.jpg', label: '敬请期待' }
       ]
+    }
+  },
+  methods: {
+    /**
+     * 事件委托
+     * @author astar
+     * @date 2021-03-03 18:21
+     */
+    dealWithClick (e) {
+      if (e.target.nodeName.toUpperCase() === 'IMG' && e.target.dataset.route) {
+        this.$router.push(e.target.dataset.route)
+      }
     }
   }
 }
