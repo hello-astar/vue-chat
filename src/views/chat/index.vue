@@ -27,7 +27,7 @@
               <div class="chat-box__item_content">
                 <template v-for="(ele, idx) in item.content">
                   <span v-if="ele.kind==='text'" :key="idx">{{ele.value}}</span>
-                  <span v-if="ele.kind==='emoji'" :key="idx" class="emoji-icon" :style="{ 'background-position': `0 ${-30 * expressions.findIndex(item => item === ele.value)}px` }"></span>
+                  <expression-item v-if="ele.kind==='emoji'" :key="idx" :value="ele.value"></expression-item>
                 </template>
               </div>
             </div>
@@ -45,6 +45,7 @@ import { mapGetters } from 'vuex';
 import { getAuthorization } from '@/utils';
 import inputBox from './components/inputBox';
 import expressions from './components/expression/config';
+import expressionItem from './components/expression/expressionItem';
 import { removeToken } from '@/utils/token';
 import { getHistoryChatByCount } from '@/request';
 
@@ -166,7 +167,8 @@ export default {
     ...mapGetters(['userInfo'])
   },
   components: {
-    inputBox
+    inputBox,
+    expressionItem
   }
 }
 </script>
