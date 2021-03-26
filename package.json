@@ -9,20 +9,20 @@
     "name": "node bin/configHeader.js cmx astar"
   },
   "dependencies": {
-    "core-js": "^2.6.5",
+    "core-js": "^3.6.5",
     "qiniu-js": "^3.1.1",
     "socket.io-client": "^3.1.0",
     "vue": "^2.6.10",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.9.0",
-    "@vue/cli-plugin-eslint": "^3.9.0",
+    "@vue/cli-plugin-babel": "~4.5.12",
+    "@vue/cli-plugin-eslint": "~4.5.12",
     "@vue/cli-service": "^3.9.0",
     "axios": "^0.21.1",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
     "node-sass": "^4.12.0",
     "postcss-pxtorem": "^5.1.1",
     "sass-loader": "^7.1.0",
