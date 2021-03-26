@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2021-02-26 18:24:16
+ * @LastEditTime: 2021-03-26 17:22:47
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -66,8 +66,8 @@ module.exports = {
     config.module
       .rule('vue')
       .test(/\.vue$/)
-      .use('inline-style-to-rem')
-      .loader(resolve('loader/inline-style-to-rem'))
+      .use('vue-inline-px-to-rem')
+      .loader('vue-inline-px-to-rem')
       .options({
         rootValue: 100
       })
