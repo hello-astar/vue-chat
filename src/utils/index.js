@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-02-10 14:50:36
- * @LastEditTime: 2021-03-01 17:46:14
+ * @LastEditTime: 2021-03-28 01:02:03
  * @LastEditors: astar
  */
 import { getToken } from '@/utils/token'
@@ -46,6 +46,6 @@ export const loadScript = (url, cb) => {
   elem.addEventListener('load', function () { cb(true) }, false);
   elem.addEventListener('error', function () { cb(false) }, false);
   elem.src = url;
-  elem.crossOrigin = 'anonymous';
+  // elem.crossOrigin = 'anonymous';
   window.document.body.appendChild(elem);
 }

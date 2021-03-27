@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 16:50:59
  * @LastEditors: astar
- * @LastEditTime: 2021-02-25 15:05:42
+ * @LastEditTime: 2021-03-28 00:21:25
  * @Description: 入口页面
  * @FilePath: \vue-chat\src\App.vue
 -->
@@ -27,10 +27,11 @@ export default {
   // background: #eee;
   .app-content {
     position: absolute;
-    top: 0%;
-    left: 0%;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    overflow: auto;
   }
 }
 </style>
