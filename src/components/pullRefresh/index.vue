@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-06 10:50:18
  * @LastEditors: astar
- * @LastEditTime: 2021-03-02 15:52:12
+ * @LastEditTime: 2021-03-27 23:42:52
  * @Description: 下拉刷新
  * @FilePath: \vue-chat\src\components\pullRefresh\index.vue
 -->
@@ -96,7 +96,7 @@ export default {
       const $content = this.$refs.content
       $content.style.marginTop = `${-1 * this.marginTop}px`
       $content.style.transition = 'none'
-      this.loading = 0
+      this.loading = BEFORE_LOAD
       this.touchStart = 0
       this.distance = 0
       this.gesture = 0
@@ -120,45 +120,45 @@ export default {
         if (this.distance < this.marginTop) {
           $content.style.marginTop = `${this.distance - this.marginTop}px`
           if (this.distance >= this.height) {
-            this.loading = 1
+            this.loading = PULLING
           }
         }
       } else if (scrollTop + clientHeight === scrollHeight && this.loading !== 2 && distance < 0 && this.loadMoreNext) { // 上拉 // 除法有误差，设置误差范围0.4rem
         // 上拉加载
         this.gesture = 2
-        this.loading = 1
+        this.loading = PULLING
       }
     },
     endTouch () {
       // 松开判断loading
       if (this.loading === 1) {
-        this.loading = 2 // 加载中
+        this.loading = LOADING // 加载中
         // 根据手势判断上拉还是下拉
         if (this.gesture === 1 && this.refreshNext) {
           const $content = this.$refs.content
           $content.style.marginTop = `${-1 * this.marginTop + this.height}px`
           this.refreshNext().then(res => {
             if (res) {
-              this.loading = 3
+              this.loading = REFRESH_SUCCESS
             } else {
-              this.loading = 4
+              this.loading = NO_DATA
             }
             this.backToTop(500)
           }).catch(() => {
-            this.loading = 5
+            this.loading = REFRESH_FAIL
             this.backToTop(500)
           })
         } else if (this.gesture === 2 && this.loadMoreNext) {
           this.loadMoreNext().then(res => {
             // 加载成功，判断是否有更新内容 to3 or 4
             if (res) {
-              this.loading = 3
+              this.loading = REFRESH_SUCCESS
             } else {
-              this.loading = 4
+              this.loading = NO_DATA
             }
             this.initData()
           }).catch(() => {
-            this.loading = 5
+            this.loading = REFRESH_FAIL
             this.initData()
           })
         }
