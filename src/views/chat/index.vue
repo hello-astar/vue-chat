@@ -1,5 +1,5 @@
 <template>
-  <div class="vue-chat">
+  <div :class="getClass">
     <div class="content">
       <aside class="sidebar">
         <div class="userinfo">
@@ -48,6 +48,7 @@ import expressions from './components/expression/config';
 import expressionItem from './components/expression/expressionItem';
 import { removeToken } from '@/utils/token';
 import { getHistoryChatByCount } from '@/request';
+import { getDpr } from '@/utils/setRem';
 
 export default {
   name: "chat",
@@ -164,7 +165,24 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['userInfo']),
+    getClass () {
+      // $dprs: 1, 2, 3, 4;
+      // @each $dpr in $dprs {
+      //   @media screen and (max-width:#{$dpr * 768}px) and (min-resolution:#{$dpr}dppx) {
+      //   }
+      // }
+      let dpr = getDpr();
+      if (window.innerWidth < dpr * 768) {
+        return [
+          'vue-chat',
+          'vue-chat-small-device'
+        ]
+      }
+      return [
+        'vue-chat'
+      ]
+    }
   },
   components: {
     inputBox,
@@ -299,33 +317,28 @@ export default {
   }
 }
 // 兼容屏幕小于ipad的设备
-$dprs: 1, 2, 3, 4;
-@each $dpr in $dprs {
-  @media screen and (max-width:#{$dpr * 768}px) and (min-resolution:#{$dpr}dppx) {
-    .vue-chat {
-      min-width: auto;
-      min-height: auto;
-      .content {
+.vue-chat-small-device {
+  min-width: auto;
+  min-height: auto;
+  .content {
+    width: 100%;
+    height: 100%;
+    .sidebar {
+      display: none; // 小屏上不展示sidebar
+    }
+    .main-content {
+      .input-box {
+        flex: 0 0 50px;
         width: 100%;
-        height: 100%;
-        .sidebar {
-          display: none; // 小屏上不展示sidebar
-        }
-        .main-content {
-          .input-box {
-            flex: 0 0 50px;
-            width: 100%;
-            background: #fff;
-            textarea {
-              display: block;
-              width: 100%;
-              height: 100%;
-              padding: 10px;
-              border: none;
-              outline: none;
-              resize: none;
-            }
-          }
+        background: #fff;
+        textarea {
+          display: block;
+          width: 100%;
+          height: 100%;
+          padding: 10px;
+          border: none;
+          outline: none;
+          resize: none;
         }
       }
     }

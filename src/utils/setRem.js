@@ -2,25 +2,29 @@
  * @Description: 
  * @Author: astar
  * @Date: 2020-09-16 20:07:43
- * @LastEditTime: 2020-09-17 18:32:02
+ * @LastEditTime: 2021-03-28 20:13:26
  * @LastEditors: astar
  */
 import { os } from '@/utils/browser';
-export default function (doc, win) {
-  let docEl = win.document.documentElement;
-  let metaEl = doc.querySelector('meta[name="viewport"]');
-  let resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+export const getDpr = function () {
   let dpr = 0;
-  let scale = 0;
   // 对iOS设备进行dpr的判断，对于Android系列，始终认为其dpr为1
-  let devicePixelRatio = win.devicePixelRatio;
+  let devicePixelRatio = window.devicePixelRatio;
   
   if(os.ios || os.android) {
     dpr = devicePixelRatio;
   } else {
     dpr = 1;
   }
-  scale = 1 / dpr;
+  return dpr;
+}
+
+export default function (doc, win) {
+  let docEl = win.document.documentElement;
+  let metaEl = doc.querySelector('meta[name="viewport"]');
+  let resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+  let dpr = getDpr();
+  let scale = 1 / dpr;
   docEl.setAttribute('data-dpr', dpr);
   if (!metaEl) {
     metaEl = doc.createElement('meta');
