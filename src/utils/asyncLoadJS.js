@@ -2,11 +2,11 @@
  * @Author: astar
  * @Date: 2021-02-25 18:08:42
  * @LastEditors: astar
- * @LastEditTime: 2021-02-26 14:36:15
+ * @LastEditTime: 2021-03-29 15:49:47
  * @Description: 加载js文件，返回promise
  * @FilePath: \vue-chat\src\utils\asyncLoadJS.js
  */
-// import { loadScript } from '@/utils';
+import { loadScript } from '@/utils';
 
 const config = {
   'jsEncrypt': {
@@ -31,14 +31,11 @@ const loadFunc = function (key, success, fail) {
     success(key);
     return;
   }
-
-  import('@/utils').then(module => {
-    const loadScript = module.loadScript;
-    loadScript(target.depUrl, (res) => {
-      target.isReady = true;
-      res ? success(key) : fail(`模块${key}加载失败`);
-      return;
-    });
+  
+  loadScript(target.depUrl, (res) => {
+    target.isReady = true;
+    res ? success(key) : fail(`模块${key}加载失败`);
+    return;
   });
 }
 
@@ -54,4 +51,5 @@ const asyncLoadJS = function (conf) {
     });
   }
 }
+
 export default asyncLoadJS;

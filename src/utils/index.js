@@ -41,11 +41,11 @@ export const pipe = path => () => import(`@/views/${path}`);
 
 // 加载js链接
 export const loadScript = (url, cb) => {
-  const elem = window.document.createElement('script');
+  const elem = document.createElement('script');
   elem.type = 'text/javascript';
   elem.addEventListener('load', function () { cb(true) }, false);
   elem.addEventListener('error', function () { cb(false) }, false);
   elem.src = url;
   elem.crossorigin = 'anonymous';
-  window.document.body.appendChild(elem);
+  document.body.appendChild(elem);
 }
