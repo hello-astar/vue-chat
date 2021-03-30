@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-02-10 14:50:36
- * @LastEditTime: 2021-03-28 01:04:09
+ * @LastEditTime: 2021-03-30 17:01:59
  * @LastEditors: astar
  */
 import { getToken } from '@/utils/token'
@@ -40,7 +40,7 @@ export const requireAll = reqContextfunc => reqContextfunc.keys().map(reqContext
 export const pipe = path => () => import(`@/views/${path}`);
 
 // 加载js链接
-export const loadScript = (url, cb) => {
+export const loadScript = (url, cb = function () {}) => {
   const elem = document.createElement('script');
   elem.type = 'text/javascript';
   elem.addEventListener('load', function () { cb(true) }, false);
