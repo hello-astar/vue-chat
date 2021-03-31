@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-02-26 11:57:15
+ * @LastEditTime: 2021-03-31 17:38:04
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -18,10 +18,10 @@
         <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.name" placeholder="请输入用户名" v-if="formConfig.name.show"></s-input-cell>
         <s-input-cell type="password" autocomplete="off" class="input__cell" v-model="formData.password" placeholder="请输入密码" v-if="formConfig.password.show"></s-input-cell>
         <s-input-cell type="text" sutocomplete="off" class="input__cell" v-model="formData.captcha" placeholder="请输入验证码" v-if="formConfig.captcha.show">
-          <img :src="captchaImg" alt="验证码" v-throttle="[getCaptchaImg, 'click', 1000]">
+          <img :src="captchaImg" alt="验证码" v-throttle.click="[getCaptchaImg, 1000]">
         </s-input-cell>
       </div>
-      <button class="panel-container__btn" v-throttle="[submit, 'click', 1000]">{{ mapTypeName }}</button>
+      <button class="panel-container__btn" v-throttle.click="[submit, 1000]">{{ mapTypeName }}</button>
       <div class="panel-container__tip" @click="linkTo">{{ mapTip }}</div>
     </div>
   </div>

@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-06 10:50:18
  * @LastEditors: astar
- * @LastEditTime: 2021-03-27 23:42:52
+ * @LastEditTime: 2021-03-31 16:40:54
  * @Description: 下拉刷新
  * @FilePath: \vue-chat\src\components\pullRefresh\index.vue
 -->
@@ -35,7 +35,7 @@
   </div>
 </template>
 <script>
-import { BEFORE_LOAD, PULLING, LOADING, NO_DATA, REFRESH_SUCCESS, REFRESH_FAIL } from '@/utils/consts';
+import { BEFORE_LOAD, PULLING, LOADING, NO_DATA, REFRESH_SUCCESS, REFRESH_FAIL } from './config.js';
 
 export default {
   name: 'pull-refresh',

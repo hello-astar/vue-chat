@@ -74,9 +74,8 @@ function detect() {
   system.isPC = system.isWin || system.isMac || system.isX11
   system.isMobile = !system.isPC
 
-  return {os, browser, system}
+  return { os, browser, system }
 }
 
-let {os, browser, system} = detect()
-
-export {os, browser, system, detect}
+let { os, browser, system } = detect()
+export { os, browser, system }

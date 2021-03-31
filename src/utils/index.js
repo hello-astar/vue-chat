@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-02-10 14:50:36
- * @LastEditTime: 2021-03-30 17:01:59
+ * @LastEditTime: 2021-03-31 18:26:16
  * @LastEditors: astar
  */
 import { getToken } from '@/utils/token'
@@ -48,4 +48,55 @@ export const loadScript = (url, cb = function () {}) => {
   elem.src = url;
   elem.crossorigin = 'anonymous';
   document.body.appendChild(elem);
+}
+
+/**
+ * 防抖
+ * @author astar
+ * @date 2021-03-31 18:24
+ * @param {Function} fn - 绑定的函数
+ * @param {Number} delay - 时间间隔(ms)
+ * @returns {*}
+ */
+export const debounce = (fn, delay = 1000) => {
+  let timer = null;
+  return function () {
+    timer && clearTimeout(timer);
+    let args = arguments;
+    let context = this;
+    timer = setTimeout(function () {
+      fn.apply(context, args);
+      timer = null;
+    }, delay);
+  }
+}
+
+/**
+ * 节流
+ * @author astar
+ * @date 2021-03-31 18:18
+ * @param {Function} fn - 绑定的函数
+ * @param {Number} delay - 时间间隔(ms)
+ * @param {Boolean} lastTrigger - 是否在脱离事件后执行最后一次
+ * @returns {*}
+ */
+export const throttle = (fn, delay = 1000, lastTrigger = false) => {
+  let timer = null;
+  let start = new Date();
+  return function () {
+    timer && clearTimeout(timer);
+    let now = new Date();
+    let context = this;
+    let args = arguments;
+    if (now - start >= delay) {
+      fn.apply(context, args);
+      start = now;
+    } else {
+      if (lastTrigger) { // 脱离事件后执行最后一次 // 一般用于触底加载之类 // 防止重复提交不需要执行最后一次
+        timer = setTimeout(() => {
+          fn.apply(context, args);
+        }, delay - (now - start));
+      }
+    }
+  }
 }
