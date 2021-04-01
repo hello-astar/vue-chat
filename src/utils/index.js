@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-02-10 14:50:36
- * @LastEditTime: 2021-03-31 18:26:16
+ * @LastEditTime: 2021-04-01 11:14:41
  * @LastEditors: astar
  */
 import { getToken } from '@/utils/token'
@@ -77,14 +77,14 @@ export const debounce = (fn, delay = 1000) => {
  * @date 2021-03-31 18:18
  * @param {Function} fn - 绑定的函数
  * @param {Number} delay - 时间间隔(ms)
- * @param {Boolean} lastTrigger - 是否在脱离事件后执行最后一次
+ * @param {Boolean} last - 是否在脱离事件后执行最后一次
  * @returns {*}
  */
-export const throttle = (fn, delay = 1000, lastTrigger = false) => {
+export const throttle = (fn, delay = 1000, last = false) => {
   let timer = null;
   let start = new Date();
   return function () {
-    timer && clearTimeout(timer);
+    last && timer && clearTimeout(timer);
     let now = new Date();
     let context = this;
     let args = arguments;
@@ -92,7 +92,7 @@ export const throttle = (fn, delay = 1000, lastTrigger = false) => {
       fn.apply(context, args);
       start = now;
     } else {
-      if (lastTrigger) { // 脱离事件后执行最后一次 // 一般用于触底加载之类 // 防止重复提交不需要执行最后一次
+      if (last) { // 脱离事件后执行最后一次 // 一般用于触底加载之类 // 防止重复提交不需要执行最后一次
         timer = setTimeout(() => {
           fn.apply(context, args);
         }, delay - (now - start));

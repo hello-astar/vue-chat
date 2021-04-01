@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-28 18:26:05
  * @LastEditors: astar
- * @LastEditTime: 2021-03-31 18:27:21
+ * @LastEditTime: 2021-04-01 11:32:29
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\directives\index.js
  */
@@ -15,13 +15,11 @@ import { throttle, debounce } from '@/utils'
 export const throttleDirective = (Vue) => {
   Vue.directive('throttle', {
     bind: function (el, binding) {
-      if (!Object.keys(binding.modifiers).length) {
-        console.warn('[v-throttle] - please specify an event');
-        return;
-      }
-      let event = Object.keys(binding.modifiers)[0];
-      let [fn, delay] = binding.value;
-      el.addEventListener(event, throttle(fn, delay));
+      if (!Array.isArray(binding.value)) return;
+      let event = binding.arg;
+      let { last = false } = binding.modifiers; // 是否在脱离事件后最后执行一次
+      let [fn = () => {}, delay = 500] = binding.value;
+      el.addEventListener(event, throttle(fn, delay, last));
     }
   })
 }
@@ -34,25 +32,56 @@ export const throttleDirective = (Vue) => {
 export const debounceDirective = (Vue) => {
   Vue.directive('debounce', {
     bind: function (el, binding) {
-      if (!Object.keys(binding.modifiers).length) {
-        console.warn('[v-debounce] - please specify an event');
-        return;
-      }
-      let event = Object.keys(binding.modifiers)[0];
-      let [fn, delay] = binding.value;
+      if (!Array.isArray(binding.value)) return;
+      let event = binding.arg;
+      let [fn = () => {}, delay = 500] = binding.value;
       el.addEventListener(event, debounce(fn, delay));
     }
   })
 }
 
-      let [fn, event, delay] = binding.value;
+/**
+ * 监听长按事件
+ * @author astar
+ * @date 2021-03-31 14:11
+ */
+export const press = (Vue) => {
+  Vue.directive('press', {
+    bind: function (el, binding) {
+      if (!Array.isArray(binding.value)) return;
+      let [callback, delay = 650] = binding.value;
+      let startTime = null;
       let timer = null;
-      el.addEventListener(event, () => {
-        timer && clearTimeout(timer);
-        timer = setTimeout(() => {
-          fn();
-        }, delay);
-      })
+      let startP = null;
+      function start (event) {
+        event.preventDefault();
+        startTime = new Date().getTime();
+        timer = setTimeout(callback, delay);
+      }
+      function cancel () {
+        let now = new Date().getTime();
+        if (now - startTime < delay) {
+          timer && clearTimeout(timer);
+        }
+      }
+      if ('ontouchstart' in window) {
+        el.addEventListener('touchstart', (event) => {
+          console.time()
+          start(event);
+          startP = event.touches[0];
+        });
+        el.addEventListener('touchmove', (event) => {
+          let endP = event.touches[0];
+          if (Math.sqrt((endP.clientX - startP.clientX) ^ 2 + (endP.clientY - startP.clientY) ^ 2) < 2) {
+            timer && clearTimeout(timer);
+            start(event);
+          }
+        });
+        el.addEventListener('touchend', cancel);
+      } else if ('onmousedown' in window) {
+        el.addEventListener('mousedown', start);
+        el.addEventListener('mouseup', cancel);
+      }
     }
   })
 }
