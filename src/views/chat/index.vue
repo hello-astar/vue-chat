@@ -23,17 +23,17 @@
           </div>
           <pull-refresh :refreshNext="refreshNext">
             <div slot="main" class="chat-box__item" :class="item.userId === userInfo._id ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item._id">
-              <s-avatar class="chat-box__item_avatar" :src="item.avatar" size="medium"/>
+              <s-avatar class="chat-box__item_avatar" :src="item.avatar" size="medium" v-press="atSomeone(item)"/>
               <div class="chat-box__item_content">
                 <template v-for="(ele, idx) in item.content">
-                  <span v-if="ele.kind==='text'" :key="idx">{{ele.value}}</span>
-                  <expression-item v-if="ele.kind==='emoji'" :key="idx" :value="ele.value"></expression-item>
+                  <span v-if="ele.kind === 'TEXT'" :key="idx">{{ele.value}}</span>
+                  <span v-else v-html="getHTMLFromJSON(ele)" :key="idx"></span>
                 </template>
               </div>
             </div>
           </pull-refresh>
         </div>
-        <input-box @send="sendMessage" class="input-box"></input-box>
+        <input-box ref="inputBox" @send="sendMessage" class="input-box"></input-box>
       </main>
     </div>
   </div>
@@ -44,11 +44,10 @@ import { io } from 'socket.io-client';
 import { mapGetters } from 'vuex';
 import { getAuthorization } from '@/utils';
 import inputBox from './components/inputBox';
-import expressions from './components/expression/config';
-import expressionItem from './components/expression/expressionItem';
 import { removeToken } from '@/utils/token';
 import { getHistoryChatByCount } from '@/request';
 import { getDpr } from '@/utils/setRem';
+import { getHTMLFromJSON } from '@/utils/editor.js';
 
 export default {
   name: "chat",
@@ -56,7 +55,6 @@ export default {
     return {
       pageSize: 20,
       totalDone: false,
-      expressions,
       socket: null, // socket
       reConnectCount: 10,
       reConnectId: null,
@@ -79,6 +77,24 @@ export default {
     });
   },
   methods: {
+    getHTMLFromJSON,
+    /**
+     * 长按艾特@
+     * @author astar
+     * @date 2021-04-01 17:01
+     * @param {Object} item - 艾特某人
+     * @returns {*}
+     */
+    atSomeone (item) {
+      const _this = this;
+      return function () {
+        console.log(item)
+        _this.$refs.inputBox.onSelectExpression({
+          kind: 'AT',
+          value: item.name
+        })
+      }
+    },
     refreshNext () {
       return new Promise((resolve, reject) => {
         if (!this.totalDone) {
@@ -135,7 +151,7 @@ export default {
         }
         if (this.reConnectCount) {
           this.reConnectId = setTimeout(() => {
-            console.log('重新连接');
+            console.warn('[socket] - reconnect');
             this.reConnectCount--;
             this.socket.connect();
           }, 1000);
@@ -152,7 +168,7 @@ export default {
         }
         this.socket.emit('message', message);
       } else {
-        console.log('socket 还未初始化');
+        console.warn('[socket] - socket not initialized yet');
       }
     }
   },
@@ -185,8 +201,7 @@ export default {
     }
   },
   components: {
-    inputBox,
-    expressionItem
+    inputBox
   }
 }
 </script>

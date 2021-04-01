@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-04-01 14:50:21
+ * @LastEditTime: 2021-04-01 17:13:20
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -19,13 +19,15 @@
     placeholder="按Enter发送"
   />
   <s-popup class="expression-popup" v-model="showExpression" place="bottom" :x="pos.x" :y="pos.y" height="110px" :width="popupWidth">
-    <expression :onSelectExpression="onSelectExpression"></expression>
+    <emoji-popup :onSelectExpression="onSelectExpression"></emoji-popup>
   </s-popup>
 </div>
 </template>
 <script>
-import expression from './expression';
+import emojiPopup from './emojiPopup';
 import { getElementPagePosition } from '@/utils';
+import { getHTMLFromJSON, getJSONFromInput } from '@/utils/editor.js';
+
 export default {
   data () {
     return {
@@ -54,10 +56,20 @@ export default {
     })
   },
   methods: {
+    /**
+     * 计算emoji popup的位置
+     * @author astar
+     * @date 2021-04-01 15:07
+     */
     computePopupStyle () {
       this.popupWidth = window.getComputedStyle(this.$refs.inputbox).width;
       this.pos = getElementPagePosition(this.$refs.inputbox);
     },
+    /**
+     * 展示或取消展示emoji popup
+     * @author astar
+     * @date 2021-04-01 15:08
+     */
     toggleShowExpression () {
       this.showExpression = !this.showExpression
       if (this.showExpression) { // 点击表情包，输入框不失去焦点
@@ -94,7 +106,7 @@ export default {
      */
     sendMessage (e) {
       e.preventDefault();
-      this.$emit('send', this.getJSONFromInput());
+      this.$emit('send', getJSONFromInput(this.$refs.input));
       e.target.innerHTML = null;
       this.showExpression = false;
     },
@@ -136,46 +148,17 @@ export default {
      * @param {*}
      * @returns {*}
      */
-    onSelectExpression (expression) {
+    onSelectExpression (data) {
       // this.showExpression = false
-      this.insertAtCursor && this.insertAtCursor(expression)
-    },
-    /**
-     * 将输入框内容转换为JSON格式数据
-     * @author astar
-     * @date 2021-02-02 18:02
-     */
-    getJSONFromInput () {
-      const $ele = this.$refs.input
-      const $children = $ele.childNodes
-      let result = []
-      $children.forEach(child => {
-        let nodeType = child.nodeType
-        console.log(nodeType)
-        if (nodeType === 3 && child.textContent) { // 普通文本
-          result.push({
-            kind: 'text',
-            value: child.textContent // 还需转义,到时候再说吧
-          })
-          console.log(child.textContent)
-        } else if (nodeType === 1) { // 元素节点, 目前只有emoji类型，后期考虑其他
-          if ((new RegExp(/^emoji-.*/)).test(child.dataset.name)) {
-            result.push({
-              kind: 'emoji',
-              value: child.dataset.name.replace(/^emoji-/, '')
-            })
-            console.log(child.dataset.name)
-          }
-        }
-      })
-      return result
+      console.log(data)
+      this.insertAtCursor && this.insertAtCursor(getHTMLFromJSON(data))
     }
   },
   beforeDestroy () {
     window.removeEventListener("resize", this.computePopupStyle);
   },
   components: {
-    expression
+    emojiPopup
   }
 }
 </script>

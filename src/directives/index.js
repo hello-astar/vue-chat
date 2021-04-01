@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-28 18:26:05
  * @LastEditors: astar
- * @LastEditTime: 2021-04-01 11:32:29
+ * @LastEditTime: 2021-04-01 14:31:49
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\directives\index.js
  */
@@ -48,8 +48,8 @@ export const debounceDirective = (Vue) => {
 export const press = (Vue) => {
   Vue.directive('press', {
     bind: function (el, binding) {
-      if (!Array.isArray(binding.value)) return;
-      let [callback, delay = 650] = binding.value;
+      let delay = 650;
+      let callback = binding.value;
       let startTime = null;
       let timer = null;
       let startP = null;
@@ -66,7 +66,6 @@ export const press = (Vue) => {
       }
       if ('ontouchstart' in window) {
         el.addEventListener('touchstart', (event) => {
-          console.time()
           start(event);
           startP = event.touches[0];
         });

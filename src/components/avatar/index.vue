@@ -2,11 +2,11 @@
  * @Description: 头像组件
  * @Author: astar
  * @Date: 2020-09-08 21:10:10
- * @LastEditTime: 2021-02-04 14:28:05
+ * @LastEditTime: 2021-04-01 17:07:53
  * @LastEditors: astar
 -->
 <template>
-  <span class="avatar-wrapper" :class="classes" :style="styles">
+  <span class="avatar-wrapper" :class="classes" :style="styles" v-press="press">
     <slot>
       <img :style="imgStyles" :src="src" :alt="alt" @error="error">
     </slot>
@@ -46,6 +46,9 @@ export default {
   methods: {
     error(e) {
       this.$emit('error', e)
+    },
+    press () {
+      this.$emit('press')
     }
   },
   computed: {
