@@ -2,15 +2,17 @@
  * @Author: astar
  * @Date: 2021-03-04 10:11:57
  * @LastEditors: astar
- * @LastEditTime: 2021-03-04 10:30:35
+ * @LastEditTime: 2021-04-01 14:48:05
  * @Description: 单个表情渲染
  * @FilePath: \vue-chat\src\views\chat\components\expression\expressionItem.vue
 -->
 <template>
-  <span
+  <i
+    contenteditable="false"
     class="emoji-icon"
+    :data-name="iconName"
     :style="{ 'background-position': `0 ${-30 * index}px` }"
-  ></span>
+  ></i>
 </template>
 <script>
 import expressions from './config.js';
@@ -24,6 +26,9 @@ export default {
   computed: {
     index () {
       return expressions.findIndex(item => item === this.value)
+    },
+    iconName () {
+      return `emoji-${this.value}`
     }
   }
 }

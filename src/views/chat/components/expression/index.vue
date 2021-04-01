@@ -1,8 +1,8 @@
 <!--
  * @Author: astar
  * @Date: 2021-01-30 14:59:41
- * @LastEditors: astar
- * @LastEditTime: 2021-03-04 10:28:21
+ * @LastEditors: cmx
+ * @LastEditTime: 2021-04-01 14:52:30
  * @Description: 表情包popup
  * @FilePath: \vue-chat\src\views\chat\components\expression\index.vue
 -->
@@ -12,7 +12,6 @@
     v-for="(item, index) in expressions"
     :key="index"
     :value="item"
-    :data-index="index"
   ></expression-item>
 </div>
 </template>
@@ -34,11 +33,8 @@ export default {
   },
   methods: {
     selectExpression ({ target }) {
-      if (target.nodeName.toLowerCase() === 'span') {
-        const index = target.dataset.index
-        if (this.expressions[index]) {
-          this.onSelectExpression(`<img name="emoji-${this.expressions[index]}" class="emoji-icon" style="background-position: 0 ${-30 * index}px"/>`)
-        }
+      if (target.nodeName.toLowerCase() === 'i' && target.dataset.name) {
+        this.onSelectExpression(target.outerHTML)
       }
     }
   },

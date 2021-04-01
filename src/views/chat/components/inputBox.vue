@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-03-27 23:01:41
+ * @LastEditTime: 2021-04-01 14:50:21
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -159,12 +159,12 @@ export default {
           })
           console.log(child.textContent)
         } else if (nodeType === 1) { // 元素节点, 目前只有emoji类型，后期考虑其他
-          if ((new RegExp(/^emoji-.*/)).test(child.name)) {
+          if ((new RegExp(/^emoji-.*/)).test(child.dataset.name)) {
             result.push({
               kind: 'emoji',
-              value: child.name.replace(/^emoji-/, '')
+              value: child.dataset.name.replace(/^emoji-/, '')
             })
-            console.log(child.name)
+            console.log(child.dataset.name)
           }
         }
       })

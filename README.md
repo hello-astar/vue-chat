@@ -19,9 +19,9 @@
 - [x] 同端登录互踢
 - [x] 表情包功能
 - [ ] change log
-- [ ] 抽出layout，使用qiankun重构，以支持不同应用展示
 - [x] 开发webpack loader-将内联样式的px转换为rem
 - [ ] 艾特@功能
+- [ ] 抽出下拉上拉逻辑，重构pullRefresh组件
 
 # 安装运行
 1. 拉取项目
