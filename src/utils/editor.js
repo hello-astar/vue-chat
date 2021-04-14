@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-04-01 16:02:08
  * @LastEditors: astar
- * @LastEditTime: 2021-04-01 18:37:07
+ * @LastEditTime: 2021-04-13 17:41:42
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\utils\editor.js
  */
@@ -53,7 +53,7 @@ export function getJSONFromInput ($ele) {
         kind: KINDS.TEXT,
         value: child.textContent // 还需转义,到时候再说吧
       })
-    } else if (nodeType === 1) { // 元素节点, 目前只有emoji类型，后期考虑其他
+    } else if (nodeType === 1) { // 元素节点, 目前只有emoji和at类型，后期考虑其他
       let options = child.dataset
       result.push({
         kind: options.kind,

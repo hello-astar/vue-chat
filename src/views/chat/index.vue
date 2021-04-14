@@ -47,7 +47,7 @@ import inputBox from './components/inputBox';
 import { removeToken } from '@/utils/token';
 import { getHistoryChatByCount } from '@/request';
 import { getDpr } from '@/utils/setRem';
-import { getHTMLFromJSON } from '@/utils/editor.js';
+import { getHTMLFromJSON, KINDS } from '@/utils/editor.js';
 
 export default {
   name: "chat",
@@ -128,6 +128,16 @@ export default {
 
       this.socket.on("message", message => {
         this.chatRecord.push(message);
+        if (message.userId !== this.userInfo._id) {
+          let content = message.content.reduce((str, item) => {
+            if (item.kind === KINDS.TEXT) {
+              return str + item.value
+            }
+            if (item.kind === KINDS.EMOJI) return str + `[${item.value}]`
+            if (item.kind === KINDS.AT) return str + `@${item.value}`
+          }, '')
+          this.$notify(message.name, content, { icon: message.avatar, tag: message._id });
+        }
         this.$nextTick(() => {
           if (this.$refs.box) {
             this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;

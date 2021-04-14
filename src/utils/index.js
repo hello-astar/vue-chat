@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-02-10 14:50:36
- * @LastEditTime: 2021-04-01 11:14:41
+ * @LastEditTime: 2021-04-09 15:40:07
  * @LastEditors: astar
  */
 import { getToken } from '@/utils/token'
@@ -82,19 +82,20 @@ export const debounce = (fn, delay = 1000) => {
  */
 export const throttle = (fn, delay = 1000, last = false) => {
   let timer = null;
-  let start = new Date();
+  let start = null;
   return function () {
     last && timer && clearTimeout(timer);
     let now = new Date();
     let context = this;
     let args = arguments;
-    if (now - start >= delay) {
+    if (!start || now - start >= delay) {
       fn.apply(context, args);
       start = now;
     } else {
       if (last) { // 脱离事件后执行最后一次 // 一般用于触底加载之类 // 防止重复提交不需要执行最后一次
         timer = setTimeout(() => {
           fn.apply(context, args);
+          start = new Date();
         }, delay - (now - start));
       }
     }

@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 16:50:59
  * @LastEditors: astar
- * @LastEditTime: 2021-02-25 15:26:20
+ * @LastEditTime: 2021-04-14 13:44:58
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\main.js
  */
@@ -12,6 +12,7 @@ import "@/assets/styles/reset.css";
 import "@/assets/styles/common.scss";
 import store from '@/store';
 import setRem from '@/utils/setRem';
+import notify from '@/utils/notify';
 import { installComponent, installPlugin } from '@/components';
 import installRouter from '@/router';
 import * as directives from '@/directives';
@@ -35,7 +36,14 @@ const router = installRouter(Vue);
 
 Vue.config.productionTip = false;
 
+if (
+  window.Notification &&
+  (window.Notification.permission === 'default' || window.Notification.permission === 'denied')
+) {
+  window.Notification.requestPermission();
+}
 
+Vue.prototype.$notify = notify;
 export const vm = new Vue({
   render: h => h(App),
   router,

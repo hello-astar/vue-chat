@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2021-03-26 17:22:47
+ * @LastEditTime: 2021-04-13 10:52:48
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -19,6 +19,7 @@ module.exports = {
   devServer: {
     port: 2000,
     open: false,
+    https: true,
     proxy: {
       '/test-proxy': {
         target: 'http://192.168.22.173:3000',                                          
