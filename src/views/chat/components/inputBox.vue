@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-04-16 23:54:31
+ * @LastEditTime: 2021-04-17 01:01:43
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -18,13 +18,13 @@
     @input="getLastEditRange();searchGif()"
     placeholder="按Enter发送"
   />
-  <s-popup v-model="showEmojis" place="bottom" :x="pos.x" :y="pos.y" height="110px" :width="popupWidth">
+  <s-popup v-model="showEmojis" place="bottom" :x="pos.x" :y="pos.y" :width="popupWidth">
     <div class="emoji-popup">
       <message v-for="(item, idx) in EMOJIS" :key="idx" :item="{ kind: KINDS.EMOJI, value: item }" @click.native="insertHTMLFromJson({ kind: KINDS.EMOJI, value: item })"></message>
     </div>
   </s-popup>
-  <s-popup v-model="showGifs" place="bottom" :x="pos.x" :y="pos.y" height="110px" :width="popupWidth">
-    <img v-for="item in gifs" :key="item.id" :src="item.url" alt="" @click="onSelectImg(item.url)">
+  <s-popup v-model="showGifs" place="bottom" :x="pos.x" :y="pos.y" :width="popupWidth">
+    <message @click.native="onSelectImg(item.url)" style="width: 25%;" v-for="item in gifs" :key="item.id" :item="{ kind: KINDS.IMG, value: item.url }" />
   </s-popup>
 </div>
 </template>

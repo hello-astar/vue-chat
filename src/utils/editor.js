@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-04-01 16:02:08
  * @LastEditors: astar
- * @LastEditTime: 2021-04-16 23:30:27
+ * @LastEditTime: 2021-04-17 01:07:21
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\utils\editor.js
  */
@@ -53,7 +53,8 @@ export function getHTMLFromJSONConfig ({ kind, value }) {
       ele: 'img',
       attrs: {
         ...normalAttrs,
-        src: value
+        src: value,
+        style: 'width: 1.5rem;'
       }
     }
   };
@@ -96,4 +97,14 @@ export function getJSONFromInput ($ele) {
     }
   })
   return result
+}
+
+export function getSimpleMessageFromJSON ({ kind, value }) {
+  const mapSimpleMessage = {
+    [KINDS.TEXT]: value,
+    [KINDS.AT]: `@${value} `,
+    [KINDS.EMOJI]: `[${value}]`,
+    [KINDS.IMG]: '[表情]'
+  }
+  return mapSimpleMessage[kind]
 }
