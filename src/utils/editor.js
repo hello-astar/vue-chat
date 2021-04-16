@@ -2,14 +2,15 @@
  * @Author: astar
  * @Date: 2021-04-01 16:02:08
  * @LastEditors: astar
- * @LastEditTime: 2021-04-13 17:41:42
+ * @LastEditTime: 2021-04-16 18:23:25
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\utils\editor.js
  */
 export const KINDS = {
   TEXT: 'TEXT',
   AT: 'AT',
-  EMOJI: 'EMOJI'
+  EMOJI: 'EMOJI',
+  IMG: 'IMG'
 }
 export const EMOJIS = [
   '呵呵', '哈哈', '吐舌', '啊', '酷', '怒', '开心', '汗', '泪', '黑线',
@@ -33,6 +34,8 @@ export function getHTMLFromJSON (data) {
       return `<span data-kind="${KINDS.AT}" data-value="${data.value}" contenteditable="false">@${data.value} </span>`;
     case KINDS.EMOJI:
       return `<i class="emoji-icon" data-kind="${KINDS.EMOJI}" data-value="${data.value}" contenteditable="false" style="background-position: left 0 top ${EMOJIS.indexOf(data.value) * 100 / (EMOJIS.length - 1)}%"></i>`;
+    case KINDS.IMG:
+      return `<img data-kind="${KINDS.IMG}" data-value="${data.value}" src="${data.value}" contenteditable="false">`
     default:
       return null;
   }

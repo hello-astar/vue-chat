@@ -25,10 +25,7 @@
             <div slot="main" class="chat-box__item" :class="item.userId === userInfo._id ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item._id">
               <s-avatar class="chat-box__item_avatar" :src="item.avatar" size="medium" v-press="atSomeone(item)"/>
               <div class="chat-box__item_content">
-                <template v-for="(ele, idx) in item.content">
-                  <span v-if="ele.kind === 'TEXT'" :key="idx">{{ele.value}}</span>
-                  <span v-else v-html="getHTMLFromJSON(ele)" :key="idx"></span>
-                </template>
+                <message v-for="(ele, idx) in item.content" :item="ele" :key="idx"></message>
               </div>
             </div>
           </pull-refresh>
@@ -47,7 +44,8 @@ import inputBox from './components/inputBox';
 import { removeToken } from '@/utils/token';
 import { getHistoryChatByCount } from '@/request';
 import { getDpr } from '@/utils/setRem';
-import { getHTMLFromJSON, KINDS } from '@/utils/editor.js';
+import { KINDS } from '@/utils/editor.js';
+import message from './components/message.js'
 
 export default {
   name: "chat",
@@ -77,7 +75,6 @@ export default {
     });
   },
   methods: {
-    getHTMLFromJSON,
     /**
      * 长按艾特@
      * @author astar
@@ -88,9 +85,8 @@ export default {
     atSomeone (item) {
       const _this = this;
       return function () {
-        console.log(item)
-        _this.$refs.inputBox.onSelectExpression({
-          kind: 'AT',
+        _this.$refs.inputBox.insertHTMLFromJson({
+          kind: KINDS.AT,
           value: item.name
         })
       }
@@ -211,7 +207,8 @@ export default {
     }
   },
   components: {
-    inputBox
+    inputBox,
+    message
   }
 }
 </script>

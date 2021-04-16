@@ -2,40 +2,50 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-04-01 17:13:20
+ * @LastEditTime: 2021-04-16 18:20:19
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
 <template>
 <div class="input-box" ref="inputbox">
-  <i class="iconfont icon-biaoqing" @click="toggleShowExpression"></i>
+  <i class="iconfont icon-biaoqing" @click="toggleshowEmojis"></i>
   <div
     ref="input"
     class="input"
     contenteditable
     @keydown.enter="sendMessage"
     @click="getLastEditRange"
-    @input="getLastEditRange"
+    @input="getLastEditRange();searchGif()"
     placeholder="按Enter发送"
   />
-  <s-popup class="expression-popup" v-model="showExpression" place="bottom" :x="pos.x" :y="pos.y" height="110px" :width="popupWidth">
-    <emoji-popup :onSelectExpression="onSelectExpression"></emoji-popup>
+  <s-popup v-model="showEmojis" place="bottom" :x="pos.x" :y="pos.y" height="110px" :width="popupWidth">
+    <div class="emoji-popup">
+      <message v-for="(item, idx) in EMOJIS" :key="idx" :item="{ kind: KINDS.EMOJI, value: item }" @click.native="insertHTMLFromJson({ kind: KINDS.EMOJI, value: item })"></message>
+    </div>
+  </s-popup>
+  <s-popup v-model="showGifs" place="bottom" :x="pos.x" :y="pos.y" height="110px" :width="popupWidth">
+    <img v-for="item in gifs" :key="item.id" :src="item.url" alt="" @click="onSelectImg(item.url)">
   </s-popup>
 </div>
 </template>
 <script>
-import emojiPopup from './emojiPopup';
-import { getElementPagePosition } from '@/utils';
-import { getHTMLFromJSON, getJSONFromInput } from '@/utils/editor.js';
+import { getElementPagePosition, debounce } from '@/utils';
+import { getHTMLFromJSON, getJSONFromInput, KINDS, EMOJIS } from '@/utils/editor.js';
+import { getGifs } from '@/request';
+import message from './message';
 
 export default {
   data () {
     return {
+      EMOJIS,
+      KINDS,
       popupWidth: '0px',
       pos: { x: '0', y: '0' }, // popup左下角位置
-      showExpression: false,
+      showEmojis: false,
       lastEditRange: 0,
       insertAtCursor: null,
+      showGifs: false,
+      gifs: []
     }
   },
   created () {
@@ -56,6 +66,20 @@ export default {
     })
   },
   methods: {
+    searchGif: debounce(function () {
+      let children = this.$refs.input.childNodes;
+      if (children.length === 1 && children[0].nodeType === 3 && children[0].textContent && children[0].textContent.length <= 2) {
+        getGifs({ keyword: children[0].textContent }).then(res => {
+          this.gifs = res.data
+          if (res.data.length) {
+            this.showGifs = true
+            this.showEmojis = false
+          }
+        });
+      } else {
+        this.showGifs = false
+      }
+    }, 300),
     /**
      * 计算emoji popup的位置
      * @author astar
@@ -70,9 +94,9 @@ export default {
      * @author astar
      * @date 2021-04-01 15:08
      */
-    toggleShowExpression () {
-      this.showExpression = !this.showExpression
-      if (this.showExpression) { // 点击表情包，输入框不失去焦点
+    toggleshowEmojis () {
+      this.showEmojis = !this.showEmojis
+      if (this.showEmojis) { // 点击表情包，输入框不失去焦点
         this.insertAtCursor('')
       }
     },
@@ -105,10 +129,10 @@ export default {
      * @param {Event} e - keydown事件
      */
     sendMessage (e) {
-      e.preventDefault();
+      e && e.preventDefault();
       this.$emit('send', getJSONFromInput(this.$refs.input));
-      e.target.innerHTML = null;
-      this.showExpression = false;
+      this.$refs.input.innerHTML = null;
+      this.showEmojis = false;
     },
     /**
      * 保存输入框光标最后所在位置，存入insertAtCursor函数
@@ -148,17 +172,25 @@ export default {
      * @param {*}
      * @returns {*}
      */
-    onSelectExpression (data) {
-      // this.showExpression = false
-      console.log(data)
+    insertHTMLFromJson (data) {
       this.insertAtCursor && this.insertAtCursor(getHTMLFromJSON(data))
+    },
+    /**
+     * 选择表情包，直接发送
+     * @author astar
+     * @date 2021-04-16 17:19
+     */
+    onSelectImg (url) {
+      this.$refs.input.innerHTML = getHTMLFromJSON({ kind: KINDS.IMG, value: url })
+      this.sendMessage()
+      this.showGifs = false
     }
   },
   beforeDestroy () {
     window.removeEventListener("resize", this.computePopupStyle);
   },
   components: {
-    emojiPopup
+    message
   }
 }
 </script>
@@ -182,6 +214,9 @@ export default {
     background: #fff;
     font-size: 12px;
     line-height: 20px;
+  }
+  .emoji-popup {
+    padding: 5px;
   }
 }
 </style> 

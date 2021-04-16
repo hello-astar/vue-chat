@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 16:24:58
  * @LastEditors: astar
- * @LastEditTime: 2021-03-01 17:47:01
+ * @LastEditTime: 2021-04-16 17:12:36
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\components\popup\index.vue
 -->
@@ -101,7 +101,7 @@ export default {
     &__content {
       background: #fff;
       height: 100%;
-      padding: 10px;
+      // padding: 10px;
       overflow: auto;
     }
   }
