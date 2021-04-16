@@ -45,7 +45,7 @@ import { removeToken } from '@/utils/token';
 import { getHistoryChatByCount } from '@/request';
 import { getDpr } from '@/utils/setRem';
 import { KINDS } from '@/utils/editor.js';
-import message from './components/message.js'
+import message from './components/message';
 
 export default {
   name: "chat",

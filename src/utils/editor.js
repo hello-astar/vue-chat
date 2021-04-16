@@ -2,23 +2,64 @@
  * @Author: astar
  * @Date: 2021-04-01 16:02:08
  * @LastEditors: astar
- * @LastEditTime: 2021-04-16 18:23:25
+ * @LastEditTime: 2021-04-16 23:30:27
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\utils\editor.js
  */
+// 全部功能
 export const KINDS = {
-  TEXT: 'TEXT',
-  AT: 'AT',
-  EMOJI: 'EMOJI',
-  IMG: 'IMG'
-}
+  TEXT: 'TEXT', // 输入文字
+  AT: 'AT', // 艾特
+  EMOJI: 'EMOJI', // emoji表情
+  IMG: 'IMG' // 搜索表情包
+};
+
+// emoji配置
 export const EMOJIS = [
   '呵呵', '哈哈', '吐舌', '啊', '酷', '怒', '开心', '汗', '泪', '黑线',
   '鄙视', '不高兴', '真棒', '钱', '疑问', '阴险', '吐', '咦', '委屈', '花心',
   '呼', '笑眼', '冷', '太开心', '滑稽', '勉强', '狂汗', '乖', '睡觉', '惊哭',
   '升起', '惊讶', '喷', '爱心', '心碎', '玫瑰', '礼物', '星星月亮', '太阳', '音乐',
   '灯泡', '蛋糕', '彩虹', '钱币', '咖啡', 'haha', '胜利', '大拇指', '弱', 'ok',
-]
+];
+
+// 从JSON转换为HTML配置项
+export function getHTMLFromJSONConfig ({ kind, value }) {
+  let normalAttrs = {
+    'data-kind': kind,
+    'data-value': value,
+    'contenteditable': false
+  }
+  const mapEle = {
+    [KINDS.TEXT]: {
+      ele: 'span',
+      attrs: normalAttrs,
+      body: value
+    },
+    [KINDS.AT]: {
+      ele: 'i',
+      attrs: normalAttrs,
+      body: `@${value} `
+    },
+    [KINDS.EMOJI]: {
+      ele: 'i',
+      attrs: {
+        ...normalAttrs,
+        class: 'emoji-icon',
+        style: `background-position: left 0 top ${EMOJIS.indexOf(value) * 100 / (EMOJIS.length - 1)}%`
+      }
+    },
+    [KINDS.IMG]: {
+      ele: 'img',
+      attrs: {
+        ...normalAttrs,
+        src: value
+      }
+    }
+  };
+  return mapEle[kind];
+}
+
 /**
  * 将json解析为html
  * @author astar
@@ -27,20 +68,10 @@ export const EMOJIS = [
  * @returns {DOM String}
  */
 export function getHTMLFromJSON (data) {
-  switch (data.kind) {
-    // case KINDS.TEXT:
-    //   return `<span contenteditable="false">${data.value}</span>`;
-    case KINDS.AT:
-      return `<span data-kind="${KINDS.AT}" data-value="${data.value}" contenteditable="false">@${data.value} </span>`;
-    case KINDS.EMOJI:
-      return `<i class="emoji-icon" data-kind="${KINDS.EMOJI}" data-value="${data.value}" contenteditable="false" style="background-position: left 0 top ${EMOJIS.indexOf(data.value) * 100 / (EMOJIS.length - 1)}%"></i>`;
-    case KINDS.IMG:
-      return `<img data-kind="${KINDS.IMG}" data-value="${data.value}" src="${data.value}" contenteditable="false">`
-    default:
-      return null;
-  }
+  let config = getHTMLFromJSONConfig(data);
+  let attrStr = Object.keys(config.attrs).map(key => `${key}='${config.attrs[key]}'`).join(' ');
+  return `<${config.ele} ${attrStr}>${config.body || ''}</${config.ele}>`
 }
-
 /**
  * 将HTML转换为JSON格式数据
  * @author astar

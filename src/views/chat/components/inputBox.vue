@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-04-16 18:20:19
+ * @LastEditTime: 2021-04-16 23:54:31
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -173,7 +173,7 @@ export default {
      * @returns {*}
      */
     insertHTMLFromJson (data) {
-      this.insertAtCursor && this.insertAtCursor(getHTMLFromJSON(data))
+      this.insertAtCursor && this.insertAtCursor(getHTMLFromJSON(data));
     },
     /**
      * 选择表情包，直接发送
@@ -213,7 +213,7 @@ export default {
     overflow: auto;
     background: #fff;
     font-size: 12px;
-    line-height: 20px;
+    line-height: 18px;
   }
   .emoji-popup {
     padding: 5px;

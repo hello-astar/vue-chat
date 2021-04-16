@@ -19,11 +19,13 @@
   font-size: 20px;
 }
 
+$emoji-size: 25px;
 .emoji-icon {
   display: inline-block;
-  width: 30px;
-  height: 30px;
+  width: $emoji-size;
+  height: $emoji-size;
   background: url('~@/assets/images/biaoqing.png');
-  background-size: 30px auto;
+  background-size: $emoji-size auto;
   background-repeat: no-repeat;
+  vertical-align: middle;
 }
