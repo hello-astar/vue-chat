@@ -22,9 +22,9 @@
             暂时没有新消息
           </div>
           <pull-refresh :refreshNext="refreshNext">
-            <div slot="main" class="chat-box__item" :class="item.userId === userInfo._id ? 'reverse' : 'normal'" v-for="item in chatRecord" :key="item._id">
+            <div slot="main" class="chat-box__item" :class="[item.userId === userInfo._id ? 'reverse' : 'normal']" v-for="item in chatRecord" :key="item._id">
               <s-avatar class="chat-box__item_avatar" :src="item.avatar" size="medium" v-press="atSomeone(item)"/>
-              <div class="chat-box__item_content">
+              <div class="chat-box__item_content" :class="{'img': KINDS.IMG === item.content[0].kind}">
                 <message v-for="(ele, idx) in item.content" :item="ele" :key="idx"></message>
               </div>
             </div>
@@ -51,6 +51,7 @@ export default {
   name: "chat",
   data () {
     return {
+      KINDS,
       pageSize: 20,
       totalDone: false,
       socket: null, // socket
@@ -321,11 +322,20 @@ export default {
             .chat-box__item_content {
               margin-right: 20px;
               margin-left: 55px;
-              background: rgb(128,177,53);
+              // background: rgb(128,177,53);
+              background: #a7d6c6;
               &:after {
                 right: -12px;
-                border-left-color: rgb(128,177,53);
+                // border-left-color: rgb(128,177,53);
+                border-left-color: #a7d6c6;
               }
+            }
+          }
+          .img {
+            padding: 0;
+            background: transparent !important;
+            &:after {
+              display: none;
             }
           }
         }
