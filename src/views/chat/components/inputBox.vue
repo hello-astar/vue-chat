@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-04-17 13:40:26
+ * @LastEditTime: 2021-04-17 14:02:23
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -23,7 +23,7 @@
       <message v-for="(item, idx) in EMOJIS" :key="idx" :item="{ kind: KINDS.EMOJI, value: item }" @click.native="insertHTMLFromJson({ kind: KINDS.EMOJI, value: item })"></message>
     </div>
   </s-popup>
-  <s-popup v-model="showGifs" place="bottom" :x="pos.x" :y="pos.y" :width="popupWidth" max-height="150px">
+  <s-popup v-model="showGifs" place="bottom" :x="pos.x" :y="pos.y" :width="popupWidth">
     <message @click.native="onSelectImg(item.url)" v-for="item in gifs" :key="item.id" :item="{ kind: KINDS.IMG, value: item.url }" />
   </s-popup>
 </div>
@@ -133,6 +133,7 @@ export default {
       this.$emit('send', getJSONFromInput(this.$refs.input));
       this.$refs.input.innerHTML = null;
       this.showEmojis = false;
+      this.showGifs = false;
     },
     /**
      * 保存输入框光标最后所在位置，存入insertAtCursor函数
