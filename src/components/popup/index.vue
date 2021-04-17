@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 16:24:58
  * @LastEditors: astar
- * @LastEditTime: 2021-04-17 01:05:05
+ * @LastEditTime: 2021-04-17 13:39:51
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\components\popup\index.vue
 -->
@@ -40,7 +40,8 @@ export default {
         left: this.x,
         bottom: `calc(100% - ${this.y})`,
         // height: this.height,
-        width: this.width
+        width: this.width,
+        maxHeight: this.maxHeight
       }
     }
   },
@@ -73,6 +74,9 @@ export default {
     },
     x: String, // 内容左下角x
     y: String, // 内容左下角y
+    maxHeight: {
+      type: String
+    },
     // height: { // 内容高度
     //   type: String,
     //   default: '200px'

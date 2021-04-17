@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-04-01 16:02:08
  * @LastEditors: astar
- * @LastEditTime: 2021-04-17 01:07:21
+ * @LastEditTime: 2021-04-17 13:34:43
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\utils\editor.js
  */
@@ -54,7 +54,7 @@ export function getHTMLFromJSONConfig ({ kind, value }) {
       attrs: {
         ...normalAttrs,
         src: value,
-        style: 'width: 1.5rem;'
+        style: 'max-width: 1.5rem;'
       }
     }
   };
