@@ -12,6 +12,7 @@
             <s-avatar :src="item.avatar" size="large"></s-avatar>
           </li>
         </ul>
+        <button @click="showAddGroup=true">创建群聊</button>
       </aside>
       <main class="main-content">
         <header class="contact-name">
@@ -33,6 +34,9 @@
         <input-box ref="inputBox" @send="sendMessage" class="input-box"></input-box>
       </main>
     </div>
+    <s-dialog title="创建群组" v-model="showAddGroup" @confirm="addGroup" @cancel="showAddGroup=false">
+      <s-input-cell autocomplete="off" v-model="formData.groupName" placeholder="请输入群组名"></s-input-cell>
+    </s-dialog>
   </div>
 </template>
 
@@ -42,7 +46,7 @@ import { mapGetters } from 'vuex';
 import { getAuthorization } from '@/utils';
 import inputBox from './components/inputBox';
 import { removeToken } from '@/utils/token';
-import { getHistoryChatByCount } from '@/request';
+import { getGroups, getHistoryChatByCount, addGroup } from '@/request';
 import { getDpr } from '@/utils/setRem';
 import { KINDS, getSimpleMessageFromJSON } from '@/utils/editor.js';
 import message from './components/message';
@@ -55,16 +59,21 @@ export default {
       pageSize: 20,
       totalDone: false,
       socket: null, // socket
-      reConnectCount: 10,
+      reConnectCount: 5,
       reConnectId: null,
       searchPerson: '', // 搜索联系人
       onlineList: [], // 当前在线人
-      chatRecord: [] // 当前聊天记录
+      chatRecord: [], // 当前聊天记录
+      showAddGroup: false,
+      formData: {
+        groupName: ''
+      }
     }
   },
-  created () {
-    this.reConnectCount = 10;
+  async created () {
     this.initSocket();
+    // 获取用户群组
+    this.getGroups();
     this.refreshNext().then(() => {
       this.$nextTick(() => {
         if (this.$refs.box) {
@@ -76,6 +85,22 @@ export default {
     });
   },
   methods: {
+    /**
+     * 创建群组
+     * @author astar
+     * @date 2021-04-19 16:50
+     */
+    addGroup () {
+      addGroup({ groupName: this.formData.groupName.trim() }).then(res => {
+        this.getGroups();
+        this.$toast.text(res.msg);
+      }).catch(_ => {
+        console.log(_)
+      })
+    },
+    getGroups () {
+      getGroups()
+    },
     /**
      * 长按艾特@
      * @author astar

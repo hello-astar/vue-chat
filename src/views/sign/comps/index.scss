@@ -11,9 +11,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 50%;
+  // height: 50%;
   // padding: 0 12px;
-  width: 300px;
+  min-width: 300px;
   background-color: #eee;
   border-radius: 4px;
   .panel-container {
@@ -27,6 +27,9 @@
         margin-bottom: 15px;
         .icon-login {
           font-size: 50px;
+        }
+        img {
+          width: 100px;
         }
       }
     }

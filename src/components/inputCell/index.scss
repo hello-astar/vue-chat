@@ -1,6 +1,7 @@
 .input-cell {
   position: relative;
   display: flex;
+  align-items: flex-end;
   border-bottom: 1px solid #999;
   width: 100%;
   &__label {

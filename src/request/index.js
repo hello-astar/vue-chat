@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 17:47:49
  * @LastEditors: astar
- * @LastEditTime: 2021-04-14 17:49:04
+ * @LastEditTime: 2021-04-19 17:09:39
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
@@ -36,4 +36,16 @@ export const getHistoryChatByCount = (data = {}) => {
 
 export const getGifs = (data = {}) => {
   return getRequest('/chat/searchGifs', data)
+}
+
+export const getGroups = (data = {}) => {
+  return getRequest('/group/getGroups', data)
+}
+
+export const addGroup = (data = {}) => {
+  return postRequest('/group/addGroup', data)
+}
+
+export const getHistoryChatSortByGroup = (data = {}) => {
+  return getRequest('/chat/getHistoryChatSortByGroup', data)
 }
