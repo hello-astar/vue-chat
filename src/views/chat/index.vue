@@ -7,8 +7,8 @@
           {{userInfo.userName}}
         </div>
         <s-search-box class="search" v-model="searchPerson"></s-search-box>
-        <button @click="getGroups">群聊</button>
-        <button @click="getFriends">好友</button>
+        <s-button @click="getGroups">群聊</s-button>
+        <s-button @click="getFriends">好友</s-button>
         <ul class="contact-list scrollbar">
           <!-- <li class="contact-item" v-for="item in onlineList" :key="item._id">
             <s-avatar :src="item.avatar" size="large"></s-avatar>
@@ -18,11 +18,12 @@
             {{item.groupName}}
           </li>
         </ul>
-        <button @click="showAddGroup=true">创建群聊</button>
+        <s-button @click="showAddGroup=true">创建群聊</s-button>
       </aside>
       <main class="main-content" v-if="current.receiverId">
         <header class="contact-name">
           {{current.name}}
+          <i style="float: right; cursor: pointer" class="iconfont icon-icon_tianjiahaoyou"></i>
         </header>
         <div class="chat-box" ref="box">
           <div class="no-data" v-show="!chatRecord.length">
@@ -91,7 +92,9 @@ export default {
     this.initSocket();
     // 获取用户群组
     this.getGroups();
-    getHistoryChatSortByGroup({ pageNo: 1, pageSize: 20 })
+    getHistoryChatSortByGroup({ pageNo: 1, pageSize: 20 }).then(res => {
+      console.log(res)
+    })
   },
   methods: {
     initRecord () {
@@ -122,10 +125,11 @@ export default {
       })
     },
     getGroups () {
-      getGroups().then(res => {
-        console.log(res)
-        this.groupList = res.data
-        this.current = { receiverId: res.data[0]._id, name: res.data[0].groupName }
+      getGroups().then(({ data = [] })=> {
+        if (data.length) {
+          this.groupList = data
+          this.current = { receiverId: data[0]._id, name: data[0].groupName }
+        }
       })
     },
     getFriends () {
@@ -180,9 +184,9 @@ export default {
 
       this.socket.on("message", message => {
         this.chatRecord.push(message);
-        if (message.userId !== this.userInfo._id) {
+        if (message.sender._id !== this.userInfo._id) {
           let content = message.content.reduce((str, item) => str + getSimpleMessageFromJSON(item), '');
-          this.$notify(message.name, content, { icon: message.avatar, tag: message._id });
+          this.$notify(message.userName || message.groupName, content, { icon: message.avatar, tag: message._id });
         }
         this.$nextTick(() => {
           if (this.$refs.box) {
