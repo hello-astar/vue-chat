@@ -4,27 +4,33 @@
       <aside class="sidebar">
         <div class="userinfo">
           <s-avatar shape="circle" :src="userInfo.avatar" size="medium"/>
-          {{userInfo.name}}
+          {{userInfo.userName}}
         </div>
         <s-search-box class="search" v-model="searchPerson"></s-search-box>
+        <button @click="getGroups">群聊</button>
+        <button @click="getFriends">好友</button>
         <ul class="contact-list scrollbar">
-          <li class="contact-item" v-for="item in onlineList" :key="item._id">
+          <!-- <li class="contact-item" v-for="item in onlineList" :key="item._id">
             <s-avatar :src="item.avatar" size="large"></s-avatar>
+          </li> -->
+          <li class="contact-item" v-for="item in groupList" :key="item._id" @click="current = { receiverId: item._id, name: item.groupName }">
+            <s-avatar :src="item.avatar" size="large"></s-avatar>
+            {{item.groupName}}
           </li>
         </ul>
         <button @click="showAddGroup=true">创建群聊</button>
       </aside>
-      <main class="main-content">
+      <main class="main-content" v-if="current.receiverId">
         <header class="contact-name">
-          群聊
+          {{current.name}}
         </header>
         <div class="chat-box" ref="box">
           <div class="no-data" v-show="!chatRecord.length">
             暂时没有新消息
           </div>
           <pull-refresh :refreshNext="refreshNext">
-            <div slot="main" class="chat-box__item" :class="[item.userId === userInfo._id ? 'reverse' : 'normal']" v-for="item in chatRecord" :key="item._id">
-              <s-avatar class="chat-box__item_avatar" :src="item.avatar" size="medium" v-press="atSomeone(item)"/>
+            <div slot="main" class="chat-box__item" :class="[item.sender._id === userInfo._id ? 'reverse' : 'normal']" v-for="item in chatRecord" :key="item._id">
+              <s-avatar class="chat-box__item_avatar" :src="item.sender.avatar" size="medium" v-press="atSomeone(item)"/>
               <div class="chat-box__item_content" :class="{'img': KINDS.IMG === item.content[0].kind}">
                 <message v-for="(ele, idx) in item.content" :item="ele" :key="idx"></message>
               </div>
@@ -46,7 +52,7 @@ import { mapGetters } from 'vuex';
 import { getAuthorization } from '@/utils';
 import inputBox from './components/inputBox';
 import { removeToken } from '@/utils/token';
-import { getGroups, getHistoryChatByCount, addGroup } from '@/request';
+import { getFriends, getGroups, getHistoryChatByCount, addGroup, getHistoryChatSortByGroup } from '@/request';
 import { getDpr } from '@/utils/setRem';
 import { KINDS, getSimpleMessageFromJSON } from '@/utils/editor.js';
 import message from './components/message';
@@ -55,6 +61,10 @@ export default {
   name: "chat",
   data () {
     return {
+      current: {
+        receiverId: '',
+        name: ''
+      },
       KINDS,
       pageSize: 20,
       totalDone: false,
@@ -67,24 +77,36 @@ export default {
       showAddGroup: false,
       formData: {
         groupName: ''
-      }
+      },
+      groupList: [],
+      friendList: []
+    }
+  },
+  watch: {
+    'current.receiverId' () {
+      this.initRecord()
     }
   },
   async created () {
     this.initSocket();
     // 获取用户群组
     this.getGroups();
-    this.refreshNext().then(() => {
-      this.$nextTick(() => {
-        if (this.$refs.box) {
-          this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
-        }
-      });
-    }, _ => {
-      this.$toast.text(_);
-    });
+    getHistoryChatSortByGroup({ pageNo: 1, pageSize: 20 })
   },
   methods: {
+    initRecord () {
+      this.totalDone = false
+      this.chatRecord = []
+      this.refreshNext().then(() => {
+        this.$nextTick(() => {
+          if (this.$refs.box) {
+            this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
+          }
+        });
+      }, _ => {
+        this.$toast.text(_);
+      });
+    },
     /**
      * 创建群组
      * @author astar
@@ -93,13 +115,21 @@ export default {
     addGroup () {
       addGroup({ groupName: this.formData.groupName.trim() }).then(res => {
         this.getGroups();
+        this.showAddGroup = false;
         this.$toast.text(res.msg);
       }).catch(_ => {
         console.log(_)
       })
     },
     getGroups () {
-      getGroups()
+      getGroups().then(res => {
+        console.log(res)
+        this.groupList = res.data
+        this.current = { receiverId: res.data[0]._id, name: res.data[0].groupName }
+      })
+    },
+    getFriends () {
+      getFriends()
     },
     /**
      * 长按艾特@
@@ -120,7 +150,7 @@ export default {
     refreshNext () {
       return new Promise((resolve, reject) => {
         if (!this.totalDone) {
-          getHistoryChatByCount({ exitsCount: this.chatRecord.length, fetchCount: this.pageSize }).then(res => {
+          getHistoryChatByCount({ receiverId: this.current.receiverId, startId: this.chatRecord.length ? this.chatRecord[this.chatRecord.length - 1] : null, fetchCount: this.pageSize }).then(res => {
             if (res.code === 1) {
               this.chatRecord = res.data.concat(this.chatRecord);
               if (!res.data.length) {
@@ -144,9 +174,9 @@ export default {
         }
       });
 
-      this.socket.on("online-list", list => {
-        this.onlineList = list;
-      });
+      // this.socket.on("online-list", list => {
+      //   this.onlineList = list;
+      // });
 
       this.socket.on("message", message => {
         this.chatRecord.push(message);
@@ -186,13 +216,13 @@ export default {
         }
       });
     },
-    sendMessage (message) {
+    sendMessage (content) {
       if (this.socket) {
-        if (!message || !message.length) {
+        if (!content || !content.length) {
           this.$toast.text('不能发送空数据', 'top');
           return;
         }
-        this.socket.emit('message', message);
+        this.socket.emit('message', { receiverId: this.current.receiverId, content, isGroup: 1 });
       } else {
         console.warn('[socket] - socket not initialized yet');
       }
@@ -275,6 +305,7 @@ export default {
           display: inline-block;
           cursor: pointer;
           padding: 12px 5px;
+          color: #fff;
         }
       }
     }

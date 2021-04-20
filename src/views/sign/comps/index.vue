@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-04-19 16:38:37
+ * @LastEditTime: 2021-04-20 14:26:21
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -15,7 +15,7 @@
           <s-upload-img ref="avatar" v-model="formData.avatar" v-if="formConfig.avatar.show"></s-upload-img>
           <i class="iconfont icon-login" v-else></i>
         </div>
-        <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.name" placeholder="请输入用户名" v-if="formConfig.name.show"></s-input-cell>
+        <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.userName" placeholder="请输入用户名" v-if="formConfig.userName.show"></s-input-cell>
         <s-input-cell type="password" autocomplete="off" class="input__cell" v-model="formData.password" placeholder="请输入密码" v-if="formConfig.password.show"></s-input-cell>
         <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.captcha" placeholder="请输入验证码" v-if="formConfig.captcha.show">
           <img :src="captchaImg" alt="验证码" v-throttle:click="[getCaptchaImg, 1000]">
@@ -56,7 +56,7 @@ export default {
       captchaImg: '', // 验证图片
       formData: {
         avatar: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3155998395,3600507640&fm=26&gp=0.jpg',
-        name: 'astar',
+        userName: 'astar',
         password: '123456',
         captcha: ''
       },
@@ -66,7 +66,7 @@ export default {
           validate: value => value,
           msg: '请选择头像'
         },
-        name: {
+        userName: {
           show: true,
           validate: value => value && value.trim(),
           msg: '请输入用户名'

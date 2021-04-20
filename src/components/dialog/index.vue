@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-04 13:58:20
  * @LastEditors: astar
- * @LastEditTime: 2021-02-04 15:50:07
+ * @LastEditTime: 2021-04-20 14:01:57
  * @Description: 弹窗
  * @FilePath: \vue-chat\src\components\dialog\index.vue
 -->
@@ -66,7 +66,6 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     max-width: 80%;
-    min-width: 60%;
     max-height: 80%;
     overflow: auto;
     padding: 0 10px;
