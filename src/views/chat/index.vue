@@ -146,7 +146,7 @@ export default {
       return function () {
         _this.$refs.inputBox.insertHTMLFromJson({
           kind: KINDS.AT,
-          value: item.name
+          value: item.sender.userName
         })
       }
     },
