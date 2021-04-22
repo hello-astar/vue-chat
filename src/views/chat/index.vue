@@ -3,16 +3,11 @@
     <div class="content">
       <aside class="sidebar">
         <div class="userinfo">
-          <s-avatar shape="circle" :src="userInfo.avatar" size="medium"/>
-          {{userInfo.userName}}
+          <s-avatar shape="circle" :src="userInfo.avatar" size="large" @click="showUserInfo=true"/>
+          <span class="username">{{userInfo.userName}}</span>
         </div>
         <s-search-box class="search" v-model="searchPerson"></s-search-box>
-        <s-button @click="getGroups">群聊</s-button>
-        <s-button @click="getFriends">好友</s-button>
         <ul class="contact-list scrollbar">
-          <!-- <li class="contact-item" v-for="item in onlineList" :key="item._id">
-            <s-avatar :src="item.avatar" size="large"></s-avatar>
-          </li> -->
           <li class="contact-item" v-for="item in groupList" :key="item._id" @click="current = { receiverId: item._id, name: item.groupName }">
             <s-avatar :src="item.avatar" size="large"></s-avatar>
             {{item.groupName}}
@@ -23,7 +18,7 @@
       <main class="main-content" v-if="current.receiverId">
         <header class="contact-name">
           {{current.name}}
-          <i style="float: right; cursor: pointer" class="iconfont icon-icon_tianjiahaoyou"></i>
+          <i style="float: right; cursor: pointer" class="iconfont icon-zhankai" @click="$router.push(`/test/aaa?id=${current.receiverId}`)"></i>
         </header>
         <div class="chat-box" ref="box">
           <div class="no-data" v-show="!chatRecord.length">
@@ -43,6 +38,10 @@
     </div>
     <s-dialog title="创建群组" v-model="showAddGroup" @confirm="addGroup" @cancel="showAddGroup=false">
       <s-input-cell autocomplete="off" v-model="formData.groupName" placeholder="请输入群组名"></s-input-cell>
+    </s-dialog>
+    <s-dialog title="用户信息" v-model="showUserInfo">
+      <s-avatar :src="userInfo.avatar" size="large"></s-avatar>
+      {{userInfo.userName}}
     </s-dialog>
   </div>
 </template>
@@ -73,14 +72,14 @@ export default {
       reConnectCount: 5,
       reConnectId: null,
       searchPerson: '', // 搜索联系人
-      onlineList: [], // 当前在线人
       chatRecord: [], // 当前聊天记录
       showAddGroup: false,
       formData: {
         groupName: ''
       },
       groupList: [],
-      friendList: []
+      friendList: [],
+      showUserInfo: false
     }
   },
   watch: {
@@ -92,9 +91,9 @@ export default {
     this.initSocket();
     // 获取用户群组
     this.getGroups();
-    getHistoryChatSortByGroup({ pageNo: 1, pageSize: 20 }).then(res => {
-      console.log(res)
-    })
+    // getHistoryChatSortByGroup({ pageNo: 1, pageSize: 20 }).then(({ data }) => {
+    //   this.groupList = data
+    // })
   },
   methods: {
     initRecord () {
@@ -154,7 +153,7 @@ export default {
     refreshNext () {
       return new Promise((resolve, reject) => {
         if (!this.totalDone) {
-          getHistoryChatByCount({ receiverId: this.current.receiverId, startId: this.chatRecord.length ? this.chatRecord[this.chatRecord.length - 1] : null, fetchCount: this.pageSize }).then(res => {
+          getHistoryChatByCount({ receiverId: this.current.receiverId, startId: this.chatRecord.length ? this.chatRecord[0]._id : null, fetchCount: this.pageSize }).then(res => {
             if (res.code === 1) {
               this.chatRecord = res.data.concat(this.chatRecord);
               if (!res.data.length) {
@@ -178,15 +177,11 @@ export default {
         }
       });
 
-      // this.socket.on("online-list", list => {
-      //   this.onlineList = list;
-      // });
-
       this.socket.on("message", message => {
         this.chatRecord.push(message);
         if (message.sender._id !== this.userInfo._id) {
           let content = message.content.reduce((str, item) => str + getSimpleMessageFromJSON(item), '');
-          this.$notify(message.userName || message.groupName, content, { icon: message.avatar, tag: message._id });
+          this.$notify(message.sender.userName || message.sender.groupName, content, { icon: message.avatar, tag: message._id });
         }
         this.$nextTick(() => {
           if (this.$refs.box) {
@@ -286,6 +281,8 @@ export default {
     margin: auto;
     width: 800px;
     height: 600px;
+    // width: 100%;
+    // height: 100%;
     background: rgb(239, 243, 246);
     .sidebar {
       display: flex;
@@ -296,6 +293,9 @@ export default {
       .userinfo {
         margin-top: 10px;
         color: rgb(244, 244, 244);
+        .username {
+          margin-left: 10px;
+        }
       }
       .search {
         margin: 20px 0;
@@ -306,7 +306,7 @@ export default {
         overflow: auto;
         margin: 0 -5px;
         .contact-item {
-          display: inline-block;
+          // display: inline-block;
           cursor: pointer;
           padding: 12px 5px;
           color: #fff;

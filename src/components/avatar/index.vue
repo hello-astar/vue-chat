@@ -2,11 +2,11 @@
  * @Description: 头像组件
  * @Author: astar
  * @Date: 2020-09-08 21:10:10
- * @LastEditTime: 2021-04-01 17:07:53
+ * @LastEditTime: 2021-04-23 00:53:46
  * @LastEditors: astar
 -->
 <template>
-  <span class="avatar-wrapper" :class="classes" :style="styles" v-press="press">
+  <span class="avatar-wrapper" :class="classes" :style="styles" v-press="press" v-on="$listeners">
     <slot>
       <img :style="imgStyles" :src="src" :alt="alt" @error="error">
     </slot>
@@ -90,6 +90,7 @@ export default {
   vertical-align: middle;
   overflow: hidden;
   text-align: center;
+  cursor: pointer;
   >img {
     display: block;
     height: 100%;

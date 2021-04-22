@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-04-20 14:26:21
+ * @LastEditTime: 2021-04-23 00:55:08
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -55,10 +55,10 @@ export default {
     return {
       captchaImg: '', // 验证图片
       formData: {
-        avatar: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3155998395,3600507640&fm=26&gp=0.jpg',
-        userName: 'astar',
+        avatar: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg-bbs.csdn.net%2Fupload%2F201307%2F23%2F1374569161_463818.png&refer=http%3A%2F%2Fimg-bbs.csdn.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1621696556&t=0e119bf9a7011da57ff03e4abb5b6677',
+        userName: 'ad',
         password: '123456',
-        captcha: ''
+        captcha: 'ssss'
       },
       formConfig: {
         avatar: {

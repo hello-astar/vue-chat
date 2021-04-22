@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-04 13:58:20
  * @LastEditors: astar
- * @LastEditTime: 2021-04-20 14:01:57
+ * @LastEditTime: 2021-04-22 22:48:24
  * @Description: 弹窗
  * @FilePath: \vue-chat\src\components\dialog\index.vue
 -->
@@ -10,7 +10,7 @@
 <div class="dialog" v-if="visible">
   <div class="dialog-container">
     <h3 class="dialog-container_header"><i class="iconfont icon-chongwutubiao18"/>{{title || '温馨提示'}}</h3>
-    <div class="dialog-container_content">
+    <div class="dialog-container_content" :style="{width: width, height: height}">
       <slot>
       </slot>
     </div>
@@ -31,7 +31,14 @@ export default {
       type: Boolean,
       required: true
     },
-    title: String
+    title: String,
+    width: {
+      type: String,
+      default: '250px'
+    },
+    height: {
+      type: String
+    }
   },
   watch: {
     value: {
@@ -87,6 +94,7 @@ export default {
         position: relative;
         width: 50%;
         line-height: 40px;
+        cursor: pointer;
         &:first-child:after {
           position: absolute;
           top: 0;
