@@ -91,9 +91,9 @@ export default {
     this.initSocket();
     // 获取用户群组
     this.getGroups();
-    // getHistoryChatSortByGroup({ pageNo: 1, pageSize: 20 }).then(({ data }) => {
-    //   this.groupList = data
-    // })
+    getHistoryChatSortByGroup({ pageNo: 1, pageSize: 20 }).then(({ data }) => {
+      console.log(data)
+    })
   },
   methods: {
     initRecord () {
@@ -181,7 +181,7 @@ export default {
         this.chatRecord.push(message);
         if (message.sender._id !== this.userInfo._id) {
           let content = message.content.reduce((str, item) => str + getSimpleMessageFromJSON(item), '');
-          this.$notify(message.sender.userName || message.sender.groupName, content, { icon: message.avatar, tag: message._id });
+          this.$notify(message.sender.userName || message.sender.groupName, content, { icon: message.sender.avatar, tag: message._id });
         }
         this.$nextTick(() => {
           if (this.$refs.box) {
