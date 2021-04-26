@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 17:27:10
  * @LastEditors: astar
- * @LastEditTime: 2021-02-25 15:28:59
+ * @LastEditTime: 2021-04-26 14:19:58
  * @Description: 定义拦截器
  * @FilePath: \vue-chat\src\axios\interceptors.js
  */
@@ -25,10 +25,8 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(config => {
-  if (!config.notToken) {
-    config.headers = {
-      authorization: getAuthorization() // jwt校验token
-    }
+  config.headers = {
+    authorization: getAuthorization() // jwt校验token
   }
   return config;
 }, _ => { // 请求失败操作

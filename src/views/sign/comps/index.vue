@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-04-23 00:55:08
+ * @LastEditTime: 2021-04-26 18:32:44
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -21,7 +21,7 @@
           <img :src="captchaImg" alt="验证码" v-throttle:click="[getCaptchaImg, 1000]">
         </s-input-cell>
       </div>
-      <button class="panel-container__btn" v-throttle:click="[submit, 1000]">{{ mapTypeName }}</button>
+      <s-button class="panel-container__btn" v-throttle:click="[submit, 1000]">{{ mapTypeName }}</s-button>
       <div class="panel-container__tip" @click="linkTo">{{ mapTip }}</div>
     </div>
   </div>

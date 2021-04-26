@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2020-09-16 20:07:43
- * @LastEditTime: 2021-03-28 20:13:26
+ * @LastEditTime: 2021-04-21 18:59:29
  * @LastEditors: astar
  */
 import { os } from '@/utils/browser';
@@ -22,7 +22,7 @@ export const getDpr = function () {
 export default function (doc, win) {
   let docEl = win.document.documentElement;
   let metaEl = doc.querySelector('meta[name="viewport"]');
-  let resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+  let resizeEvt = 'orientationchange' in win ? 'orientationchange' : 'resize';
   let dpr = getDpr();
   let scale = 1 / dpr;
   docEl.setAttribute('data-dpr', dpr);
@@ -43,9 +43,9 @@ export default function (doc, win) {
     let width = clientWidth;
     let baseWidth = 0;
     if (width >= 768 * dpr) {
-      baseWidth = 1520;
+      baseWidth = 1520; // 大屏
     } else {
-      baseWidth = 375;
+      baseWidth = 375; // 小屏
     }
     fz = 100 * width / baseWidth;
     docEl.style.fontSize = fz + 'px';
