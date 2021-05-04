@@ -2,16 +2,16 @@
  * @Author: astar
  * @Date: 2021-01-30 16:24:58
  * @LastEditors: astar
- * @LastEditTime: 2021-04-17 13:39:51
+ * @LastEditTime: 2021-05-05 01:41:12
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\components\popup\index.vue
 -->
 <template>
 <transition name="mask">
-  <div class="popup" @click.self="visible=false" v-show="visible">
-    <div class="popup-container" :style="style">
-      <transition name="slide">
-        <div class="popup-container__content" v-show="visible">
+  <div class="s-popup" @click.self="visible=false" v-show="visible">
+    <div class="s-popup-container" :style="style">
+      <transition :name="transitionName">
+        <div class="s-popup-container__content" v-show="visible">
           <slot></slot>
         </div>
       </transition>
@@ -29,20 +29,16 @@ export default {
   },
   computed: {
     style () {
-      const mapPlace = {
-        'top': { top: 0, left: 0 },
-        'left': { top: 0, left: 0 },
-        'right': { top: 0, right: 0 },
-        'bottom': { bottom: 0, left: 0 }
-      }
       return {
-        ...mapPlace[this.place],
         left: this.x,
-        bottom: `calc(100% - ${this.y})`,
-        // height: this.height,
+        bottom: `calc(100% - (${this.y}))`,
+        height: this.height,
         width: this.width,
         maxHeight: this.maxHeight
       }
+    },
+    transitionName () {
+      return `slide-${this.place}`
     }
   },
   model: {
@@ -74,13 +70,10 @@ export default {
     },
     x: String, // 内容左下角x
     y: String, // 内容左下角y
+    height: String, // 高度
     maxHeight: {
       type: String
     },
-    // height: { // 内容高度
-    //   type: String,
-    //   default: '200px'
-    // },
     width: { // 内容宽度
       type: String,
       default: '200px'
@@ -89,7 +82,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.popup {
+.s-popup {
   position: fixed;
   overflow: hidden;
   top: 0;
@@ -113,10 +106,18 @@ export default {
 .mask-leave-active {
   transition: visibility .1s;
 }
-.slide-enter-active, .slide-leave-active {
-  transition: transform .1s;
-}
-.slide-enter, .slide-leave-to {
-  transform: translateY(100%);
+$places: (
+  'bottom': translateY(100%),
+  'top': translateY(-100%),
+  'left': translateX(-100%),
+  'right': translateX(100%)
+);
+@each $place, $value in $places {
+  .slide-#{$place}-enter-active, .slide-#{$place}-leave-active {
+    transition: transform .1s;
+  }
+  .slide-#{$place}-enter, .slide-#{$place}-leave-to {
+    transform: $value;
+  }
 }
 </style>

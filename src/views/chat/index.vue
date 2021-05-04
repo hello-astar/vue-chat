@@ -13,12 +13,12 @@
             {{item.groupName}}
           </li>
         </ul>
-        <s-button @click="showAddGroup=true">创建群聊</s-button>
+        <s-button type="primary" @click="showAddGroup=true">创建群聊</s-button>
       </aside>
-      <main class="main-content" v-if="current.receiverId">
+      <main class="main-content" ref="chat">
         <header class="contact-name">
           {{current.name}}
-          <i style="float: right; cursor: pointer" class="iconfont icon-zhankai" @click="$router.push(`/test/aaa?id=${current.receiverId}`)"></i>
+          <i style="float: right" class="iconfont icon-zhankai" @click="showGroupInfo=true"></i>
         </header>
         <div class="chat-box" ref="box">
           <div class="no-data" v-show="!chatRecord.length">
@@ -39,20 +39,28 @@
     <s-dialog title="创建群组" v-model="showAddGroup" @confirm="addGroup" @cancel="showAddGroup=false">
       <s-input-cell autocomplete="off" v-model="formData.groupName" placeholder="请输入群组名"></s-input-cell>
     </s-dialog>
-    <s-dialog title="用户信息" v-model="showUserInfo">
+    <s-dialog class="user-info-dialog" title="用户信息" width="300px" v-model="showUserInfo" @cancel="showUserInfo=false" @confirm="showUserInfo=false">
       <s-avatar :src="userInfo.avatar" size="large"></s-avatar>
-      {{userInfo.userName}}
+      <div>
+        <span>用户名：{{userInfo.userName}}</span><br>
+        <span>用户ID：{{userInfo._id}}</span>
+        <i class="iconfont icon-fuzhi"></i>
+      </div>
     </s-dialog>
+    <s-popup v-model="showGroupInfo" place="right" :x="pos.x" :y="pos.y" :width="popupWidth" :height="popupHeight">
+      <info :id="current.receiverId" isGroup @close="showGroupInfo=false"></info>
+    </s-popup>
   </div>
 </template>
 
 <script>
 import { io } from 'socket.io-client';
 import { mapGetters } from 'vuex';
-import { getAuthorization } from '@/utils';
+import { getAuthorization, getElementPagePosition } from '@/utils';
 import inputBox from './components/inputBox';
+import info from './components/info';
 import { removeToken } from '@/utils/token';
-import { getFriends, getGroups, getHistoryChatByCount, addGroup, getHistoryChatSortByGroup } from '@/request';
+import { getFriends, getGroups, getHistoryChatByCount, addGroup, getRecentConcats } from '@/request';
 import { getDpr } from '@/utils/setRem';
 import { KINDS, getSimpleMessageFromJSON } from '@/utils/editor.js';
 import message from './components/message';
@@ -79,7 +87,11 @@ export default {
       },
       groupList: [],
       friendList: [],
-      showUserInfo: false
+      showUserInfo: false,
+      showGroupInfo: false,
+      popupWidth: '0px',
+      popupHeight: '0px',
+      pos: {x: '0px', y: '0px' }
     }
   },
   watch: {
@@ -89,13 +101,33 @@ export default {
   },
   async created () {
     this.initSocket();
+    const _this = this;
+    this.$nextTick(() => {
+      this.computePopupStyle()
+        window.addEventListener(
+          "resize",
+          _this.computePopupStyle,
+          false
+        );
+    })
     // 获取用户群组
     this.getGroups();
-    getHistoryChatSortByGroup({ pageNo: 1, pageSize: 20 }).then(({ data }) => {
+    getRecentConcats({ pageNo: 1, pageSize: 20 }).then(({ data }) => {
       console.log(data)
     })
   },
   methods: {
+    /**
+     * 计算emoji popup的位置
+     * @author astar
+     * @date 2021-04-01 15:07
+     */
+    computePopupStyle () {
+      this.popupWidth = window.getComputedStyle(this.$refs.chat).width;
+      this.popupHeight = window.getComputedStyle(this.$refs.chat).height;
+      let { x, y } = getElementPagePosition(this.$refs.chat) || {x: '0', y: '0'};
+      this.pos = { y: y + ' + ' + this.popupHeight, x }
+    },
     initRecord () {
       this.totalDone = false
       this.chatRecord = []
@@ -257,6 +289,7 @@ export default {
   },
   components: {
     inputBox,
+    info,
     message
   }
 }
@@ -428,6 +461,15 @@ export default {
         }
       }
     }
+  }
+}
+</style>
+<style lang="scss" scoped>
+/deep/ .user-info-dialog .dialog-container_content {
+  display: flex;
+  justify-content: space-between;
+  .s-avatar {
+    flex-shrink: 0;
   }
 }
 </style>

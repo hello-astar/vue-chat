@@ -2,11 +2,11 @@
  * @Description: 头像组件
  * @Author: astar
  * @Date: 2020-09-08 21:10:10
- * @LastEditTime: 2021-04-23 00:53:46
+ * @LastEditTime: 2021-05-04 22:24:56
  * @LastEditors: astar
 -->
 <template>
-  <span class="avatar-wrapper" :class="classes" :style="styles" v-press="press" v-on="$listeners">
+  <span class="s-avatar" :class="classes" :style="styles" v-press="press" v-on="$listeners">
     <slot>
       <img :style="imgStyles" :src="src" :alt="alt" @error="error">
     </slot>
@@ -84,7 +84,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.avatar-wrapper {
+.s-avatar {
   display: inline-block;
   box-sizing: border-box;
   vertical-align: middle;
@@ -94,6 +94,7 @@ export default {
   >img {
     display: block;
     height: 100%;
+    width: 100%;
   }
   &.avatar-size__large {
     width: 42px;

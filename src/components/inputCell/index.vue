@@ -2,13 +2,13 @@
  * @Description: 输入框
  * @Author: astar
  * @Date: 2020-09-20 17:16:54
- * @LastEditTime: 2021-02-04 14:28:25
+ * @LastEditTime: 2021-05-05 00:35:26
  * @LastEditors: astar
 -->
 <template>
-<div class="input-cell">
+<div class="input-cell" :class="{'no-border': noBorder}">
   <div>
-    <slot name="label"></slot>
+    <slot name="label">{{label}}</slot>
   </div>
   <input
     :class="['input']"
@@ -21,7 +21,7 @@
   <div>
     <slot></slot>
   </div>
-  <span class="input-cell__line"></span>
+  <span v-if="!noBorder" class="input-cell__line"></span>
 </div>
 </template>
 <script>
@@ -38,7 +38,11 @@ export default {
     },
     autocomplete: String,
     label: String,
-    value: String
+    value: String,
+    noBorder: {
+      type: Boolean,
+      default: false
+    }
   },
   watch: {
     value: {

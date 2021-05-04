@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 17:47:49
  * @LastEditors: astar
- * @LastEditTime: 2021-04-22 23:05:35
+ * @LastEditTime: 2021-05-04 18:38:56
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
@@ -46,8 +46,8 @@ export const addGroup = (data = {}) => {
   return postRequest('/group/addGroup', data)
 }
 
-export const getHistoryChatSortByGroup = (data = {}) => {
-  return getRequest('/chat/getHistoryChatSortByGroup', data)
+export const getRecentConcats = (data = {}) => {
+  return getRequest('/chat/getRecentConcats', data)
 }
 
 export const getGroupInfoByGroupId = (data = {}) => {
@@ -60,4 +60,8 @@ export const updateGroupNameByGroupId = (data = {}) => {
 
 export const joinMembertoGroup = (data = {}) => {
   return postRequest('/group/joinMember', data)
+}
+
+export const exitGroup = (data = {}) => {
+  return postRequest('/group/exitGroup', data)
 }

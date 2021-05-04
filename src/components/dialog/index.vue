@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-04 13:58:20
  * @LastEditors: astar
- * @LastEditTime: 2021-04-22 22:48:24
+ * @LastEditTime: 2021-05-05 00:47:17
  * @Description: 弹窗
  * @FilePath: \vue-chat\src\components\dialog\index.vue
 -->
@@ -16,7 +16,7 @@
     </div>
     <div class="dialog-container_footer">
       <slot name="footer">
-        <div class="btn cancel-btn" @click="$emit('cancel')">取消</div>
+        <div class="btn cancel-btn" @click="cancel">取消</div>
         <div class="btn" @click="$emit('confirm')">确定</div>
       </slot>
     </div>
@@ -54,6 +54,12 @@ export default {
   data () {
     return {
       visible: false
+    }
+  },
+  methods: {
+    cancel () {
+      this.visible = false
+      this.$emit('cancel')
     }
   }
 }

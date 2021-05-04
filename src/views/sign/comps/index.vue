@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-04-26 18:32:44
+ * @LastEditTime: 2021-05-05 01:21:43
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -21,7 +21,7 @@
           <img :src="captchaImg" alt="验证码" v-throttle:click="[getCaptchaImg, 1000]">
         </s-input-cell>
       </div>
-      <s-button class="panel-container__btn" v-throttle:click="[submit, 1000]">{{ mapTypeName }}</s-button>
+      <s-button type="primary" class="panel-container__btn" v-throttle:click="[submit, 1000]">{{ mapTypeName }}</s-button>
       <div class="panel-container__tip" @click="linkTo">{{ mapTip }}</div>
     </div>
   </div>
@@ -55,8 +55,8 @@ export default {
     return {
       captchaImg: '', // 验证图片
       formData: {
-        avatar: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg-bbs.csdn.net%2Fupload%2F201307%2F23%2F1374569161_463818.png&refer=http%3A%2F%2Fimg-bbs.csdn.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1621696556&t=0e119bf9a7011da57ff03e4abb5b6677',
-        userName: 'ad',
+        avatar: 'http://5b0988e595225.cdn.sohucs.com/images/20180424/9d2dc769a2cd4e67aafe8cbcb8232399.jpeg',
+        userName: 'yz',
         password: '123456',
         captcha: 'ssss'
       },

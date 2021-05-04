@@ -4,8 +4,11 @@
   align-items: flex-end;
   border-bottom: 1px solid #999;
   width: 100%;
+  &.no-border {
+    border-bottom: 0;
+  }
   &__label {
-
+    flex-shrink: 0;
   }
   .input {
     flex: 1;
