@@ -1,5 +1,5 @@
 <template>
-  <div :class="getClass">
+  <div class="vue-chat" :class="className">
     <div class="content">
       <aside class="sidebar">
         <div class="userinfo">
@@ -63,7 +63,7 @@ import inputBox from './components/inputBox';
 import info from './components/info';
 import { removeToken } from '@/utils/token';
 import { getFriends, getGroups, getHistoryChatByCount, addGroup, getRecentConcats } from '@/request';
-import { getDpr } from '@/utils/setRem';
+import { getSize } from '@/utils/setRem';
 import { KINDS, getSimpleMessageFromJSON } from '@/utils/editor.js';
 import message from './components/message';
 
@@ -71,6 +71,7 @@ export default {
   name: "chat",
   data () {
     return {
+      className: [],
       current: { // 当前群聊
         receiverId: '',
         name: ''
@@ -106,17 +107,21 @@ export default {
       this.initRecord()
     }
   },
-  async created () {
+  created () {
     this.initSocket();
     const _this = this;
     this.$nextTick(() => {
       this.computePopupStyle()
-        window.addEventListener(
-          "resize",
-          _this.computePopupStyle,
-          false
-        );
-    })
+    });
+    this.getClass();
+    window.addEventListener(
+      "resize",
+      function () {
+        _this.getClass();
+        _this.computePopupStyle();
+      },
+      false
+    );
     // 获取用户群组
     this.getGroups();
     getRecentConcats({ pageNo: 1, pageSize: 20 }).then(({ data }) => {
@@ -124,6 +129,16 @@ export default {
     })
   },
   methods: {
+    getClass () {
+      let { isLarge } = getSize(window, document);
+      if (!isLarge) {
+        this.className = [
+          'vue-chat-small-device'
+        ]
+        return;
+      }
+      this.className = []
+    },
     /**
     * 复制粘贴
     * @author astar
@@ -144,6 +159,7 @@ export default {
      * @date 2021-04-01 15:07
      */
     computePopupStyle () {
+      if (!this.$refs.chat) return;
       this.popupWidth = window.getComputedStyle(this.$refs.chat).width;
       this.popupHeight = window.getComputedStyle(this.$refs.chat).height;
       let { x, y } = getElementPagePosition(this.$refs.chat) || {x: '0', y: '0'};
@@ -289,24 +305,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userInfo']),
-    getClass () {
-      // $dprs: 1, 2, 3, 4;
-      // @each $dpr in $dprs {
-      //   @media screen and (max-width:#{$dpr * 768}px) and (min-resolution:#{$dpr}dppx) {
-      //   }
-      // }
-      let dpr = getDpr();
-      if (window.innerWidth < dpr * 768) {
-        return [
-          'vue-chat',
-          'vue-chat-small-device'
-        ]
-      }
-      return [
-        'vue-chat'
-      ]
-    }
+    ...mapGetters(['userInfo'])
   },
   components: {
     inputBox,
