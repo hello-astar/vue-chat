@@ -3,7 +3,7 @@
     <div class="content">
       <aside class="sidebar">
         <div class="userinfo">
-          <s-avatar shape="circle" :src="userInfo.avatar" size="large" @click="showUserInfo=true"/>
+          <s-avatar shape="circle" :src="userInfo.avatar" size="large"/>
           <span class="username">{{userInfo.userName}}</span>
         </div>
         <s-search-box class="search" v-model="searchPerson"></s-search-box>
@@ -26,7 +26,7 @@
           </div>
           <pull-refresh :refreshNext="refreshNext">
             <div slot="main" class="chat-box__item" :class="[item.sender._id === userInfo._id ? 'reverse' : 'normal']" v-for="item in chatRecord" :key="item._id">
-              <s-avatar class="chat-box__item_avatar" :src="item.sender.avatar" size="medium" v-press="atSomeone(item)"/>
+              <s-avatar class="chat-box__item_avatar" :src="item.sender.avatar" size="medium" v-press="atSomeone(item)" @click="showUserInfo=true;currentUser=item.sender"/>
               <div class="chat-box__item_content" :class="{'img': KINDS.IMG === item.content[0].kind}">
                 <message v-for="(ele, idx) in item.content" :item="ele" :key="idx"></message>
               </div>
@@ -39,12 +39,14 @@
     <s-dialog title="创建群组" v-model="showAddGroup" @confirm="addGroup" @cancel="showAddGroup=false">
       <s-input-cell autocomplete="off" v-model="formData.groupName" placeholder="请输入群组名"></s-input-cell>
     </s-dialog>
-    <s-dialog class="user-info-dialog" title="用户信息" width="300px" v-model="showUserInfo" @cancel="showUserInfo=false" @confirm="showUserInfo=false">
-      <s-avatar :src="userInfo.avatar" size="large"></s-avatar>
+    <s-dialog class="user-info-dialog" title="用户信息" width="320px" v-model="showUserInfo" @confirm="showUserInfo=false">
+      <s-avatar :src="currentUser.avatar" size="large"></s-avatar>
       <div>
-        <span>用户名：{{userInfo.userName}}</span><br>
-        <span>用户ID：{{userInfo._id}}</span>
-        <i class="iconfont icon-fuzhi"></i>
+        <span>用户名：{{currentUser.userName}}</span>
+        <i class="iconfont icon-fuzhi" @click="copy(currentUser.userName)"></i>
+        <br>
+        <span>用户ID：{{currentUser._id}}</span>
+        <i class="iconfont icon-fuzhi" @click="copy(currentUser._id)"></i>
       </div>
     </s-dialog>
     <s-popup v-model="showGroupInfo" place="right" :x="pos.x" :y="pos.y" :width="popupWidth" :height="popupHeight">
@@ -69,10 +71,15 @@ export default {
   name: "chat",
   data () {
     return {
-      current: {
+      current: { // 当前群聊
         receiverId: '',
         name: ''
       },
+      currentUser: {
+        avatar: '',
+        userName: '',
+        _id: ''
+      }, // 当前展示用户信息的用户
       KINDS,
       pageSize: 20,
       totalDone: false,
@@ -117,6 +124,20 @@ export default {
     })
   },
   methods: {
+    /**
+    * 复制粘贴
+    * @author astar
+    * @date 2021-05-05 19:17
+    */
+    copy (value) {
+      let content = document.createElement('input');
+      content.value = value;
+      document.body.appendChild(content);
+      content.select();
+      document.execCommand('Copy');
+      document.body.removeChild(content);
+      this.$toast.text('复制成功');
+    },
     /**
      * 计算emoji popup的位置
      * @author astar
@@ -467,9 +488,16 @@ export default {
 <style lang="scss" scoped>
 /deep/ .user-info-dialog .dialog-container_content {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: flex-start;
   .s-avatar {
+    margin-right: 20px;
     flex-shrink: 0;
+  }
+  .iconfont {
+    margin-left: 10px;
+    font-size: 18px;
+    vertical-align: middle;
   }
 }
 </style>

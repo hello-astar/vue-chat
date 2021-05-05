@@ -2,11 +2,11 @@
  * @Description: 头像组件
  * @Author: astar
  * @Date: 2020-09-08 21:10:10
- * @LastEditTime: 2021-05-04 22:24:56
+ * @LastEditTime: 2021-05-05 19:27:12
  * @LastEditors: astar
 -->
 <template>
-  <span class="s-avatar" :class="classes" :style="styles" v-press="press" v-on="$listeners">
+  <span class="s-avatar" :class="classes" :style="styles" @click="$emit('click')">
     <slot>
       <img :style="imgStyles" :src="src" :alt="alt" @error="error">
     </slot>
@@ -44,11 +44,8 @@ export default {
     alt: String
   },
   methods: {
-    error(e) {
+    error (e) {
       this.$emit('error', e)
-    },
-    press () {
-      this.$emit('press')
     }
   },
   computed: {

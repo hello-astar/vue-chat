@@ -2,7 +2,7 @@
  * @Description: 通用按钮
  * @Author: astar
  * @Date: 2021-04-21 00:05:57
- * @LastEditTime: 2021-05-05 01:23:36
+ * @LastEditTime: 2021-05-05 19:02:09
  * @LastEditors: astar
 -->
 <template>
@@ -45,22 +45,22 @@ export default {
   background: none;
   outline: 0;
   border: 0;
-  &__primary {
-    background:rgb(29, 29, 29);
-    color: rgba(255,255,255,.8);
-    border: 1px solid rgb(29, 29, 29);
+  @mixin button($type, $bgColor, $color, $borderColor) {
+    &.s-button__#{$type} {
+      background-color: $bgColor;
+      color: $color;
+      border-width: 1px;
+      border-style: solid;
+      border-color: $borderColor;
+      &.s-button__plain {
+        color: $bgColor;
+        background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%);
+      }
+    }
   }
-  &__text {
-    border: 0;
-  }
-  &__danger {
-    background: rgb(168, 69, 69);
-    border: 1px solid rgb(168, 69, 69);
-    color: rgb(253, 250, 250);
-  }
-  &__plain {
-    background: transparent;
-  }
+  @include button('primary',rgb(29, 29, 29), rgba(255,255,255,.8), rgb(29, 29, 29));
+  @include button('text', transparent, rgb(29, 29, 29), transparent);
+  @include button('danger', rgb(168, 69, 69), rgb(253, 250, 250),rgb(168, 69, 69));
   &__small {
 
   }
