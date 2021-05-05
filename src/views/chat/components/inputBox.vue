@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-04-17 14:02:23
+ * @LastEditTime: 2021-05-05 22:01:14
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -30,7 +30,7 @@
 </template>
 <script>
 import { getElementPagePosition, debounce } from '@/utils';
-import { getHTMLFromJSON, getJSONFromInput, KINDS, EMOJIS } from '@/utils/editor.js';
+import { getHTMLFromJSON, getJSONFromInput, KINDS, EMOJIS, dealWithPasteProblem } from '@/utils/editor.js';
 import { getGifs } from '@/request';
 import message from './message';
 
@@ -51,7 +51,7 @@ export default {
   created () {
     const _this = this
     this.$nextTick(() => {
-      _this.dealWithPasteProblem();
+      dealWithPasteProblem();
       _this.computePopupStyle();
 
       window.addEventListener(
@@ -101,28 +101,6 @@ export default {
       }
     },
     /**
-     * 解决复制粘贴文本把样式也复制过来的问题
-     * @author astar
-     * @date 2021-02-02 17:52
-     */
-    dealWithPasteProblem () {
-      document.querySelector('div[contenteditable="true"]').addEventListener("paste", function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        var text = '', event = (e.originalEvent || e);
-        if (event.clipboardData && event.clipboardData.getData) {
-            text = event.clipboardData.getData('text/plain');
-        } else if (window.clipboardData && window.clipboardData.getData) {
-            text = window.clipboardData.getData('Text');
-        }
-        if (document.queryCommandSupported('insertText')) {
-            document.execCommand('insertText', false, text);
-        } else {
-            document.execCommand('paste', false, text);
-        }
-      });
-    },
-    /**
      * 按enter键发送数据，文本框不允许换行
      * @author astar
      * @date 2021-02-02 17:53
@@ -167,10 +145,10 @@ export default {
       }
     },
     /**
-     * 选择emoji后的回调函数，将选择的emoji插入最后光标所在处
+     * 将dom字符串插入光标位置
      * @author astar
      * @date 2021-02-02 17:56
-     * @param {*}
+     * @param {Object} data - { kind, value } 可用getHTMLFromJSON函数转换为相应dom string
      * @returns {*}
      */
     insertHTMLFromJson (data) {

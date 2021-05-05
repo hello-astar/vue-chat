@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-04-01 16:02:08
  * @LastEditors: astar
- * @LastEditTime: 2021-04-17 14:07:22
+ * @LastEditTime: 2021-05-06 00:41:50
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\utils\editor.js
  */
@@ -37,8 +37,11 @@ export function getHTMLFromJSONConfig ({ kind, value }) {
       body: value
     },
     [KINDS.AT]: {
-      ele: 'i',
-      attrs: normalAttrs,
+      ele: 'div',
+      attrs: {
+        ...normalAttrs,
+        style: 'display: inline-block'
+      },
       body: `@${value} `
     },
     [KINDS.EMOJI]: {
@@ -54,7 +57,7 @@ export function getHTMLFromJSONConfig ({ kind, value }) {
       attrs: {
         ...normalAttrs,
         src: value,
-        style: 'max-width: 1.5rem;'
+        style: 'max-width: 1.2rem;'
       }
     }
   };
@@ -109,4 +112,27 @@ export function getSimpleMessageFromJSON ({ kind, value }) {
     [KINDS.IMG]: '[表情]'
   }
   return mapSimpleMessage[kind]
+}
+
+/**
+ * 解决复制粘贴文本把样式也复制过来的问题
+ * @author astar
+ * @date 2021-02-02 17:52
+ */
+export function dealWithPasteProblem () {
+  document.querySelector('div[contenteditable="true"]').addEventListener("paste", function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    var text = '', event = (e.originalEvent || e);
+    if (event.clipboardData && event.clipboardData.getData) {
+      text = event.clipboardData.getData('text/plain');
+    } else if (window.clipboardData && window.clipboardData.getData) {
+      text = window.clipboardData.getData('Text');
+    }
+    if (document.queryCommandSupported('insertText')) {
+      document.execCommand('insertText', false, text);
+    } else {
+      document.execCommand('paste', false, text);
+    }
+  });
 }
