@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-28 18:26:05
  * @LastEditors: astar
- * @LastEditTime: 2021-04-01 14:31:49
+ * @LastEditTime: 2021-05-05 19:50:45
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\directives\index.js
  */
@@ -53,15 +53,16 @@ export const press = (Vue) => {
       let startTime = null;
       let timer = null;
       let startP = null;
-      function start (event) {
-        event.preventDefault();
+      function start () {
         startTime = new Date().getTime();
         timer = setTimeout(callback, delay);
       }
-      function cancel () {
+      function cancel (event) {
         let now = new Date().getTime();
         if (now - startTime < delay) {
           timer && clearTimeout(timer);
+        } else {
+          event.preventDefault(); // 在移动端，手指点击一个元素，会经过：touchstart --> touchmove -> touchend -->click , 使用preventDefault会阻止click事件的触发，因此判断为press事件后阻止click触发
         }
       }
       if ('ontouchstart' in window) {
