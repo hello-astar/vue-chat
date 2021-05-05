@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-04 13:58:20
  * @LastEditors: astar
- * @LastEditTime: 2021-05-05 00:47:17
+ * @LastEditTime: 2021-05-06 00:39:50
  * @Description: 弹窗
  * @FilePath: \vue-chat\src\components\dialog\index.vue
 -->
@@ -74,6 +74,7 @@ export default {
   z-index: 999;
   background: rgba(33,33,33,.5);
   &-container {
+    display: table;
     position: absolute;
     top: 50%;
     left: 50%;
