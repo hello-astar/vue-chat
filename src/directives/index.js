@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-28 18:26:05
  * @LastEditors: astar
- * @LastEditTime: 2021-05-05 19:50:45
+ * @LastEditTime: 2021-05-05 20:05:05
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\directives\index.js
  */
@@ -78,10 +78,11 @@ export const press = (Vue) => {
           }
         });
         el.addEventListener('touchend', cancel);
-      } else if ('onmousedown' in window) {
-        el.addEventListener('mousedown', start);
-        el.addEventListener('mouseup', cancel);
       }
+      // } else if ('onmousedown' in window) {
+      //   el.addEventListener('mousedown', start);
+      //   el.addEventListener('mouseup', cancel);
+      // }
     }
   })
 }
