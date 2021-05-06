@@ -1,24 +1,11 @@
 <template>
   <div class="vue-chat" :class="className">
     <div class="content">
-      <aside class="sidebar">
-        <div class="userinfo">
-          <s-avatar shape="circle" :src="userInfo.avatar" size="large"/>
-          <span class="username">{{userInfo.userName}}</span>
-        </div>
-        <s-search-box class="search" v-model="searchPerson"></s-search-box>
-        <ul class="contact-list scrollbar">
-          <li class="contact-item" v-for="item in groupList" :key="item._id" @click="current = { receiverId: item._id, name: item.groupName }">
-            <s-avatar :src="item.avatar" size="large"></s-avatar>
-            {{item.groupName}}
-          </li>
-        </ul>
-        <s-button type="primary" @click="showAddGroup=true">创建群聊</s-button>
-      </aside>
+      <chat-aside class="sidebar"></chat-aside>
       <main class="main-content" ref="chat">
         <header class="contact-name">
           {{current.name}}
-          <i style="float: right" class="iconfont icon-zhankai" @click="showGroupInfo=true"></i>
+          <i style="float: right" v-if="current.receiverId" class="iconfont icon-zhankai" @click="showGroupInfo=true"></i>
         </header>
         <div class="chat-box" ref="box">
           <div class="no-data" v-show="!chatRecord.length">
@@ -61,11 +48,13 @@ import { mapGetters } from 'vuex';
 import { getAuthorization, getElementPagePosition } from '@/utils';
 import inputBox from './components/inputBox';
 import info from './components/info';
+import chatAside from './components/chatAside';
 import { removeToken } from '@/utils/token';
 import { getFriends, getGroups, getHistoryChatByCount, addGroup, getRecentConcats } from '@/request';
 import { getSize } from '@/utils/setRem';
 import { KINDS, getSimpleMessageFromJSON } from '@/utils/editor.js';
 import message from './components/message';
+// import eventBus from './eventBus';
 
 export default {
   name: "chat",
@@ -108,6 +97,10 @@ export default {
     }
   },
   created () {
+    // this.bus = new eventBus('main');
+    // this.bus.addListener(eventBus.REQUEST_GROUP_LIST, function (data) {
+    //   console.log(data)
+    // })
     this.initSocket();
     const _this = this;
     this.$nextTick(() => {
@@ -297,6 +290,7 @@ export default {
     }
   },
   beforeDestroy () {
+    // this.bus.offListener();
     this.socket.disconnect();
     this.socket = null;
     if (this.reConnectId) {
@@ -310,7 +304,8 @@ export default {
   components: {
     inputBox,
     info,
-    message
+    message,
+    chatAside
   }
 }
 </script>
@@ -500,3 +495,4 @@ export default {
   }
 }
 </style>
+
