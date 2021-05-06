@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 17:15:31
  * @LastEditors: astar
- * @LastEditTime: 2021-05-06 17:59:26
+ * @LastEditTime: 2021-05-06 20:50:36
  * @Description: 使用eventBus实现组件间通信
  * @FilePath: \vue-chat\src\views\chat\eventBus.js
  */
@@ -11,6 +11,7 @@ const Bus = new Vue();
 
 export default class eventBus {
   static REQUEST_GROUP_LIST = 'REQUEST_GROUP_LIST';
+  static CHANGE_CURRENT_RECEIVER = 'CHANGE_CURRENT_RECEIVER';
   
   constructor (name) {
     this.component = name;
@@ -31,7 +32,7 @@ export default class eventBus {
   }
 
   // 关闭订阅
-  offListener () {
+  offListen () {
     this.listeners.forEach(listener => {
       console.log(`${this.component}关闭监听发${listener}事件`);
       Bus.$off(listener);
