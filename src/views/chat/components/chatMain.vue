@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-05-07 15:19:16
+ * @LastEditTime: 2021-05-07 21:41:11
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -102,10 +102,12 @@ export default {
      * @param {Object} message - 一条消息
      */
     receiveMessage (message) {
-      this.chatRecord.push(message);
+      if (message.receiver._id === this.currentReceiver._id) {
+        this.chatRecord.push(message);
+      }
       if (message.sender._id !== this.userInfo._id) {
         let content = message.content.reduce((str, item) => str + getSimpleMessageFromJSON(item), '');
-        this.$notify(message.sender.userName || message.sender.groupName, content, { icon: message.sender.avatar, tag: message._id });
+        this.$notify(message.sender.userName, content, { icon: message.sender.avatar, tag: message._id });
       }
       this.$nextTick(() => {
         if (this.$refs.box) {

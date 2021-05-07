@@ -2,7 +2,7 @@
  * @Description: 搜索框
  * @Author: astar
  * @Date: 2020-09-08 20:54:56
- * @LastEditTime: 2021-02-23 17:07:05
+ * @LastEditTime: 2021-05-07 22:09:31
  * @LastEditors: astar
 -->
 <template>
@@ -49,6 +49,7 @@ export default {
   width: 100%;
   height: 32px;
   border-radius: 4px;
+  background-color: #26292e;
   .search-box__icon {
     position: absolute;
     top: 0;

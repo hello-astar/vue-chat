@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:08:54
  * @LastEditors: astar
- * @LastEditTime: 2021-05-07 15:17:59
+ * @LastEditTime: 2021-05-07 23:58:40
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatAside.vue
 -->
@@ -12,27 +12,36 @@
       <s-avatar shape="circle" :src="userInfo.avatar" size="large"/>
       <span class="username">{{userInfo.userName}}</span>
     </div>
-    <s-search-box class="search" v-model="formData.searchPerson"></s-search-box>
+    <div class="search">
+      <s-search-box v-model="formData.searchPerson"></s-search-box>
+    </div>
     <ul class="contact-list scrollbar">
-      <li class="contact-item" v-for="(item, idx) in groupList" :key="idx" @click="changeCurrentReceiver(item.receiver)">
-        <s-avatar :src="item.receiver.avatar" size="large"></s-avatar>
-        {{item.receiver.groupName}}
+      <li class="contact-item" :class="{ 'active': item._id === currentReceiver._id }" v-for="(item, idx) in groupList" :key="idx" @click="changeCurrentReceiver(item)">
+        <s-avatar class="contact-item__avatar" :src="item.avatar" size="large"></s-avatar>
+        <div class="contact-item__content">
+          <p class="header">{{item.name}}</p>
+          <p class="message">{{(item.latest || []).reduce((str, item) => str + getSimpleMessageFromJSON(item), '')}}</p>
+        </div>
       </li>
     </ul>
-    <s-button type="primary" @click="showAddGroup=true">创建群聊</s-button>
+    <div class="footer">
+      <s-button type="primary" @click="showAddGroup=true">创建群聊</s-button>
+    </div>
     <s-dialog title="创建群组" v-model="showAddGroup" @confirm="addGroup" @cancel="showAddGroup=false">
-      <s-input-cell autocomplete="off" v-model="formData.groupName" placeholder="请输入群组名"></s-input-cell>
+      <s-input-cell no-border autocomplete="off" v-model="formData.groupName" placeholder="请输入群组名"></s-input-cell>
     </s-dialog>
   </aside>
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import { getRecentConcats, addGroup } from '@/request';
+import { getRecentContacts, addGroup } from '@/request';
 import eventBus from '@/views/chat/eventBus';
+import { getSimpleMessageFromJSON } from '@/utils/editor.js';
 
 export default {
   data () {
     return {
+      getSimpleMessageFromJSON,
       bus: null, // 兄弟组件通信工具
       formData: {
         searchPerson: '', // 搜索最近联系人
@@ -58,10 +67,10 @@ export default {
      * @date 2021-05-06 18:24
      */
     getGroups () {
-      getRecentConcats({ pageNo: 1, pageSize: 20 }).then(({ data = [] })=> {
+      getRecentContacts({ pageNo: 1, pageSize: 20 }).then(({ data = [] })=> {
         if (data.length) {
           this.groupList = data;
-          this.changeCurrentReceiver(data[0].receiver);
+          this.changeCurrentReceiver(data[0]);
         }
       });
     },
@@ -70,9 +79,9 @@ export default {
     * @author astar
     * @date 2021-05-06 20:52
     */
-    changeCurrentReceiver (receiver) {
-      if (!receiver) return;
-      this.currentReceiver = { _id: receiver._id, name: receiver.groupName || receiver.userName, isGroup: receiver.isGroup };
+    changeCurrentReceiver ({ _id, name, isGroup }) {
+      if (this.currentReceiver._id === _id) return;
+      this.currentReceiver = { _id, name, isGroup };
       this.bus.broadcast(eventBus.CHANGE_CURRENT_RECEIVER, this.currentReceiver);
     },
     /**
@@ -81,9 +90,8 @@ export default {
      * @date 2021-04-19 16:50
      */
     addGroup () {
-      addGroup({ groupName: this.formData.groupName.trim() }).then(res => {
-        this.groupList.unshift({ receiver: res.data }); // 将新添加的群组存入最近联系人列表
-        this.changeCurrentReceiver(res.data);
+      addGroup({ groupName: this.formData.groupName.trim() }).then(() => {
+        this.getGroups();
         this.showAddGroup = false;
       }).catch(_ => {
         console.log(_)
@@ -100,26 +108,46 @@ export default {
   display: flex;
   flex-direction: column;
   .userinfo {
-    margin-top: 10px;
     color: rgb(244, 244, 244);
+    padding: 10px;
     .username {
       margin-left: 10px;
     }
   }
   .search {
-    margin: 20px 0;
-    background-color: #26292e;
+    padding: 10px;
   }
   .contact-list {
     flex: 1;
     overflow: auto;
-    margin: 0 -5px;
     .contact-item {
-      // display: inline-block;
+      display: flex;
       cursor: pointer;
-      padding: 12px 5px;
+      padding: 12px 8px;
       color: #fff;
+      &__avatar {
+        margin-right: 10px;
+      }
+      &__content {
+        .message {
+          color: rgb(216, 215, 215);
+          font-size: 12px;
+        }
+      }
+      &.active {
+        background: #a7d6c6;
+        color: #666;
+        .contact-item__content {
+          .message {
+            color: #666;
+          }
+        }
+      }
     }
+  }
+  .footer {
+    padding: 10px;
+    text-align: center;
   }
 }
 </style>

@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-04-01 16:02:08
  * @LastEditors: astar
- * @LastEditTime: 2021-05-06 00:41:50
+ * @LastEditTime: 2021-05-07 21:31:26
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\utils\editor.js
  */
@@ -104,6 +104,11 @@ export function getJSONFromInput ($ele) {
   return result
 }
 
+/**
+* 将消息转换为简洁字符串表示
+* @author astar
+* @date 2021-05-07 21:31
+*/
 export function getSimpleMessageFromJSON ({ kind, value }) {
   const mapSimpleMessage = {
     [KINDS.TEXT]: value,

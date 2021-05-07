@@ -50,7 +50,7 @@ export default {
      */
     resizePage () {
       this.getClass();
-      this.computePopupStyle();
+      this.$nextTick(this.computePopupStyle);
     },
     /**
      * 根据屏幕大小获取布局css
@@ -121,7 +121,6 @@ export default {
     &_sidebar {
       width: 30%;
       background: #303942;
-      padding: 10px;
     }
     &_main {
       width: 100%;

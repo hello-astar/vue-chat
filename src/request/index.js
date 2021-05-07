@@ -46,8 +46,8 @@ export const addGroup = (data = {}) => {
   return postRequest('/group/addGroup', data)
 }
 
-export const getRecentConcats = (data = {}) => {
-  return getRequest('/chat/getRecentConcats', data)
+export const getRecentContacts = (data = {}) => {
+  return getRequest('/chat/getRecentContacts', data)
 }
 
 export const getGroupInfoByGroupId = (data = {}) => {
