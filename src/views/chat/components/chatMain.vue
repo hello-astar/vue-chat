@@ -2,15 +2,15 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-05-06 21:21:44
+ * @LastEditTime: 2021-05-07 15:19:16
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
 <template>
-  <main class="main-content" ref="chat">
+  <main class="chat-main" ref="chat">
     <header class="contact-name">
       {{currentReceiver.name}}
-      <i style="float: right" v-if="currentReceiver._id" class="iconfont icon-zhankai" @click="showGroupInfo=true"></i>
+      <i style="float: right" v-if="currentReceiver._id" class="iconfont icon-zhankai" @click="$emit('show-info', currentReceiver._id)"></i>
     </header>
     <div class="chat-box" ref="box">
       <div class="no-data" v-show="!chatRecord.length">
@@ -26,9 +26,6 @@
       </pull-refresh>
     </div>
     <input-box ref="inputBox" @send="sendMessage" class="input-box"></input-box>
-    <s-popup v-model="showGroupInfo" place="right" :x="pos.x" :y="pos.y" :width="popupWidth" :height="popupHeight">
-      <info :id="currentReceiver._id" isGroup @close="showGroupInfo=false"></info>
-    </s-popup>
     <s-dialog class="user-info-dialog" title="用户信息" width="320px" v-model="showUserInfo" @confirm="showUserInfo=false">
       <s-avatar :src="currentUser.avatar" size="large"></s-avatar>
       <div>
@@ -44,7 +41,6 @@
 <script>
 import inputBox from './inputBox';
 import message from './message';
-import info from './info';
 import { io } from 'socket.io-client';
 import { getAuthorization } from '@/utils';
 import { removeToken } from '@/utils/token';
@@ -59,71 +55,97 @@ export default {
       KINDS,
       pageSize: 20, // 聊天记录分页
       totalDone: false, // 聊天记录是否全部加载完成
-      bus: null, // 兄弟组件通信工具
+      $bus: null, // 兄弟组件通信工具
       currentReceiver: {}, // 当前聊天人或群
       currentUser: {}, // 当前点击用户信息
       chatRecord: [], // 聊天记录列表
-      showGroupInfo: false, // 展示群聊基本信息
       showUserInfo: false, // 展示用户基本信息
-      socket: null, // socket
-      reConnectCount: 5,
-      reConnectId: null,
-      popupWidth: '0px',
-      popupHeight: '0px',
-      pos: {x: '0px', y: '0px' }
+      $socket: null, // socket
+      reConnectCount: 5, // 连接失败可尝试五次重连
+      reConnectId: null
     }
   },
   created () {
     this.initSocket();
-    this.bus = new eventBus('chat-main');
-    this.bus.addListener(eventBus.CHANGE_CURRENT_RECEIVER, this.initRecord);
+    this.$bus = new eventBus('chat-main');
+    // 修改当前receiver，重新获取聊天记录
+    this.$bus.addListener(eventBus.CHANGE_CURRENT_RECEIVER, this.initRecord);
   },
   methods: {
+    /**
+     * 初始化socket，监听服务器端返回
+     * @author astar
+     * @date 2021-05-07 14:49
+     */
     initSocket () {
-      this.socket = io(process.env.VUE_APP_BASE_API, {
+      this.$socket = io(process.env.VUE_APP_BASE_API, {
         withCredentials: true,
         extraHeaders: {
           'authorization': getAuthorization()
         }
       });
 
-      this.socket.on("message", message => {
-        this.chatRecord.push(message);
-        if (message.sender._id !== this.userInfo._id) {
-          let content = message.content.reduce((str, item) => str + getSimpleMessageFromJSON(item), '');
-          this.$notify(message.sender.userName || message.sender.groupName, content, { icon: message.sender.avatar, tag: message._id });
-        }
-        this.$nextTick(() => {
-          if (this.$refs.box) {
-            this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
-          }
-        });
+      this.$socket.on('connect', () => {
+        this.reConnectCount = 5;
       });
+      
+      this.$socket.on('message', this.receiveMessage);
 
-      this.socket.on("error", error => {
-        this.$toast.text(error);
-        if (error.type === 'logout') {
-          removeToken();
-          this.$router.push('/login');
-        }
-      });
+      this.$socket.on('error', this.receiveErrorMessage);
 
-      this.socket.on("connect_error", error => {
-        console.log(error)
-        if (this.reConnectId) {
-          clearTimeout(this.reConnectId);
-          this.reConnectId = null;
-        }
-        if (this.reConnectCount) {
-          this.reConnectId = setTimeout(() => {
-            console.warn('[socket] - reconnect');
-            this.reConnectCount--;
-            this.socket.connect();
-          }, 1000);
-        } else {
-          this.$toast.text('连接失败，请重新连接')
+      this.$socket.on('connect_error', this.connectError);
+    },
+    /**
+     * 收到消息
+     * @author astar
+     * @date 2021-05-07 14:51
+     * @param {Object} message - 一条消息
+     */
+    receiveMessage (message) {
+      this.chatRecord.push(message);
+      if (message.sender._id !== this.userInfo._id) {
+        let content = message.content.reduce((str, item) => str + getSimpleMessageFromJSON(item), '');
+        this.$notify(message.sender.userName || message.sender.groupName, content, { icon: message.sender.avatar, tag: message._id });
+      }
+      this.$nextTick(() => {
+        if (this.$refs.box) {
+          this.$refs.box.scrollTop = this.$refs.box.scrollHeight - this.$refs.box.clientHeight;
         }
       });
+    },
+    /**
+     * 收到错误信息
+     * @author astar
+     * @date 2021-05-07 14:53
+     * @param {Object} error - { type, msg }
+     */
+    receiveErrorMessage (error) {
+      this.$toast.text(error.msg);
+      if (error.type === 'logout') {
+        removeToken();
+        this.$router.push('/login');
+      }
+    },
+    /**
+     * 连接socket失败等, 将尝试重新连接5次
+     * @author astar
+     * @date 2021-05-07 14:55
+     */
+    connectError (error) {
+      console.log(error)
+      if (this.reConnectId) {
+        clearTimeout(this.reConnectId);
+        this.reConnectId = null;
+      }
+      if (this.reConnectCount) {
+        this.reConnectId = setTimeout(() => {
+          console.warn('[socket] - reconnect');
+          this.reConnectCount--;
+          this.$socket.connect();
+        }, 1000);
+      } else {
+        this.$toast.text('连接失败，请重新连接');
+      }
     },
     /**
     * 初始化聊天记录
@@ -174,12 +196,12 @@ export default {
     * @date 2021-05-06 21:09
     */
     sendMessage (content) {
-      if (this.socket) {
+      if (this.$socket) {
         if (!content || !content.length) {
           this.$toast.text('不能发送空数据', 'top');
           return;
         }
-        this.socket.emit('message', { receiverId: this.current.receiverId, content, isGroup: 1 });
+        this.$socket.emit('message', { receiverId: this.currentReceiver._id, content, isGroup: this.currentReceiver.isGroup });
       } else {
         console.warn('[socket] - socket not initialized yet');
       }
@@ -199,12 +221,25 @@ export default {
           value: item.sender.userName
         })
       }
+    },
+    /**
+    * 复制粘贴
+    * @author astar
+    * @date 2021-05-05 19:17
+    */
+    copy (value) {
+      let content = document.createElement('input');
+      content.value = value;
+      document.body.appendChild(content);
+      content.select();
+      document.execCommand('Copy');
+      document.body.removeChild(content);
+      this.$toast.text('复制成功');
     }
   },
   beforeDestroy () {
-    this.bus.offListen();
-    this.socket.disconnect();
-    this.socket = null;
+    this.$bus.offListen();
+    this.$socket.disconnect();
     if (this.reConnectId) {
       clearTimeout(this.reConnectId);
       this.reConnectId = null;
@@ -215,8 +250,94 @@ export default {
   },
   components: {
     inputBox,
-    message,
-    info
+    message
   }
 }
 </script>
+<style lang="scss" scoped>
+.chat-main {
+  display: flex;
+  flex-direction: column;
+  .contact-name {
+    flex: 0 0 50px; // 高度50
+    width: 100%;
+    padding: 0 20px;
+    line-height: 50px;
+    border-bottom: 1px solid rgb(221, 221, 221);
+    font-weight: 600;
+    font-size: 15px;
+    color: rgb(56, 56, 56);
+  }
+  .chat-box {
+    flex: 1;
+    overflow: auto;
+    .no-data {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: rgba(0, 0, 0, .2);
+    }
+    &__item {
+      display: flex;
+      padding: 10px 20px;
+      &_avatar {
+        flex: 0 0 auto;
+      }
+      .chat-box__item_content {
+        position: relative;
+        padding: 10px;
+        background: #fff;
+        border-radius: 4px;
+        color: #000;
+        font-size: 13px;
+        word-break: break-all;
+        &:after {
+          position: absolute;
+          top: 10px;
+          content: '\20';
+          display: block;
+          width: 0;
+          height: 0;
+          border: 6px solid transparent;
+        }
+      }
+      &.normal {
+        .chat-box__item_content {
+          margin-left: 20px;
+          margin-right: 55px;
+          &:after {
+            left: -12px;
+            border-right-color: #fff;
+          }
+        }
+      }
+      &.reverse {
+        flex-direction: row-reverse;
+        .chat-box__item_content {
+          margin-right: 20px;
+          margin-left: 55px;
+          // background: rgb(128,177,53);
+          background: #a7d6c6;
+          &:after {
+            right: -12px;
+            // border-left-color: rgb(128,177,53);
+            border-left-color: #a7d6c6;
+          }
+        }
+      }
+      .img {
+        padding: 0;
+        background: transparent !important;
+        &:after {
+          display: none;
+        }
+      }
+    }
+  }
+  .input-box {
+    flex: 0 0 180px;
+    width: 100%;
+    overflow: hidden;
+  }
+}
+</style>

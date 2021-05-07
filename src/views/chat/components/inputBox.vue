@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-05-05 22:01:14
+ * @LastEditTime: 2021-05-07 18:49:44
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -48,22 +48,17 @@ export default {
       gifs: []
     }
   },
-  created () {
-    const _this = this
-    this.$nextTick(() => {
-      dealWithPasteProblem();
-      _this.computePopupStyle();
-
-      window.addEventListener(
-        "resize",
-        _this.computePopupStyle,
-        false
-      );
-
-      _this.$refs.input.focus();
-      _this.getLastEditRange();
-      _this.$refs.input.blur();
-    })
+  mounted () {
+    dealWithPasteProblem();
+    this.computePopupStyle();
+    window.addEventListener(
+      'resize',
+      this.computePopupStyle,
+      false
+    );
+    this.$refs.input.focus();
+    this.getLastEditRange();
+    this.$refs.input.blur();
   },
   methods: {
     searchGif: debounce(function () {
@@ -166,7 +161,7 @@ export default {
     }
   },
   beforeDestroy () {
-    window.removeEventListener("resize", this.computePopupStyle);
+    window.removeEventListener('resize', this.computePopupStyle);
   },
   components: {
     message
