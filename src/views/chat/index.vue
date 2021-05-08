@@ -1,9 +1,7 @@
 <template>
-  <div class="vue-chat" :class="className">
-    <div class="vue-chat__content">
-      <chat-aside class="vue-chat__content_sidebar"></chat-aside>
-      <chat-main ref="chatMain" class="vue-chat__content_main" @show-info="gotoInfo"></chat-main>
-    </div>
+  <div class="vue-chat" :class="{'vue-chat-small-device': !isLarge}">
+    <chat-aside class="vue-chat_sidebar" :class="{'vue-chat-small-device_sidebar': !isLarge}"></chat-aside>
+    <chat-main ref="chatMain" class="vue-chat_main" :class="{'vue-chat-small-device_main': !isLarge}" @show-info="gotoInfo"></chat-main>
     <!-- 群组或用户详细信息 -->
     <s-popup v-model="showInfo" place="right" :x="pos.x" :y="pos.y" :width="chatMainWidth" :height="chatMainHeight">
       <chat-info :id="currentInfoId" isGroup @close="showInfo=false"></chat-info>
@@ -17,22 +15,20 @@ import { getElementPagePosition } from '@/utils';
 import chatAside from './components/chatAside';
 import chatMain from './components/chatMain';
 import chatInfo from './components/chatInfo';
-import { getSize } from '@/utils/setRem';
 
 export default {
   name: "chat",
+  props: {
+    isLarge: Boolean, // 根据屏幕大小添加className
+  },
   data () {
     return {
-      className: [], // 根据屏幕大小添加className
       showInfo: false, // 是否展示详细信息
       currentInfoId: null, // 当前详情的id
       chatMainWidth: '0px',
       chatMainHeight: '0px',
       pos: {x: '0px', y: '0px' }
     }
-  },
-  created () {
-    this.getClass();
   },
   mounted () {
     this.computePopupStyle();
@@ -49,23 +45,7 @@ export default {
      * @date 2021-05-07 14:36
      */
     resizePage () {
-      this.getClass();
       this.$nextTick(this.computePopupStyle);
-    },
-    /**
-     * 根据屏幕大小获取布局css
-     * @author astar
-     * @date 2021-05-07 14:06
-     */
-    getClass () {
-      let { isLarge } = getSize(window, document);
-      if (!isLarge) {
-        this.className = [
-          'vue-chat-small-device'
-        ]
-        return;
-      }
-      this.className = []
     },
     /**
      * 计算info popup的左下角位置
@@ -98,52 +78,30 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "@/assets/styles/mixin.scss";
 .vue-chat {
-  position: relative;
-  min-height: 610px;
-  min-width: 800px;
-  height: 100%;
+  display: flex;
   width: 100%;
-  overflow: auto;
-  @include bg-filter('~@/assets/images/chat_bg.jpg');
-  .vue-chat__content {
-    display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    width: 800px;
-    height: 600px;
-    background: rgb(239, 243, 246);
-    &_sidebar {
-      width: 30%;
-      background: #303942;
-    }
-    &_main {
-      width: 100%;
-      background: #eee;
-    }
+  height: 100%;
+  &_sidebar {
+    flex-shrink: 0;
+    width: 30%;
+    background: #303942;
+  }
+  &_main {
+    width: 100%;
+    background: #eee;
   }
 }
-// 兼容屏幕小于ipad的设备
+  // 兼容屏幕小于ipad的设备
 .vue-chat-small-device {
-  min-width: auto;
-  min-height: auto;
-  .vue-chat__content {
-    width: 100%;
-    height: 100%;
-    .vue-chat__content_sidebar {
-      display: none; // 小屏上不展示sidebar
-    }
-    .vue-chat__content_main {
-      /deep/ .input-box {
-        flex: 0 0 50px;
-        width: 100%;
-        background: #fff;
-      }
+  &_sidebar {
+    display: none; // 小屏上不展示sidebar
+  }
+  &_main {
+    /deep/ .input-box {
+      flex: 0 0 50px;
+      width: 100%;
+      background: #fff;
     }
   }
 }
