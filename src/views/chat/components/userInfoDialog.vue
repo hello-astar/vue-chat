@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-05-09 20:22:07
- * @LastEditTime: 2021-05-09 20:36:44
+ * @LastEditTime: 2021-05-10 00:20:03
  * @LastEditors: astar
 -->
 <template>
@@ -10,19 +10,23 @@
     title="用户信息"
     width="320px"
     v-model="showUserInfo"
-    confirmTxt="加为好友"
-    @confirm="addFriend(info)"
+    :confirmTxt="isMyFriend ? '发消息' : '加为好友'"
+    @confirm="confirm"
   >
     <user-info :currentUser="info"></user-info>
   </s-dialog>
 </template>
 <script>
 import userInfo from './userInfo';
-import { addFriend } from '@/request';
+import { addFriend, checkIsMyFriend } from '@/request';
+import eventBus from '@/views/chat/eventBus';
+
 export default {
   data () {
     return {
-      showUserInfo: false
+      $bus: null,
+      showUserInfo: false,
+      isMyFriend: false
     }
   },
   props: {
@@ -35,6 +39,9 @@ export default {
       default: () => ({})
     }
   },
+  created () {
+    this.$bus = new eventBus('user-info-dialog');
+  },
   methods: {
     /**
     * 判断是否为我的好友
@@ -42,18 +49,37 @@ export default {
     * @date 2021-05-09 20:36
     */
     checkIsMyFriend () {
-
+      checkIsMyFriend({ userId: this.info._id }).then(({ data }) => {
+        this.isMyFriend = data;
+      })
     },
     /**
     * 添加好友
     * @author astar
     * @date 2021-05-09 10:57
     */
-    addFriend (item) {
-      addFriend({ friendId: item._id }).then(() => {
+    addFriend () {
+      addFriend({ friendId: this.info._id }).then(() => {
         this.showUserInfo = false;
-        this.$toast.text('添加好友成功')
+        this.$toast.text('添加好友成功');
+        this.isMyFriend = true;
       })
+    },
+    confirm () {
+      if (this.isMyFriend) {
+        this.showUserInfo = false;
+        this.$bus.broadcast(
+          eventBus.REQUEST_CONTACT_LIST,
+          {
+            name: this.info.userName,
+            _id: this.info._id,
+            avatar: this.info.avatar,
+            isGroup: false
+          }
+        );
+      } else {
+        this.addFriend()
+      }
     }
   },
   watch: {

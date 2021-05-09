@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 17:47:49
  * @LastEditors: astar
- * @LastEditTime: 2021-05-09 11:30:12
+ * @LastEditTime: 2021-05-09 23:51:00
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
@@ -72,4 +72,8 @@ export const joinMembertoGroup = (data = {}) => {
 
 export const exitGroup = (data = {}) => {
   return postRequest('/group/exitGroup', data)
+}
+
+export const checkIsMyFriend = (data = {}) => {
+  return postRequest('/user/checkIsMyFriend', data)
 }

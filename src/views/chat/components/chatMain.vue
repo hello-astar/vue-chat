@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-05-09 23:20:02
+ * @LastEditTime: 2021-05-10 00:09:03
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -11,7 +11,7 @@
     <header class="contact-name">
       <i class="iconfont icon-shouye home-icon" @click="$router.push('/chat/detail')"></i>
       {{currentReceiver.name}}
-      <i style="float: right" v-if="currentReceiver._id" class="iconfont icon-zhankai" @click="$emit('show-info', currentReceiver._id)"></i>
+      <i style="float: right" v-if="currentReceiver._id && currentReceiver.isGroup" class="iconfont icon-zhankai" @click="$emit('show-info', currentReceiver._id)"></i>
     </header>
     <div class="chat-box" ref="box">
       <div class="no-data" v-show="!chatRecord.length">

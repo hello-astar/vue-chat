@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:08:54
  * @LastEditors: astar
- * @LastEditTime: 2021-05-09 23:33:40
+ * @LastEditTime: 2021-05-10 00:17:13
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatAside.vue
 -->
@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       getSimpleMessageFromJSON,
-      bus: null, // 兄弟组件通信工具
+      $bus: null, // 兄弟组件通信工具
       formData: {
         searchPerson: '', // 搜索最近联系人
         groupName: ''
@@ -55,11 +55,11 @@ export default {
   },
   created () {
     this.getRecentContacts(this.$route.params.receiver);
-    this.bus = new eventBus('chat-aside');
-    this.bus.addListener(eventBus.REQUEST_CONTACT_LIST, this.getRecentContacts);
+    this.$bus = new eventBus('chat-aside');
+    this.$bus.addListener(eventBus.REQUEST_CONTACT_LIST, receiver => this.getRecentContacts(receiver));
   },
   beforeDestroy () {
-    this.bus.offListen();
+    this.$bus.offListen();
   },
   watch: {
     'formData.searchPerson': debounce(function () {
@@ -94,7 +94,7 @@ export default {
     changeCurrentReceiver ({ _id, name, isGroup }) {
       if (this.currentReceiver._id === _id) return;
       this.currentReceiver = { _id, name, isGroup };
-      this.bus.broadcast(eventBus.CHANGE_CURRENT_RECEIVER, this.currentReceiver);
+      this.$bus.broadcast(eventBus.CHANGE_CURRENT_RECEIVER, this.currentReceiver);
     },
     /**
      * 创建群组

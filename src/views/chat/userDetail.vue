@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-08 10:38:53
  * @LastEditors: astar
- * @LastEditTime: 2021-05-09 23:27:44
+ * @LastEditTime: 2021-05-10 00:20:36
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\userDetail.vue
 -->
@@ -27,7 +27,6 @@
 import { getMyFriends, getMyGroups } from '@/request';
 import { mapGetters } from 'vuex';
 import userInfo from './components/userInfo';
-import eventBus from '@/views/chat/eventBus';
 
 export default {
   data () {
@@ -35,9 +34,6 @@ export default {
       type: 1, // 1好友 2群组
       list: []
     }
-  },
-  created () {
-    this.$bus = new eventBus('user-detail');
   },
   watch: {
     type: {
@@ -48,12 +44,22 @@ export default {
     }
   },
   methods: {
+    /**
+    * 获取我的好友和群
+    * @author astar
+    * @date 2021-05-10 00:18
+    */
     getList () {
       let func = this.type === 1 ? getMyFriends : getMyGroups;
       func().then(({ data }) => {
         this.list = data
       })
     },
+    /**
+    * 给好友或群发消息
+    * @author astar
+    * @date 2021-05-10 00:18
+    */
     chatWidth (item) {
       this.$router.push({
         name: 'chat-index',
@@ -61,7 +67,8 @@ export default {
           receiver: {
             name: item.groupName || item.userName,
             _id: item._id,
-            avatar: item.avatar
+            avatar: item.avatar,
+            isGroup: this.type === 2
           }
         }
       });
