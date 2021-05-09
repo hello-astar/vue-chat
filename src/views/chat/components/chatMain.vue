@@ -2,13 +2,14 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-05-07 21:41:11
+ * @LastEditTime: 2021-05-09 23:20:02
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
 <template>
   <main class="chat-main" ref="chat">
     <header class="contact-name">
+      <i class="iconfont icon-shouye home-icon" @click="$router.push('/chat/detail')"></i>
       {{currentReceiver.name}}
       <i style="float: right" v-if="currentReceiver._id" class="iconfont icon-zhankai" @click="$emit('show-info', currentReceiver._id)"></i>
     </header>
@@ -26,21 +27,13 @@
       </pull-refresh>
     </div>
     <input-box ref="inputBox" @send="sendMessage" class="input-box"></input-box>
-    <s-dialog class="user-info-dialog" title="用户信息" width="320px" v-model="showUserInfo" @confirm="showUserInfo=false">
-      <s-avatar :src="currentUser.avatar" size="large"></s-avatar>
-      <div>
-        <span>用户名：{{currentUser.userName}}</span>
-        <i class="iconfont icon-fuzhi" @click="copy(currentUser.userName)"></i>
-        <br>
-        <span>用户ID：{{currentUser._id}}</span>
-        <i class="iconfont icon-fuzhi" @click="copy(currentUser._id)"></i>
-      </div>
-    </s-dialog>
+    <user-info-dialog v-model="showUserInfo" :info="currentUser"></user-info-dialog>
   </main>
 </template>
 <script>
 import inputBox from './inputBox';
 import message from './message';
+import userInfoDialog from './userInfoDialog';
 import { io } from 'socket.io-client';
 import { getAuthorization } from '@/utils';
 import { removeToken } from '@/utils/token';
@@ -84,15 +77,11 @@ export default {
           'authorization': getAuthorization()
         }
       });
-
       this.$socket.on('connect', () => {
         this.reConnectCount = 5;
       });
-      
       this.$socket.on('message', this.receiveMessage);
-
       this.$socket.on('error', this.receiveErrorMessage);
-
       this.$socket.on('connect_error', this.connectError);
     },
     /**
@@ -102,6 +91,7 @@ export default {
      * @param {Object} message - 一条消息
      */
     receiveMessage (message) {
+      this.$bus.broadcast(eventBus.REQUEST_CONTACT_LIST)
       if (message.receiver._id === this.currentReceiver._id) {
         this.chatRecord.push(message);
       }
@@ -223,20 +213,6 @@ export default {
           value: item.sender.userName
         })
       }
-    },
-    /**
-    * 复制粘贴
-    * @author astar
-    * @date 2021-05-05 19:17
-    */
-    copy (value) {
-      let content = document.createElement('input');
-      content.value = value;
-      document.body.appendChild(content);
-      content.select();
-      document.execCommand('Copy');
-      document.body.removeChild(content);
-      this.$toast.text('复制成功');
     }
   },
   beforeDestroy () {
@@ -252,7 +228,8 @@ export default {
   },
   components: {
     inputBox,
-    message
+    message,
+    userInfoDialog
   }
 }
 </script>

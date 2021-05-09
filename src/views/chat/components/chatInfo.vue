@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-04-22 22:08:36
- * @LastEditTime: 2021-05-05 01:17:29
+ * @LastEditTime: 2021-05-09 20:32:12
  * @LastEditors: astar
 -->
 <template>
@@ -22,7 +22,7 @@
     <section class="chat-info-section">
       <div class="chat-info-section_header">群成员</div>
       <ul class="flex user-list">
-        <li v-for="item in info.members" :key="item._id">
+        <li v-for="item in info.members" :key="item._id" @click="showUserInfo=true;currentUser=item">
           <s-avatar :src="item.avatar" shape="circle"></s-avatar>
           <p>{{item.userName}}</p>
         </li>
@@ -43,10 +43,13 @@
     <s-dialog title="退出群组" v-model="showExitGroup" @confirm="exitGroup">
       确定退出吗？退出后再也收不到群组消息。
     </s-dialog>
+    <user-info-dialog :info="currentUser" v-model="showUserInfo"></user-info-dialog>
   </div>
 </template>
 <script>
-import { getGroupInfoByGroupId, updateGroupNameByGroupId, joinMembertoGroup, exitGroup } from '@/request'
+import { getGroupInfoByGroupId, updateGroupNameByGroupId, joinMembertoGroup, exitGroup } from '@/request';
+import userInfoDialog from './userInfoDialog';
+
 export default {
   data () {
     return {
@@ -55,9 +58,11 @@ export default {
         groupName: '',
         userId: ''
       },
+      currentUser: {},
       showJoinMember: false,
       showChangeGroupName: false,
-      showExitGroup: false
+      showExitGroup: false,
+      showUserInfo: false
     }
   },
   props: {
@@ -122,6 +127,9 @@ export default {
       if (!val) return
       this.getInfo()
     }
+  },
+  components: {
+    userInfoDialog
   }
 }
 </script>
