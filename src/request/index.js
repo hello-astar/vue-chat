@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 17:47:49
  * @LastEditors: astar
- * @LastEditTime: 2021-05-09 10:31:10
+ * @LastEditTime: 2021-05-09 11:30:12
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
@@ -38,12 +38,20 @@ export const getGifs = (data = {}) => {
   return getRequest('/tool/searchGifs', data)
 }
 
-export const getGroups = (data = {}) => {
-  return getRequest('/group/getGroups', data)
+export const getMyGroups = (data = {}) => {
+  return getRequest('/user/getMyGroups', data)
+}
+
+export const getMyFriends = (data = {}) => {
+  return getRequest('/user/getMyFriends', data)
 }
 
 export const addGroup = (data = {}) => {
   return postRequest('/group/addGroup', data)
+}
+
+export const addFriend = (data = {}) => {
+  return postRequest('/user/addFriend', data)
 }
 
 export const getRecentContacts = (data = {}) => {

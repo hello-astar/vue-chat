@@ -90,6 +90,9 @@ export default {
   &_main {
     width: 100%;
     background: #eee;
+    /deep/ .home-icon {
+      display: none;
+    }
   }
 }
   // 兼容屏幕小于ipad的设备
@@ -98,27 +101,14 @@ export default {
     display: none; // 小屏上不展示sidebar
   }
   &_main {
+    /deep/ .home-icon {
+      display: inline-block;
+    }
     /deep/ .input-box {
       flex: 0 0 50px;
       width: 100%;
       background: #fff;
     }
-  }
-}
-</style>
-<style lang="scss" scoped>
-/deep/ .user-info-dialog .dialog-container_content {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  .s-avatar {
-    margin-right: 20px;
-    flex-shrink: 0;
-  }
-  .iconfont {
-    margin-left: 10px;
-    font-size: 18px;
-    vertical-align: middle;
   }
 }
 </style>
