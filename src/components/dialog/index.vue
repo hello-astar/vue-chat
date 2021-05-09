@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-04 13:58:20
  * @LastEditors: astar
- * @LastEditTime: 2021-05-06 00:39:50
+ * @LastEditTime: 2021-05-09 11:01:06
  * @Description: 弹窗
  * @FilePath: \vue-chat\src\components\dialog\index.vue
 -->
@@ -17,7 +17,7 @@
     <div class="dialog-container_footer">
       <slot name="footer">
         <div class="btn cancel-btn" @click="cancel">取消</div>
-        <div class="btn" @click="$emit('confirm')">确定</div>
+        <div class="btn" @click="$emit('confirm')">{{confirmTxt}}</div>
       </slot>
     </div>
   </div>
@@ -31,13 +31,17 @@ export default {
       type: Boolean,
       required: true
     },
-    title: String,
-    width: {
+    title: String, // 标题
+    width: { // 宽度 // 默认250px
       type: String,
       default: '250px'
     },
-    height: {
+    height: { // 高度 // 默认自适应
       type: String
+    },
+    confirmTxt: {
+      type: String,
+      default: '确定'
     }
   },
   watch: {
