@@ -1,8 +1,8 @@
 /*
  * @Author: astar
  * @Date: 2020-09-09 17:47:49
- * @LastEditors: cmx
- * @LastEditTime: 2021-05-08 18:01:47
+ * @LastEditors: astar
+ * @LastEditTime: 2021-05-09 10:31:10
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
@@ -17,7 +17,7 @@ export const userLoginReq = (data = {}) => {
 }
 
 export const userInfoReq = (data = {}) => {
-  return getRequest('/query/getUserInfo', data);
+  return getRequest('/user/getUserInfo', data);
 }
 
 export const qiniuTokenReq = (data = {}) => {
@@ -31,11 +31,11 @@ export const qiniuUploadReq = (data = {}) => {
 export const captchaGetImg = `${process.env.VUE_APP_BASE_API}/tool/getCaptcha` // 获取图片验证码
 
 export const getHistoryChatByCount = (data = {}) => {
-  return getRequest('/query/getHistoryChatByCount', data);
+  return getRequest('/chat/getHistoryChatByCount', data);
 }
 
 export const getGifs = (data = {}) => {
-  return getRequest('/chat/searchGifs', data)
+  return getRequest('/tool/searchGifs', data)
 }
 
 export const getGroups = (data = {}) => {
@@ -47,11 +47,11 @@ export const addGroup = (data = {}) => {
 }
 
 export const getRecentContacts = (data = {}) => {
-  return postRequest('/query/getRecentContacts', data)
+  return postRequest('/user/getRecentContacts', data)
 }
 
 export const getGroupInfoByGroupId = (data = {}) => {
-  return getRequest('/query/getGroupInfo', data)
+  return getRequest('/group/getGroupInfo', data)
 }
 
 export const updateGroupNameByGroupId = (data = {}) => {
