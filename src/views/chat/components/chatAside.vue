@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:08:54
  * @LastEditors: astar
- * @LastEditTime: 2021-05-10 00:17:13
+ * @LastEditTime: 2021-05-10 15:51:58
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatAside.vue
 -->
@@ -20,7 +20,7 @@
         <s-avatar class="contact-item__avatar" :src="item.avatar" size="large"></s-avatar>
         <div class="contact-item__content">
           <p class="header">{{item.name}}</p>
-          <p class="message">{{(item.content || []).reduce((str, item) => str + getSimpleMessageFromJSON(item), '')}}</p>
+          <p class="message">{{item.sender.userName}}: {{(item.content || []).reduce((str, item) => str + getSimpleMessageFromJSON(item), '')}}</p>
         </div>
       </li>
     </ul>
@@ -138,9 +138,11 @@ export default {
       padding: 12px 8px;
       color: #fff;
       &__avatar {
+        flex-shrink: 0;
         margin-right: 10px;
       }
       &__content {
+        word-break: break-all;
         .message {
           color: rgb(216, 215, 215);
           font-size: 12px;

@@ -1,9 +1,9 @@
 <template>
-  <div class="vue-chat" :class="{'vue-chat-small-device': !isLarge}">
+  <div ref="chat" class="vue-chat" :class="{'vue-chat-small-device': !isLarge}">
     <chat-aside class="vue-chat_sidebar" :class="{'vue-chat-small-device_sidebar': !isLarge}"></chat-aside>
-    <chat-main ref="chatMain" class="vue-chat_main" :class="{'vue-chat-small-device_main': !isLarge}" @show-info="gotoInfo"></chat-main>
+    <chat-main class="vue-chat_main" :class="{'vue-chat-small-device_main': !isLarge}" @show-info="gotoInfo"></chat-main>
     <!-- 群组或用户详细信息 -->
-    <s-popup v-model="showInfo" place="right" :x="pos.x" :y="pos.y" :width="chatMainWidth" :height="chatMainHeight">
+    <s-popup v-model="showInfo" place="right" :x="pos.x" :y="pos.y" :width="chatWidth" :height="chatHeight">
       <chat-info :id="currentInfoId" isGroup @close="showInfo=false"></chat-info>
     </s-popup>
   </div>
@@ -25,8 +25,8 @@ export default {
     return {
       showInfo: false, // 是否展示详细信息
       currentInfoId: null, // 当前详情的id
-      chatMainWidth: '0px',
-      chatMainHeight: '0px',
+      chatWidth: '0px',
+      chatHeight: '0px',
       pos: {x: '0px', y: '0px' }
     }
   },
@@ -53,11 +53,11 @@ export default {
      * @date 2021-04-01 15:07
      */
     computePopupStyle () {
-      let $el = this.$refs.chatMain.$el;
-      this.chatMainWidth = window.getComputedStyle($el).width;
-      this.chatMainHeight = window.getComputedStyle($el).height;
+      let $el = this.$refs.chat;
+      this.chatWidth = window.getComputedStyle($el).width;
+      this.chatHeight = window.getComputedStyle($el).height;
       let { x, y } = getElementPagePosition($el) || { x: '0', y: '0' };
-      this.pos = { y: y + ' + ' + this.chatMainHeight, x }
+      this.pos = { y: y + ' + ' + this.chatHeight, x }
     },
     gotoInfo (id) {
       this.currentInfoId = id;
