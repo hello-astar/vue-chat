@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-05-10 00:09:03
+ * @LastEditTime: 2021-06-16 00:53:10
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -166,7 +166,7 @@ export default {
     getRecord () {
       return new Promise((resolve, reject) => {
         if (!this.totalDone) {
-          getHistoryChatByCount({ receiverId: this.currentReceiver._id, startId: this.chatRecord.length ? this.chatRecord[0]._id : null, fetchCount: this.pageSize }).then(res => {
+          getHistoryChatByCount({ receiverId: this.currentReceiver._id, isGroup: this.currentReceiver.isGroup, startId: this.chatRecord.length ? this.chatRecord[0]._id : null, fetchCount: this.pageSize }).then(res => {
             if (res.code === 1) {
               this.chatRecord = res.data.concat(this.chatRecord);
               if (!res.data.length) {
