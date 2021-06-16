@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:08:54
  * @LastEditors: astar
- * @LastEditTime: 2021-06-16 21:33:34
+ * @LastEditTime: 2021-06-17 00:59:03
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatAside.vue
 -->
@@ -136,6 +136,7 @@ export default {
     overflow: auto;
     .contact-item {
       display: flex;
+      flex-direction: row;
       cursor: pointer;
       padding: 12px 8px;
       color: #fff;
@@ -144,10 +145,19 @@ export default {
         margin-right: 10px;
       }
       &__content {
-        word-break: break-all;
+        flex: 1;
+        overflow-x: auto;
+        .header {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
         .message {
           color: rgb(216, 215, 215);
           font-size: 12px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
       &.active {

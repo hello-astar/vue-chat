@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-06-16 21:33:56
+ * @LastEditTime: 2021-06-17 01:08:12
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -20,8 +20,11 @@
       <pull-refresh :refreshNext="getRecord">
         <div slot="main" class="chat-box__item" :class="[item.sender._id === userInfo._id ? 'reverse' : 'normal']" v-for="item in chatRecord" :key="item._id">
           <s-avatar class="chat-box__item_avatar" :src="item.sender.avatar" size="medium" v-press="atSomeone(item)" @click="showUserInfo=true;currentUser=item.sender"/>
-          <div class="chat-box__item_content" :class="{'img': KINDS.IMG === item.content[0].kind}">
-            <message v-for="(ele, idx) in item.content" :item="ele" :key="idx"></message>
+          <div>
+            <p class="chat-box__item_name">{{item.sender.userName}}</p>
+            <div class="chat-box__item_content" :class="{'img': KINDS.IMG === item.content[0].kind}">
+              <message v-for="(ele, idx) in item.content" :item="ele" :key="idx"></message>
+            </div>
           </div>
         </div>
       </pull-refresh>
@@ -263,6 +266,11 @@ export default {
       &_avatar {
         flex: 0 0 auto;
       }
+      .chat-box__item_name {
+        font-size: 12px;
+        padding: 0 20px 5px;
+        color: #999;
+      }
       .chat-box__item_content {
         position: relative;
         padding: 10px;
@@ -293,6 +301,9 @@ export default {
       }
       &.reverse {
         flex-direction: row-reverse;
+        .chat-box__item_name {
+          text-align: right;
+        }
         .chat-box__item_content {
           margin-right: 20px;
           margin-left: 55px;
