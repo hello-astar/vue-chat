@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 17:47:49
  * @LastEditors: astar
- * @LastEditTime: 2021-05-09 23:51:00
+ * @LastEditTime: 2021-06-16 10:27:25
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
@@ -31,7 +31,7 @@ export const qiniuUploadReq = (data = {}) => {
 export const captchaGetImg = `${process.env.VUE_APP_BASE_API}/tool/getCaptcha` // 获取图片验证码
 
 export const getHistoryChatByCount = (data = {}) => {
-  return getRequest('/chat/getHistoryChatByCount', data);
+  return postRequest('/chat/getHistoryChatByCount', data);
 }
 
 export const getGifs = (data = {}) => {
