@@ -2,11 +2,11 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-05-09 19:06:04
- * @LastEditTime: 2021-05-09 20:21:42
+ * @LastEditTime: 2021-06-16 19:17:00
  * @LastEditors: astar
 -->
 <template>
-  <div class="user-info">
+  <div class="user-info-pane">
     <s-avatar :src="currentUser.avatar" size="large"></s-avatar>
     <div>
       <span>用户名：{{currentUser.userName}}</span>
@@ -48,7 +48,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.user-info {
+.user-info-pane {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;

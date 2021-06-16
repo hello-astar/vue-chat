@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-05-09 20:22:07
- * @LastEditTime: 2021-06-16 19:12:48
+ * @LastEditTime: 2021-06-16 19:17:41
  * @LastEditors: astar
 -->
 <template>
@@ -18,7 +18,7 @@
   </s-dialog>
 </template>
 <script>
-import userInfoPane from './userInfo';
+import userInfoPane from './userInfoPane';
 import { addFriend, checkIsMyFriend } from '@/request';
 import eventBus from '@/views/chat/eventBus';
 import { mapGetters } from "vuex";

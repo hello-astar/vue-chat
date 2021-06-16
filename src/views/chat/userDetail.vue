@@ -2,14 +2,14 @@
  * @Author: astar
  * @Date: 2021-05-08 10:38:53
  * @LastEditors: astar
- * @LastEditTime: 2021-06-16 18:22:50
+ * @LastEditTime: 2021-06-16 19:17:26
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\userDetail.vue
 -->
 <template>
   <div class="my-detail">
     <div class="my-detail__info">
-      <user-info :currentUser="userInfo"></user-info>
+      <user-info-pane :currentUser="userInfo"></user-info-pane>
     </div>
     <div class="tab">
       <s-button class="tab-button" :class="{ active: type === value }" @click="type = value" v-for="value in TYPE_LIST" :key="value">{{TYPE_LIST.getLabelByValue(value)}}</s-button>
@@ -25,7 +25,7 @@
 <script>
 import { getMyFriends, getMyGroups } from '@/request';
 import { mapGetters } from 'vuex';
-import userInfo from './components/userInfo';
+import userInfoPane from './components/userInfoPane';
 import { Enum } from '@/utils'
 
 const TYPE_LIST = new Enum({
@@ -84,7 +84,7 @@ export default {
     ...mapGetters(['userInfo'])
   },
   components: {
-    userInfo
+    userInfoPane
   }
 }
 </script>
