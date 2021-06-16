@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2020-09-16 20:07:43
- * @LastEditTime: 2021-05-06 01:04:23
+ * @LastEditTime: 2021-06-17 00:10:46
  * @LastEditors: astar
  */
 import { os } from '@/utils/browser';
@@ -29,7 +29,7 @@ export const getSize = function (win, doc) {
   let width = clientWidth;
   let dpr = getDpr();
   return {
-    baseWidth: width >= 500 * dpr ? 1520 : 375,
+    baseWidth: width >= 500 * dpr ? (width >= 1000 * dpr ? 1520 : 900) : 375,
     clientWidth: width,
     isLarge: width >= 500 * dpr
   }
