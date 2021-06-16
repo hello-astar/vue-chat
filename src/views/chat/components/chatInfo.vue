@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-04-22 22:08:36
- * @LastEditTime: 2021-05-09 20:32:12
+ * @LastEditTime: 2021-06-16 18:36:49
  * @LastEditors: astar
 -->
 <template>
@@ -160,9 +160,15 @@ export default {
         margin: 0 -5px;
         li {
           margin: 0 5px 10px;
-          min-width: 45px;
+          width: 45px;
           min-height: 45px;
           text-align: center;
+          p {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
           .add-icon {
             float: left;
             font-size: 20px;
