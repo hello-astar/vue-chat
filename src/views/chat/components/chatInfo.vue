@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-04-22 22:08:36
- * @LastEditTime: 2021-06-16 18:36:49
+ * @LastEditTime: 2021-06-16 19:03:01
  * @LastEditors: astar
 -->
 <template>
@@ -43,17 +43,19 @@
     <s-dialog title="退出群组" v-model="showExitGroup" @confirm="exitGroup">
       确定退出吗？退出后再也收不到群组消息。
     </s-dialog>
-    <user-info-dialog :info="currentUser" v-model="showUserInfo"></user-info-dialog>
+    <user-info-dialog :info="currentUser" v-model="showUserInfo" @chat-with-friend="$emit('close')"></user-info-dialog>
   </div>
 </template>
 <script>
 import { getGroupInfoByGroupId, updateGroupNameByGroupId, joinMembertoGroup, exitGroup } from '@/request';
 import userInfoDialog from './userInfoDialog';
+import eventBus from '@/views/chat/eventBus';
 
 export default {
   data () {
     return {
       info: {},
+      $bus: null,
       formData: {
         groupName: '',
         userId: ''
@@ -68,6 +70,9 @@ export default {
   props: {
     isGroup: Boolean,
     id: String
+  },
+  created () {
+    this.$bus = new eventBus('chat-info');
   },
   methods: {
     /**
@@ -98,6 +103,7 @@ export default {
       }).then(() => {
         this.getInfo()
         this.showChangeGroupName = false
+        this.$bus.broadcast(eventBus.REQUEST_CONTACT_LIST, { _id: this.id })
       })
     },
     /**

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-05-09 20:22:07
- * @LastEditTime: 2021-05-10 00:20:03
+ * @LastEditTime: 2021-06-16 19:12:48
  * @LastEditors: astar
 -->
 <template>
@@ -11,15 +11,17 @@
     width="320px"
     v-model="showUserInfo"
     :confirmTxt="isMyFriend ? '发消息' : '加为好友'"
+    :disabled="isMe"
     @confirm="confirm"
   >
-    <user-info :currentUser="info"></user-info>
+    <user-info-pane :currentUser="info"></user-info-pane>
   </s-dialog>
 </template>
 <script>
-import userInfo from './userInfo';
+import userInfoPane from './userInfo';
 import { addFriend, checkIsMyFriend } from '@/request';
 import eventBus from '@/views/chat/eventBus';
+import { mapGetters } from "vuex";
 
 export default {
   data () {
@@ -77,26 +79,33 @@ export default {
             isGroup: false
           }
         );
+        this.$emit('chat-with-friend');
       } else {
-        this.addFriend()
+        this.addFriend();
       }
     }
   },
   watch: {
     value (val) {
-      this.showUserInfo = val
+      this.showUserInfo = val;
     },
     showUserInfo (val) {
-      this.$emit('input', val)
+      this.$emit('input', val);
     },
     'info._id' (val) {
       if (val) {
-        this.checkIsMyFriend()
+        this.checkIsMyFriend();
       }
     }
   },
+  computed: {
+    ...mapGetters(['userInfo']),
+    isMe () {
+      return this.info._id === this.userInfo._id
+    }
+  },
   components: {
-    userInfo
+    userInfoPane
   }
 }
 </script>

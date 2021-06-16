@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:08:54
  * @LastEditors: astar
- * @LastEditTime: 2021-05-10 15:51:58
+ * @LastEditTime: 2021-06-16 18:58:02
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatAside.vue
 -->
@@ -72,7 +72,7 @@ export default {
      * @author astar
      * @date 2021-05-06 18:24
      */
-    getRecentContacts (initData) {
+    getRecentContacts (initData = null) {
       getRecentContacts({ pageNo: 1, pageSize: 20, keyword: this.formData.searchPerson }).then(({ data = [] })=> {
         if (data.length) {
           if (initData) {
@@ -92,7 +92,6 @@ export default {
     * @date 2021-05-06 20:52
     */
     changeCurrentReceiver ({ _id, name, isGroup }) {
-      if (this.currentReceiver._id === _id) return;
       this.currentReceiver = { _id, name, isGroup };
       this.$bus.broadcast(eventBus.CHANGE_CURRENT_RECEIVER, this.currentReceiver);
     },

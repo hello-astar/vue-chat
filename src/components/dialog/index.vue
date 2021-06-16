@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-04 13:58:20
  * @LastEditors: astar
- * @LastEditTime: 2021-05-09 11:01:06
+ * @LastEditTime: 2021-06-16 19:09:36
  * @Description: 弹窗
  * @FilePath: \vue-chat\src\components\dialog\index.vue
 -->
@@ -17,7 +17,7 @@
     <div class="dialog-container_footer">
       <slot name="footer">
         <div class="btn cancel-btn" @click="cancel">取消</div>
-        <div class="btn" @click="$emit('confirm')">{{confirmTxt}}</div>
+        <div class="btn" :class="{ 'disabled': disabled }" @click="!disabled && $emit('confirm')">{{confirmTxt}}</div>
       </slot>
     </div>
   </div>
@@ -42,6 +42,10 @@ export default {
     confirmTxt: {
       type: String,
       default: '确定'
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -118,6 +122,9 @@ export default {
         }
         &.cancel-btn {
           color: #999;
+        }
+        &.disabled {
+          color: rgb(197, 196, 196);
         }
       }
     }
