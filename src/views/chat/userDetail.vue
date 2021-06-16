@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-08 10:38:53
  * @LastEditors: astar
- * @LastEditTime: 2021-05-10 00:20:36
+ * @LastEditTime: 2021-06-16 18:22:50
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\userDetail.vue
 -->
@@ -12,12 +12,11 @@
       <user-info :currentUser="userInfo"></user-info>
     </div>
     <div class="tab">
-      <s-button @click="type = 1">好朋友</s-button>
-      <s-button @click="type = 2">群组</s-button>
+      <s-button class="tab-button" :class="{ active: type === value }" @click="type = value" v-for="value in TYPE_LIST" :key="value">{{TYPE_LIST.getLabelByValue(value)}}</s-button>
     </div>
     <ul class="list">
-      <li v-for="item in list" :key="item._id" @click="chatWidth(item)">
-        <s-avatar :src="item.avatar" size="large"></s-avatar>
+      <li class="list-item" v-for="item in list" :key="item._id" @click="chatWidth(item)">
+        <s-avatar class="list-item__avatar" :src="item.avatar" size="large"></s-avatar>
         {{item.groupName || item.userName}}
       </li>
     </ul>
@@ -27,11 +26,18 @@
 import { getMyFriends, getMyGroups } from '@/request';
 import { mapGetters } from 'vuex';
 import userInfo from './components/userInfo';
+import { Enum } from '@/utils'
+
+const TYPE_LIST = new Enum({
+  FRIEND: [1, '我的好友'],
+  GROUP: [2, '我的群组']
+})
 
 export default {
   data () {
     return {
-      type: 1, // 1好友 2群组
+      TYPE_LIST,
+      type: TYPE_LIST.FRIEND, // 1好友 2群组
       list: []
     }
   },
@@ -50,7 +56,7 @@ export default {
     * @date 2021-05-10 00:18
     */
     getList () {
-      let func = this.type === 1 ? getMyFriends : getMyGroups;
+      let func = this.type === TYPE_LIST.FRIEND ? getMyFriends : getMyGroups;
       func().then(({ data }) => {
         this.list = data
       })
@@ -61,14 +67,14 @@ export default {
     * @date 2021-05-10 00:18
     */
     chatWidth (item) {
-      this.$router.push({
+      this.$router.replace({
         name: 'chat-index',
         params: {
           receiver: {
             name: item.groupName || item.userName,
             _id: item._id,
             avatar: item.avatar,
-            isGroup: this.type === 2
+            isGroup: this.type === TYPE_LIST.GROUP
           }
         }
       });
@@ -95,15 +101,34 @@ export default {
     background: #fff;
   }
   .tab {
+    padding: 5px;
     background: #fff;
+    &-button {
+      &.active {
+        // position: relative;
+        // &:after {
+        //   position: absolute;
+        //   bottom: 0;
+        //   left: 10%;
+        //   content: '\20';
+        //   height: 2px;
+        //   width: 80%;
+        //   background: #110d3d;
+        // }
+      }
+    }
   }
   .list {
     flex: 1;
     overflow-y: auto;
     background: #fff;
     padding: 0 20px;
-    li {
+    .list-item {
       margin: 10px 0;
+      cursor: pointer;
+      &__avatar {
+        margin-right: 15px;
+      }
     }
   }
 }

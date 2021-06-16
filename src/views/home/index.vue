@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-11-12 11:19:43
  * @LastEditors: astar
- * @LastEditTime: 2021-03-03 18:21:45
+ * @LastEditTime: 2021-06-16 18:28:05
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\home\index.vue
 -->
@@ -20,7 +20,7 @@
       <ul class="img-list" @click="dealWithClick">
         <li v-for="(item, index) in imgList" :key="index" class="img-list__item">
           <img :src="item.img" alt="" :data-route="item.route">
-          <p class="label">{{item.label}}</p>
+          <p class="label" :data-route="item.route">{{item.label}}</p>
         </li>
       </ul>
     </main>
@@ -47,7 +47,7 @@ export default {
      * @date 2021-03-03 18:21
      */
     dealWithClick (e) {
-      if (e.target.nodeName.toUpperCase() === 'IMG' && e.target.dataset.route) {
+      if (['IMG', 'P'].includes(e.target.nodeName.toUpperCase()) && e.target.dataset.route) {
         this.$router.push(e.target.dataset.route)
       }
     }
@@ -129,9 +129,6 @@ export default {
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-        }
-        &:hover {
-          transform: scale(1.1);
         }
       }
     }

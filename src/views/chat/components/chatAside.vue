@@ -8,7 +8,7 @@
 -->
 <template>
   <aside class="chat-aside">
-    <div class="userinfo" @click="$router.push('/chat/detail')">
+    <div class="userinfo" @click="$router.replace('/chat/detail')">
       <s-avatar shape="circle" :src="userInfo.avatar" size="large"/>
       <span class="username">{{userInfo.userName}}</span>
     </div>
@@ -20,7 +20,7 @@
         <s-avatar class="contact-item__avatar" :src="item.avatar" size="large"></s-avatar>
         <div class="contact-item__content">
           <p class="header">{{item.name}}</p>
-          <p class="message">{{item.sender.userName}}: {{(item.content || []).reduce((str, item) => str + getSimpleMessageFromJSON(item), '')}}</p>
+          <p class="message" v-if="item.sender">{{item.sender.userName}}: {{(item.content || []).reduce((str, item) => str + getSimpleMessageFromJSON(item), '')}}</p>
         </div>
       </li>
     </ul>

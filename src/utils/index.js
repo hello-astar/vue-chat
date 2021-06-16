@@ -101,3 +101,32 @@ export const throttle = (fn, delay = 1000, last = false) => {
     }
   }
 }
+
+/**
+* 自定义枚举类
+* @author astar
+* @date 2021-06-16 17:12
+*/
+export class Enum {
+  #list = [] // 内置list
+  constructor (defination) {
+    for (let key in defination) {
+      const [value, label, desc] = defination[key]
+      Object.defineProperty(this, key, {
+        configurable: false,
+        writable: false,
+        enumerable: true,
+        value
+      })
+      this.#list.push({ value, label, desc })
+    }
+  }
+
+  getLabelByValue (value) {
+    return (this.#list.find(item => item.value === value) || {}).label
+  }
+
+  getInfoByValue (value) {
+    return this.#list.find(item => item.value === value)
+  }
+}

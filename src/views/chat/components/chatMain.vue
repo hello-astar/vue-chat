@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-06-16 00:53:10
+ * @LastEditTime: 2021-06-16 18:14:53
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -91,8 +91,8 @@ export default {
      * @param {Object} message - 一条消息
      */
     receiveMessage (message) {
-      this.$bus.broadcast(eventBus.REQUEST_CONTACT_LIST)
-      if (message.receiver._id === this.currentReceiver._id) {
+      this.$bus.broadcast(eventBus.REQUEST_CONTACT_LIST) // 重新获取左侧栏最近聊天历史
+      if ([message.receiver._id, message.sender._id].includes(this.currentReceiver._id)) {
         this.chatRecord.push(message);
       }
       if (message.sender._id !== this.userInfo._id) {
