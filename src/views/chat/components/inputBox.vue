@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 15:21:05
  * @LastEditors: astar
- * @LastEditTime: 2021-05-07 18:49:44
+ * @LastEditTime: 2021-06-17 01:45:44
  * @Description: 聊天输入框
  * @FilePath: \vue-chat\src\views\chat\components\inputBox.vue
 -->
@@ -63,7 +63,7 @@ export default {
   methods: {
     searchGif: debounce(function () {
       let children = this.$refs.input.childNodes;
-      if (children.length === 1 && children[0].nodeType === 3 && children[0].textContent && children[0].textContent.length <= 2) {
+      if (children[0].nodeType === 3 && children[0].textContent && children[0].textContent.length <= 2) {
         getGifs({ keyword: children[0].textContent }).then(res => {
           this.gifs = res.data
           if (res.data.length) {
