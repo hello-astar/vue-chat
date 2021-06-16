@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-04-22 22:08:36
- * @LastEditTime: 2021-06-16 19:03:01
+ * @LastEditTime: 2021-06-16 21:30:07
  * @LastEditors: astar
 -->
 <template>
@@ -68,7 +68,7 @@ export default {
     }
   },
   props: {
-    isGroup: Boolean,
+    // isGroup: Boolean,
     id: String
   },
   created () {
@@ -81,7 +81,7 @@ export default {
     * @date 2021-05-04 20:02
     */
     getInfo () {
-      getGroupInfoByGroupId({
+      return getGroupInfoByGroupId({
         groupId: this.id
       }).then(({ data }) => {
         this.info = data
@@ -100,10 +100,10 @@ export default {
       updateGroupNameByGroupId({
         groupId: this.id,
         groupName: this.formData.groupName.trim()
-      }).then(() => {
-        this.getInfo()
+      }).then(async () => {
+        await this.getInfo()
         this.showChangeGroupName = false
-        this.$bus.broadcast(eventBus.REQUEST_CONTACT_LIST, { _id: this.id })
+        this.$bus.broadcast(eventBus.CHANGE_CURRENT_RECEIVER, { _id: this.id, name: this.info.groupName })
       })
     },
     /**

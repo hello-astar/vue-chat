@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:08:54
  * @LastEditors: astar
- * @LastEditTime: 2021-06-16 18:58:02
+ * @LastEditTime: 2021-06-16 21:33:34
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatAside.vue
 -->
@@ -16,7 +16,7 @@
       <s-search-box v-model="formData.searchPerson"></s-search-box>
     </div>
     <ul class="contact-list scrollbar">
-      <li class="contact-item" :class="{ 'active': item._id === currentReceiver._id }" v-for="(item, idx) in groupList" :key="idx" @click="changeCurrentReceiver(item)">
+      <li class="contact-item" :class="{ 'active': item._id === currentReceiver._id }" v-for="(item, idx) in groupList" :key="idx" @click="changeCurrentReceiver(item, true)">
         <s-avatar class="contact-item__avatar" :src="item.avatar" size="large"></s-avatar>
         <div class="contact-item__content">
           <p class="header">{{item.name}}</p>
@@ -53,10 +53,16 @@ export default {
       currentReceiver: {} // 当前聊天人或群
     }
   },
-  created () {
-    this.getRecentContacts(this.$route.params.receiver);
+  async created () {
     this.$bus = new eventBus('chat-aside');
-    this.$bus.addListener(eventBus.REQUEST_CONTACT_LIST, receiver => this.getRecentContacts(receiver));
+    this.$bus.addListener(eventBus.CHANGE_CURRENT_RECEIVER, this.changeCurrentReceiver);
+    this.$bus.addListener(eventBus.REQUEST_CONTACT_LIST, this.getRecentContacts);
+    await this.getRecentContacts();
+    if (this.$route.params.receiver) {
+      this.changeCurrentReceiver(this.$route.params.receiver, true);
+    } else {
+      this.changeCurrentReceiver(this.groupList[0], true);
+    }
   },
   beforeDestroy () {
     this.$bus.offListen();
@@ -72,16 +78,9 @@ export default {
      * @author astar
      * @date 2021-05-06 18:24
      */
-    getRecentContacts (initData = null) {
-      getRecentContacts({ pageNo: 1, pageSize: 20, keyword: this.formData.searchPerson }).then(({ data = [] })=> {
+    getRecentContacts () {
+      return getRecentContacts({ pageNo: 1, pageSize: 20, keyword: this.formData.searchPerson }).then(({ data = [] })=> {
         if (data.length) {
-          if (initData) {
-            let item = data.find(item => item._id === initData._id);
-            !item && data.unshift(initData);
-            this.changeCurrentReceiver(item || data[0]);
-          } else {
-            this.changeCurrentReceiver(data[0]);
-          }
           this.groupList = data;
         }
       });
@@ -91,9 +90,13 @@ export default {
     * @author astar
     * @date 2021-05-06 20:52
     */
-    changeCurrentReceiver ({ _id, name, isGroup }) {
-      this.currentReceiver = { _id, name, isGroup };
-      this.$bus.broadcast(eventBus.CHANGE_CURRENT_RECEIVER, this.currentReceiver);
+    changeCurrentReceiver (receiver, broadcast = false) {
+      // 判断当前receiver是否在groupList中
+      let item = this.groupList.find(item => item._id === receiver._id);
+      !item && this.groupList.unshift(receiver);
+      this.currentReceiver = { ...item, ...receiver };
+      this.groupList = this.groupList.map(item => item._id === this.currentReceiver._id ? this.currentReceiver : item);
+      broadcast && this.$bus.broadcast(eventBus.CHANGE_CURRENT_RECEIVER, this.currentReceiver);
     },
     /**
      * 创建群组

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-05-09 20:22:07
- * @LastEditTime: 2021-06-16 19:17:41
+ * @LastEditTime: 2021-06-16 21:23:08
  * @LastEditors: astar
 -->
 <template>
@@ -70,15 +70,12 @@ export default {
     confirm () {
       if (this.isMyFriend) {
         this.showUserInfo = false;
-        this.$bus.broadcast(
-          eventBus.REQUEST_CONTACT_LIST,
-          {
-            name: this.info.userName,
-            _id: this.info._id,
-            avatar: this.info.avatar,
-            isGroup: false
-          }
-        );
+        this.$bus.broadcast(eventBus.CHANGE_CURRENT_RECEIVER, {
+          name: this.info.userName,
+          _id: this.info._id,
+          avatar: this.info.avatar,
+          isGroup: false
+        });
         this.$emit('chat-with-friend');
       } else {
         this.addFriend();

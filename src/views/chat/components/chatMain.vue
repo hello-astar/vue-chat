@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-06-16 19:46:10
+ * @LastEditTime: 2021-06-16 21:33:56
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -147,7 +147,7 @@ export default {
     initRecord (currentReceiver) {
       this.totalDone = false;
       this.chatRecord = [];
-      this.currentReceiver = currentReceiver;
+      this.currentReceiver = { ...this.currentReceiver, ...currentReceiver };
       this.getRecord().then(() => {
         this.$nextTick(() => {
           if (this.$refs.box) {
