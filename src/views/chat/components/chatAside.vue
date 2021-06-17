@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:08:54
  * @LastEditors: astar
- * @LastEditTime: 2021-06-17 00:59:03
+ * @LastEditTime: 2021-06-17 17:58:34
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatAside.vue
 -->
@@ -15,6 +15,7 @@
     <div class="search">
       <s-search-box v-model="formData.searchPerson"></s-search-box>
     </div>
+    <p class="contact-header">最近联系人/群</p>
     <ul class="contact-list scrollbar">
       <li class="contact-item" :class="{ 'active': item._id === currentReceiver._id }" v-for="(item, idx) in groupList" :key="idx" @click="changeCurrentReceiver(item, true)">
         <s-avatar class="contact-item__avatar" :src="item.avatar" size="large"></s-avatar>
@@ -129,6 +130,10 @@ export default {
     }
   }
   .search {
+    padding: 10px;
+  }
+  .contact-header {
+    color: #fff;
     padding: 10px;
   }
   .contact-list {

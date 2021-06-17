@@ -2,14 +2,14 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-06-17 14:49:42
+ * @LastEditTime: 2021-06-17 17:30:40
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
 <template>
   <main class="chat-main" ref="chat">
     <header class="contact-name">
-      <i class="iconfont icon-shouye home-icon" @click="$router.replace('/chat/detail')"></i>
+      <i class="iconfont icon-xiangqing home-icon" @click="$emit('show-contact')"></i>
       {{currentReceiver.name}}
       <i style="float: right" v-if="currentReceiver._id && currentReceiver.isGroup" class="iconfont icon-zhankai" @click="$emit('show-info', currentReceiver._id)"></i>
     </header>

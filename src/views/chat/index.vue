@@ -1,7 +1,11 @@
 <template>
   <div ref="chat" class="vue-chat" :class="{'vue-chat-small-device': !isLarge}">
-    <chat-aside class="vue-chat_sidebar" :class="{'vue-chat-small-device_sidebar': !isLarge}"></chat-aside>
-    <chat-main class="vue-chat_main" :class="{'vue-chat-small-device_main': !isLarge}" @show-info="gotoInfo"></chat-main>
+    <chat-aside class="vue-chat_sidebar" :class="{'vue-chat-small-device_sidebar': !isLarge, 'hidden': !showContact }"></chat-aside>
+    <chat-main
+      class="vue-chat_main"
+      :class="{'vue-chat-small-device_main': !isLarge, 'hidden': showContact}"
+      @show-contact="showContact=true"
+      @show-info="gotoInfo"></chat-main>
     <!-- 群组或用户详细信息 -->
     <s-popup v-model="showInfo" place="right" :x="pos.x" :y="pos.y" :width="chatWidth" :height="chatHeight">
       <chat-info :id="currentInfoId" isGroup @close="showInfo=false"></chat-info>
@@ -15,6 +19,7 @@ import { getElementPagePosition } from '@/utils';
 import chatAside from './components/chatAside';
 import chatMain from './components/chatMain';
 import chatInfo from './components/chatInfo';
+import eventBus from '@/views/chat/eventBus';
 
 export default {
   name: "chat",
@@ -23,12 +28,18 @@ export default {
   },
   data () {
     return {
+      $bus: null,
+      showContact: false, // 是否展示最近联系人列表
       showInfo: false, // 是否展示详细信息
       currentInfoId: null, // 当前详情的id
       chatWidth: '0px',
       chatHeight: '0px',
       pos: {x: '0px', y: '0px' }
     }
+  },
+  created () {
+    this.$bus = new eventBus('chat-index');
+    this.$bus.addListener(eventBus.CHANGE_CURRENT_RECEIVER, () => this.showContact = false);
   },
   mounted () {
     this.computePopupStyle();
@@ -98,7 +109,10 @@ export default {
   // 兼容屏幕小于ipad的设备
 .vue-chat-small-device {
   &_sidebar {
-    display: none; // 小屏上不展示sidebar
+    width: 100%;
+    &.hidden {
+      display: none;
+    }
   }
   &_main {
     /deep/ .home-icon {
@@ -108,6 +122,9 @@ export default {
       flex: 0 0 50px;
       width: 100%;
       background: #fff;
+    }
+    &.hidden {
+      display: none;
     }
   }
 }
