@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-06-17 01:22:38
+ * @LastEditTime: 2021-06-17 14:49:42
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -268,7 +268,7 @@ export default {
       }
       .chat-box__item_name {
         font-size: 12px;
-        padding: 0 20px 5px;
+        margin: -5px 20px 5px;
         color: #999;
       }
       .chat-box__item_content {
