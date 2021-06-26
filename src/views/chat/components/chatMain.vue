@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-06-17 17:30:40
+ * @LastEditTime: 2021-06-26 18:19:34
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -44,6 +44,7 @@ import { getSimpleMessageFromJSON, KINDS } from '@/utils/editor.js';
 import { getHistoryChatByCount } from '@/request';
 import eventBus from '@/views/chat/eventBus';
 import { mapGetters } from 'vuex';
+import baseUrl from '@/config';
 
 export default {
   data () {
@@ -74,7 +75,7 @@ export default {
      * @date 2021-05-07 14:49
      */
     initSocket () {
-      this.$socket = io(process.env.VUE_APP_BASE_API, {
+      this.$socket = io(baseUrl, {
         withCredentials: true,
         extraHeaders: {
           'authorization': getAuthorization()

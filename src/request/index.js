@@ -2,11 +2,12 @@
  * @Author: astar
  * @Date: 2020-09-09 17:47:49
  * @LastEditors: astar
- * @LastEditTime: 2021-06-16 10:27:25
+ * @LastEditTime: 2021-06-26 18:19:09
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
 import { postRequest, getRequest } from '@/axios';
+import baseURL from '@/config';
 
 export const userRegisterReq = (data = {}) => {
   return postRequest('/user/register', data);
@@ -28,7 +29,7 @@ export const qiniuUploadReq = (data = {}) => {
   return postRequest('http://upload-z2.qiniu.com', data);
 }
 
-export const captchaGetImg = `${process.env.VUE_APP_BASE_API}/tool/getCaptcha` // 获取图片验证码
+export const captchaGetImg = `${baseURL}/tool/getCaptcha` // 获取图片验证码
 
 export const getHistoryChatByCount = (data = {}) => {
   return postRequest('/chat/getHistoryChatByCount', data);
@@ -76,4 +77,8 @@ export const exitGroup = (data = {}) => {
 
 export const checkIsMyFriend = (data = {}) => {
   return postRequest('/user/checkIsMyFriend', data)
+}
+
+export const uploadImg = (data = {}) => {
+  return postRequest('/tool/uploadImg', data)
 }

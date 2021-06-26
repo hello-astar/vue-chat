@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-04-30 16:34:47
  * @LastEditors: astar
- * @LastEditTime: 2021-05-07 14:09:33
+ * @LastEditTime: 2021-06-18 15:37:16
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\test\aaa.vue
 -->
@@ -14,10 +14,13 @@
 <script>
 export default {
   mounted () {
-    let container = document.querySelector('.bg');
-    const RADIUS = 80;
+    document.addEventListener('mousemove', this.move);
+  },
+  methods: {
+    move (event) {
+      let container = document.querySelector('.bg');
+      const RADIUS = 80;
 
-    document.addEventListener('mousemove', function (event) {
       let x = event.clientX;
       let y = event.clientY;
 
@@ -26,7 +29,10 @@ export default {
       let circle = `circle(${RADIUS / 100 + 'rem'} at ${x / 100 + 'rem'} ${y /100 + 'rem'})`;
       container.style['-webkit-clip-path'] = circle;
       container.style['clip-path'] = circle;
-    });
+    }
+  },
+  destroyed () {
+    document.removeEventListener('mousemove', this.move)
   }
 }
 </script>

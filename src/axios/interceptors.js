@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 17:27:10
  * @LastEditors: astar
- * @LastEditTime: 2021-04-26 14:19:58
+ * @LastEditTime: 2021-06-26 18:18:45
  * @Description: 定义拦截器
  * @FilePath: \vue-chat\src\axios\interceptors.js
  */
@@ -10,13 +10,14 @@ import { vm } from '../main.js';
 import axios from 'axios';
 import { removeToken } from '@/utils/token';
 import { getAuthorization } from '@/utils';
+import baseURL from '@/config/index.js';
 
 const CUSTOM_CODE_MAP = {
   SUCCESS: 1,
   ERROR: -1
 }
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API,
+  baseURL,
   timeout: 3000,
   headers: {
     'content-type': 'application/json'
