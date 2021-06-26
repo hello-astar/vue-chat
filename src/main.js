@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 16:50:59
  * @LastEditors: astar
- * @LastEditTime: 2021-04-14 13:44:58
+ * @LastEditTime: 2021-06-26 22:58:12
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\main.js
  */
@@ -17,6 +17,7 @@ import { installComponent, installPlugin } from '@/components';
 import installRouter from '@/router';
 import * as directives from '@/directives';
 import '@/icons'; // 引入svg图片，svg-sprite-loader自动将多个svg图片打包成svg-sprite
+import './registerServiceWorker'
 setRem(document, window);
 
 // import VConsole from 'vconsole';

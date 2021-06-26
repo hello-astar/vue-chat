@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2021-04-13 10:52:48
+ * @LastEditTime: 2021-06-26 21:53:40
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -27,6 +27,17 @@ module.exports = {
           '^/test-proxy': ''
         }
       }
+    }
+  },
+  pwa: {
+    workboxOptions: {
+      // https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
+      skipWaiting: true,
+      clientsClaim: true,
+      importWorkboxFrom: 'local',
+      importsDirectory: 'js',
+      navigateFallback: '/',
+      navigateFallbackBlacklist: [/\/api\//]
     }
   },
   css: {
