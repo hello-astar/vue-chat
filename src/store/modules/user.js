@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-15 18:19:35
  * @LastEditors: astar
- * @LastEditTime: 2021-06-28 20:14:15
+ * @LastEditTime: 2021-06-28 20:17:37
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\store\modules\user.js
  */
@@ -18,7 +18,7 @@ const user = {
         if (res.data) {
           commit('SET_USER_INFO', res.data);
         } else {
-          Promise.reject()
+          return Promise.reject(res.msg)
         }
       })
     }
