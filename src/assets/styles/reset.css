@@ -12,6 +12,7 @@ body {
   color: #333;
   background-color: #fff;
   height: 100%;
+  overscroll-behavior-y: contain;
 }
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
