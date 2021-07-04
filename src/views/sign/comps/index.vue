@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-06-17 14:30:17
+ * @LastEditTime: 2021-07-04 16:55:19
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -11,10 +11,6 @@
   <div class="panel-wrapper register-wrapper">
     <div class="panel-container">
       <div class="panel-container__input">
-        <div class="input__cell">
-          <s-upload-img ref="avatar" v-model="formData.avatar" v-if="formConfig.avatar.show"></s-upload-img>
-          <i class="iconfont icon-login" v-else></i>
-        </div>
         <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.userName" placeholder="请输入用户名" v-if="formConfig.userName.show"></s-input-cell>
         <s-input-cell type="password" autocomplete="off" class="input__cell" v-model="formData.password" placeholder="请输入密码" v-if="formConfig.password.show"></s-input-cell>
         <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.captcha" placeholder="请输入验证码" v-if="formConfig.captcha.show">
@@ -55,17 +51,11 @@ export default {
     return {
       captchaImg: '', // 验证图片
       formData: {
-        avatar: '',
         userName: '',
         password: '',
         captcha: ''
       },
       formConfig: {
-        avatar: {
-          show: this.type === REGISTER,
-          validate: value => value,
-          msg: '请选择头像'
-        },
         userName: {
           show: true,
           validate: value => value && value.trim(),
