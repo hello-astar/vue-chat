@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-30 16:24:58
  * @LastEditors: astar
- * @LastEditTime: 2021-05-05 01:41:12
+ * @LastEditTime: 2021-07-05 02:12:48
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\components\popup\index.vue
 -->
@@ -66,7 +66,7 @@ export default {
     place: { // 从哪个角度弹出
       type: String,
       default: 'bottom',
-      validator: value => ['top, bottom', 'left', 'right'].includes(value)
+      validator: value => ['top', 'bottom', 'left', 'right'].includes(value)
     },
     x: String, // 内容左下角x
     y: String, // 内容左下角y
