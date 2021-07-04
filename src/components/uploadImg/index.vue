@@ -2,7 +2,7 @@
  * @Description: 上传图片
  * @Author: astar
  * @Date: 2020-09-20 18:24:39
- * @LastEditTime: 2021-03-03 17:46:42
+ * @LastEditTime: 2021-07-04 22:38:09
  * @LastEditors: astar
 -->
 <template>
@@ -15,14 +15,15 @@
   </div>
   <div class="upload-img__preview" @click="beforeUpload">
     <slot name="preview">
-      <s-avatar shape="circle" :src="dataURL" size="large"/>
+      <s-avatar v-bind="$props" :src="dataURL" size="large"/>
     </slot>
   </div>
 </div>
 </template>
 <script>
 // import qiniu from 'qiniu-js';
-import { qiniuTokenReq, qiniuUploadReq } from '@/request';
+// import { qiniuTokenReq, qiniuUploadReq } from '@/request';
+import { uploadImg } from '@/request';
 
 export default {
   name: 's-upload-img',
@@ -65,13 +66,16 @@ export default {
       }
     },
     upload () {
-      return qiniuTokenReq().then((res) => {
-        let token = res.data.token;
-        const formData = new FormData();
-        formData.append('token', token);
-        formData.append('file', this.file);
-        return qiniuUploadReq(formData);
-      })
+      // return qiniuTokenReq().then((res) => {
+      //   let token = res.data.token;
+      //   const formData = new FormData();
+      //   formData.append('token', token);
+      //   formData.append('file', this.file);
+      //   return qiniuUploadReq(formData);
+      // })
+      const formData = new FormData();
+      formData.append('file', this.file);
+      return uploadImg(formData, { headers: { 'content-type': 'multipart/form-data' }, responseType: 'blob', emulateJSON: true });
     }
   }
 }

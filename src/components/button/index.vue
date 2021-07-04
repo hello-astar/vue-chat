@@ -2,7 +2,7 @@
  * @Description: 通用按钮
  * @Author: astar
  * @Date: 2021-04-21 00:05:57
- * @LastEditTime: 2021-05-05 19:02:09
+ * @LastEditTime: 2021-07-04 21:25:37
  * @LastEditors: astar
 -->
 <template>
@@ -58,7 +58,7 @@ export default {
       }
     }
   }
-  @include button('primary',rgb(29, 29, 29), rgba(255,255,255,.8), rgb(29, 29, 29));
+  @include button('primary',#090723, rgba(255,255,255,.8), #090723);
   @include button('text', transparent, rgb(29, 29, 29), transparent);
   @include button('danger', rgb(168, 69, 69), rgb(253, 250, 250),rgb(168, 69, 69));
   &__small {

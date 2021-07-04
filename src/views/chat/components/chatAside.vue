@@ -2,20 +2,21 @@
  * @Author: astar
  * @Date: 2021-05-06 18:08:54
  * @LastEditors: astar
- * @LastEditTime: 2021-06-17 17:58:34
+ * @LastEditTime: 2021-07-04 22:27:12
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatAside.vue
 -->
 <template>
   <aside class="chat-aside">
-    <div class="userinfo" @click="$router.replace('/chat/detail')">
-      <s-avatar shape="circle" :src="userInfo.avatar" size="large"/>
+    <div class="userinfo">
+      <s-avatar shape="circle" :src="userInfo.avatar" size="large" @click="$router.push('/home')"/>
       <span class="username">{{userInfo.userName}}</span>
+      <i class="iconfont icon-zhifeiji" style="float: right" @click="$router.push('/chat/detail')"></i>
     </div>
     <div class="search">
       <s-search-box v-model="formData.searchPerson"></s-search-box>
     </div>
-    <p class="contact-header">最近联系人/群</p>
+    <p class="contact-header"><i class="iconfont icon-zhifeiji"></i>最近联系人/群</p>
     <ul class="contact-list scrollbar">
       <li class="contact-item" :class="{ 'active': item._id === currentReceiver._id }" v-for="(item, idx) in groupList" :key="idx" @click="changeCurrentReceiver(item, true)">
         <s-avatar class="contact-item__avatar" :src="item.avatar" size="large"></s-avatar>

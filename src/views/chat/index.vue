@@ -117,6 +117,8 @@ export default {
   &_main {
     /deep/ .home-icon {
       display: inline-block;
+      margin-right: 5px;
+      vertical-align: bottom;
     }
     /deep/ .input-box {
       flex: 0 0 50px;

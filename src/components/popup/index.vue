@@ -66,7 +66,7 @@ export default {
     place: { // 从哪个角度弹出
       type: String,
       default: 'bottom',
-      validate: value => ['top, bottom', 'left', 'right'].includes(value)
+      validator: value => ['top, bottom', 'left', 'right'].includes(value)
     },
     x: String, // 内容左下角x
     y: String, // 内容左下角y

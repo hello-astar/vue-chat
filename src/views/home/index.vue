@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-11-12 11:19:43
  * @LastEditors: astar
- * @LastEditTime: 2021-07-04 19:28:13
+ * @LastEditTime: 2021-07-05 00:46:48
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\home\index.vue
 -->
@@ -67,13 +67,22 @@ export default {
         margin: 15px 10px;
         overflow: hidden;
         cursor: pointer;
+        border-radius: 4px;
         .label {
+          position: relative;
+          top: 15px;
           display: inline-block;
-          font-size: 18px;
+          width: 100px;
+          height: 40px;
+          text-align: center;
+          font-size: 14px;
           background: rgba(255,255,255,.7);
-          padding: 10px 20px;
           color: black;
-          backdrop-filter: blur(8px);
+          padding: 10px;
+          font-weight: 700;
+          opacity: .7;
+          border-top-right-radius: 50px;
+          border-bottom-right-radius: 50px;
         }
       }
     }

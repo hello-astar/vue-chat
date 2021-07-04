@@ -1,7 +1,7 @@
 .input-cell {
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   border-bottom: 1px solid #999;
   width: 100%;
   &.no-border {
@@ -9,6 +9,7 @@
   }
   &__label {
     flex-shrink: 0;
+    line-height: 30px;
   }
   .input {
     flex: 1;
@@ -17,6 +18,10 @@
     padding: 0 10px;
     background-clip: content-box;
     height: 30px;
+    &.textarea {
+      height: 90px;
+      border: 1px solid #333;
+    }
   }
   input ~ .input-cell__line {
     position: absolute;
@@ -33,5 +38,8 @@
   input:focus ~ .input-cell__line {
     width: 100%;
     transform-origin: left center;
+  }
+  &__slot {
+    padding: 0 10px;
   }
 }

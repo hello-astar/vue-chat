@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-07-04 20:35:54
+ * @LastEditTime: 2021-07-04 21:58:52
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -10,7 +10,7 @@
   <main class="chat-main" ref="chat">
     <header class="contact-name">
       <i class="iconfont icon-xiangqing home-icon" @click="$emit('show-contact')"></i>
-      {{currentReceiver.name}}
+      <span>{{currentReceiver.name}}</span>
       <i style="float: right" v-if="currentReceiver._id && currentReceiver.isGroup" class="iconfont icon-zhankai" @click="$emit('show-info', currentReceiver._id)"></i>
     </header>
     <div class="chat-box" ref="box">

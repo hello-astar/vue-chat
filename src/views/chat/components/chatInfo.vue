@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-04-22 22:08:36
- * @LastEditTime: 2021-06-16 21:30:07
+ * @LastEditTime: 2021-07-04 22:07:01
  * @LastEditors: astar
 -->
 <template>
@@ -14,7 +14,7 @@
       </div>
       <p>
         <span>群名称：{{info.groupName}}</span>
-        <i class="iconfont icon-bianji" @click="showChangeGroupName=true"></i>
+        <i class="iconfont icon-bianji icon" @click="showChangeGroupName=true"></i>
       </p>
       <p>群创始人：{{info.groupOwner && info.groupOwner.userName}}</p>
       <!-- <p>公告：明天不能迟到</p> -->
@@ -155,6 +155,11 @@ export default {
       font-size: 18px;
       line-height: 40px;
       margin: 10px 0;
+    }
+    .icon {
+      margin-left: 8px;
+      vertical-align: middle;
+      font-size: 18px;
     }
     .flex {
       display: flex;
