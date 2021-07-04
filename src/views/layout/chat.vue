@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-08 10:41:26
  * @LastEditors: astar
- * @LastEditTime: 2021-05-08 11:34:05
+ * @LastEditTime: 2021-07-04 20:50:00
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\layout\chat.vue
 -->
@@ -70,9 +70,14 @@ export default {
 .chat-layout-small-device {
   min-width: 100%;
   max-width: 100%;
+  min-height: 100%;
   width: 100%;
   height: 100%;
+  &:before {
+    display: none;
+  }
   &__content {
+    position: static;
     width: 100%;
     height: 100%;
   }

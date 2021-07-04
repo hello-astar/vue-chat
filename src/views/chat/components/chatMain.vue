@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-06-26 18:19:34
+ * @LastEditTime: 2021-07-04 20:35:54
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -241,7 +241,6 @@ export default {
 .chat-main {
   display: flex;
   flex-direction: column;
-  max-height: 100vh;
   .contact-name {
     flex: 0 0 50px; // 高度50
     width: 100%;

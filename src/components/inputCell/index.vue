@@ -2,12 +2,12 @@
  * @Description: 输入框
  * @Author: astar
  * @Date: 2020-09-20 17:16:54
- * @LastEditTime: 2021-05-05 00:35:26
+ * @LastEditTime: 2021-07-04 20:06:07
  * @LastEditors: astar
 -->
 <template>
 <div class="input-cell" :class="{'no-border': noBorder}">
-  <div>
+  <div class="input-cell__label">
     <slot name="label">{{label}}</slot>
   </div>
   <input
