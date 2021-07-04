@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-10-13 14:39:31
  * @LastEditors: astar
- * @LastEditTime: 2021-03-27 20:37:29
+ * @LastEditTime: 2021-07-04 18:30:04
  * @Description: layout
  * @FilePath: \vue-chat\src\views\layout\index.vue
 -->
@@ -12,7 +12,7 @@
       <div class="layout-nav__content">
         <div class="avatar" @click="$router.push('/home')">
           <s-avatar class="avatar-img" shape="circle" :src="userInfo.avatar" size="medium"></s-avatar>
-          {{userInfo.name}}
+          {{userInfo.userName}}
         </div>
         <ul class="list">
           <li>
