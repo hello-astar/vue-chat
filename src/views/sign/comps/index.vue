@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-07-04 16:55:19
+ * @LastEditTime: 2021-07-04 17:43:02
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -10,6 +10,7 @@
 <div class="sign-page">
   <div class="panel-wrapper register-wrapper">
     <div class="panel-container">
+      <i class="panel-container__header iconfont icon-Welcome"></i>
       <div class="panel-container__input">
         <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.userName" placeholder="请输入用户名" v-if="formConfig.userName.show"></s-input-cell>
         <s-input-cell type="password" autocomplete="off" class="input__cell" v-model="formData.password" placeholder="请输入密码" v-if="formConfig.password.show"></s-input-cell>
