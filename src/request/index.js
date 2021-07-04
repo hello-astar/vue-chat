@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 17:47:49
  * @LastEditors: astar
- * @LastEditTime: 2021-06-26 18:19:09
+ * @LastEditTime: 2021-07-05 01:27:32
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
@@ -15,6 +15,10 @@ export const userRegisterReq = (data = {}) => {
 
 export const userLoginReq = (data = {}) => {
   return postRequest('/user/login', data);
+}
+
+export const editUser = (data = {}) => {
+  return postRequest('/user/editUser', data);
 }
 
 export const userInfoReq = (data = {}) => {

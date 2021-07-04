@@ -2,7 +2,7 @@
  * @Description: 上传图片
  * @Author: astar
  * @Date: 2020-09-20 18:24:39
- * @LastEditTime: 2021-07-04 22:38:09
+ * @LastEditTime: 2021-07-05 00:58:51
  * @LastEditors: astar
 -->
 <template>
@@ -31,6 +31,12 @@ export default {
     value: {
       type: String,
       required: true
+    },
+    shape: {
+      type: String
+    },
+    size: {
+      type: String
     }
   },
   model: {
