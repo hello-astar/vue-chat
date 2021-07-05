@@ -2,7 +2,7 @@
  * @Description: 头像组件
  * @Author: astar
  * @Date: 2020-09-08 21:10:10
- * @LastEditTime: 2021-05-09 20:16:48
+ * @LastEditTime: 2021-07-05 19:34:15
  * @LastEditors: astar
 -->
 <template>
@@ -92,6 +92,7 @@ export default {
     display: block;
     min-width: 100%;
     min-height: 100%;
+    max-width: 100%;
   }
   &.avatar-size__large {
     width: 42px;

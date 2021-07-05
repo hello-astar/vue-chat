@@ -28,9 +28,7 @@
     &__input {
       .input__cell {
         margin-bottom: 15px;
-        img {
-          width: 100px;
-        }
+        align-items: flex-end;
       }
     }
     &__btn {
