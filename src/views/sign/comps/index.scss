@@ -29,6 +29,9 @@
       .input__cell {
         margin-bottom: 15px;
         align-items: flex-end;
+        /deep/ img {
+          width: 1rem;
+        }
       }
     }
     &__btn {
