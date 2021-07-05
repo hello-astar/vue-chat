@@ -18,6 +18,7 @@
     padding: 0 10px;
     background-clip: content-box;
     height: 30px;
+    overflow: hidden;
     &.textarea {
       height: 90px;
       border: 1px solid #333;
@@ -40,6 +41,6 @@
     transform-origin: left center;
   }
   &__slot {
-    padding: 0 10px;
+    // padding: 0 10px;
   }
 }
