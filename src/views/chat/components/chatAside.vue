@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:08:54
  * @LastEditors: astar
- * @LastEditTime: 2021-07-04 22:27:12
+ * @LastEditTime: 2021-07-05 18:19:26
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatAside.vue
 -->
@@ -10,7 +10,10 @@
   <aside class="chat-aside">
     <div class="userinfo">
       <s-avatar shape="circle" :src="userInfo.avatar" size="large" @click="$router.push('/home')"/>
-      <span class="username">{{userInfo.userName}}</span>
+      <div class="username">
+        <span>{{userInfo.userName}}</span><br>
+        <span class="signature">{{userInfo.signature}}</span>
+      </div>
       <i class="iconfont icon-zhifeiji" style="float: right" @click="$router.push('/chat/detail')"></i>
     </div>
     <div class="search">
@@ -35,8 +38,7 @@
   </aside>
 </template>
 <script>
-import { mapGetters } from 'vuex';
-import { getRecentContacts, addGroup } from '@/request';
+import { getRecentContacts, addGroup, userDetailReq } from '@/request';
 import eventBus from '@/views/chat/eventBus';
 import { getSimpleMessageFromJSON } from '@/utils/editor.js';
 import { debounce } from '@/utils'
@@ -45,6 +47,7 @@ export default {
   data () {
     return {
       getSimpleMessageFromJSON,
+      userInfo: {},
       $bus: null, // 兄弟组件通信工具
       formData: {
         searchPerson: '', // 搜索最近联系人
@@ -65,6 +68,9 @@ export default {
     } else {
       this.changeCurrentReceiver(this.groupList[0], true);
     }
+    userDetailReq().then(({ data }) => {
+      this.userInfo = data
+    })
   },
   beforeDestroy () {
     this.$bus.offListen();
@@ -113,10 +119,7 @@ export default {
         console.log(_)
       })
     },
-  },
-  computed: {
-    ...mapGetters(['userInfo'])
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -127,7 +130,13 @@ export default {
     color: rgb(244, 244, 244);
     padding: 10px;
     .username {
+      display: inline-block;
       margin-left: 10px;
+      vertical-align: middle;
+      .signature {
+        font-size: 12px;
+        color: rgb(201, 197, 197);
+      }
     }
   }
   .search {

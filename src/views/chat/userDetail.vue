@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-08 10:38:53
  * @LastEditors: astar
- * @LastEditTime: 2021-06-16 19:17:26
+ * @LastEditTime: 2021-07-05 18:23:38
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\userDetail.vue
 -->
@@ -17,7 +17,10 @@
     <ul class="list">
       <li class="list-item" v-for="item in list" :key="item._id" @click="chatWidth(item)">
         <s-avatar class="list-item__avatar" :src="item.avatar" size="large"></s-avatar>
-        {{item.groupName || item.userName}}
+        <div class="list-item__info">
+          <p>{{item.groupName || item.userName}}</p>
+          <p class="signature" v-if="item.signature">个性签名：{{item.signature}}</p>
+        </div>
       </li>
     </ul>
   </div>
@@ -128,6 +131,14 @@ export default {
       cursor: pointer;
       &__avatar {
         margin-right: 15px;
+      }
+      &__info {
+        display: inline-block;
+        vertical-align: middle;
+        .signature {
+          color: #999;
+          font-size: 12px;
+        }
       }
     }
   }
