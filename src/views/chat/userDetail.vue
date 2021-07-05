@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-08 10:38:53
  * @LastEditors: astar
- * @LastEditTime: 2021-07-05 18:23:38
+ * @LastEditTime: 2021-07-05 19:00:44
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\userDetail.vue
 -->
@@ -18,8 +18,8 @@
       <li class="list-item" v-for="item in list" :key="item._id" @click="chatWidth(item)">
         <s-avatar class="list-item__avatar" :src="item.avatar" size="large"></s-avatar>
         <div class="list-item__info">
-          <p>{{item.groupName || item.userName}}</p>
-          <p class="signature" v-if="item.signature">个性签名：{{item.signature}}</p>
+          <p>{{item.groupName || item.userName}}<span class="ptxt" v-if="item.members">({{item.members.length}})</span></p>
+          <p class="ptxt" v-if="item.signature">个性签名：{{item.signature}}</p>
         </div>
       </li>
     </ul>
@@ -32,15 +32,15 @@ import userInfoPane from './components/userInfoPane';
 import { Enum } from '@/utils'
 
 const TYPE_LIST = new Enum({
-  FRIEND: [1, '我的好友'],
-  GROUP: [2, '我的群组']
+  GROUP: [2, '我的群组'],
+  FRIEND: [1, '我的好友']
 })
 
 export default {
   data () {
     return {
       TYPE_LIST,
-      type: TYPE_LIST.FRIEND, // 1好友 2群组
+      type: TYPE_LIST.GROUP, // 1好友 2群组
       list: []
     }
   },
@@ -108,6 +108,7 @@ export default {
     background: #fff;
     &-button {
       &.active {
+        font-weight: bold;
         // position: relative;
         // &:after {
         //   position: absolute;
@@ -135,7 +136,7 @@ export default {
       &__info {
         display: inline-block;
         vertical-align: middle;
-        .signature {
+        .ptxt {
           color: #999;
           font-size: 12px;
         }
