@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-11-12 11:19:43
  * @LastEditors: astar
- * @LastEditTime: 2021-07-05 00:46:48
+ * @LastEditTime: 2021-07-05 15:04:07
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\home\index.vue
 -->
@@ -72,7 +72,7 @@ export default {
           position: relative;
           top: 15px;
           display: inline-block;
-          width: 100px;
+          min-width: 100px;
           height: 40px;
           text-align: center;
           font-size: 14px;

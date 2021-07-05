@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-15 18:19:35
  * @LastEditors: astar
- * @LastEditTime: 2021-06-28 20:17:37
+ * @LastEditTime: 2021-07-05 15:07:29
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\store\modules\user.js
  */
@@ -13,7 +13,7 @@ const user = {
     userInfo: {}
   },
   actions: {
-    getUserInfo ({ commit }) {
+    getUserInfoByToken ({ commit }) {
       return userInfoReq().then(res => {
         if (res.data) {
           commit('SET_USER_INFO', res.data);

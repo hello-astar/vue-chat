@@ -38,7 +38,7 @@ export default Vue => {
     } else if (store.getters.userInfo._id) {
       next();
     } else {
-      store.dispatch('user/getUserInfo').then(() => {
+      store.dispatch('user/getUserInfoByToken').then(() => {
         next();
       }).catch(() => {
         next('/login');

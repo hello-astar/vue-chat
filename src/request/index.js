@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 17:47:49
  * @LastEditors: astar
- * @LastEditTime: 2021-07-05 01:27:32
+ * @LastEditTime: 2021-07-05 15:08:51
  * @Description: 定义接口请求
  * @FilePath: \vue-chat\src\request\index.js
  */
@@ -22,7 +22,11 @@ export const editUser = (data = {}) => {
 }
 
 export const userInfoReq = (data = {}) => {
-  return getRequest('/user/getUserInfo', data);
+  return getRequest('/user/getUserInfoByToken', data);
+}
+
+export const userDetailReq = (data = {}) => {
+  return getRequest('/user/getUserDetail', data)
 }
 
 export const qiniuTokenReq = (data = {}) => {

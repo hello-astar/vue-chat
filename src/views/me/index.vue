@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-07-04 19:47:45
- * @LastEditTime: 2021-07-05 02:02:11
+ * @LastEditTime: 2021-07-05 17:08:18
  * @LastEditors: astar
 -->
 <template>
@@ -26,8 +26,8 @@
 import { mapGetters } from 'vuex';
 import PUBLIC_KEY from '@/config/rsaPublicKey';
 import asyncLoadJS from '@/utils/asyncLoadJS';
-import { editUser } from '@/request';
-import { removeToken } from '@/utils/token';
+import { userDetailReq, editUser } from '@/request';
+import { setToken } from '@/utils/token';
 
 export default {
   data () {
@@ -42,8 +42,11 @@ export default {
     }
   },
   created () {
-    this.formData.userName = this.userInfo.userName
-    this.formData.avatar = this.userInfo.avatar
+    userDetailReq().then(({ data }) => {
+      this.formData.userName = data.userName
+      this.formData.avatar = data.avatar
+      this.formData.signature = data.signature
+    })
   },
   methods: {
     async submit () {
@@ -77,10 +80,10 @@ export default {
         delete formData.newPassword;
       }
       if (!Object.keys(formData).length) return;
-      editUser(formData).then(({ data }) => {
-        this.$toast.text(data);
-        removeToken();
-        this.$router.push('/login');
+      editUser(formData).then(({ data, msg }) => {
+        this.$toast.text(msg);
+        setToken(data);
+        this.$store.dispatch('user/getUserInfoByToken');
       })
     }
   },
