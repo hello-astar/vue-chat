@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-07-06 19:56:06
+ * @LastEditTime: 2021-07-06 20:27:12
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -75,7 +75,9 @@ export default {
      * @date 2021-05-07 14:49
      */
     initSocket () {
-      this.$socket = io(baseUrl, {
+      let url = new URL(baseUrl);
+      this.$socket = io(url.origin, {
+        path: '/chat-room',
         withCredentials: true,
         extraHeaders: {
           'authorization': getAuthorization()
