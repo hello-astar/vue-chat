@@ -2,30 +2,32 @@
  * @Author: astar
  * @Date: 2021-02-25 11:35:15
  * @LastEditors: astar
- * @LastEditTime: 2021-02-25 15:41:18
+ * @LastEditTime: 2021-07-06 18:41:08
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\error\401.vue
 -->
 <template>
   <div class="page-401">
-    <svg-icon icon-name="401" class="svg-icon"></svg-icon>
-    <div @click="$router.push('/login')">
-      <svg-icon icon-name="arrow" class="svg-icon"></svg-icon>
-      去登录
+    <div class="page-401__content">
+      <svg-icon icon-name="401" class="svg-icon"></svg-icon>
+      <s-button type="primary" @click="$router.push('/login')">未授权，去登录</s-button>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
 .page-401 {
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
-  height: 100vh;
-  width: 100vw;
-  .svg-icon {
-    display: inline-block;
+  &__content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    text-align: center;
     width: 180px;
-    height: 180px;
+    transform: translate(-50%, -50%);
+    .svg-icon {
+      width: 100%;
+      height: 180px;
+      margin-bottom: 20px;
+    }
   }
 }
 </style>
