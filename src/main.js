@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 16:50:59
  * @LastEditors: astar
- * @LastEditTime: 2021-06-26 22:58:12
+ * @LastEditTime: 2021-07-06 14:54:38
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\main.js
  */
@@ -48,5 +48,9 @@ Vue.prototype.$notify = notify;
 export const vm = new Vue({
   render: h => h(App),
   router,
-  store
+  store,
+  mounted () {
+    // You'll need this for renderAfterDocumentEvent.
+    document.dispatchEvent(new Event('render-event'))
+  }
 }).$mount("#app");

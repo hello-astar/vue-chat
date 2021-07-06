@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-04-22 22:08:36
- * @LastEditTime: 2021-07-05 18:51:54
+ * @LastEditTime: 2021-07-06 16:04:30
  * @LastEditors: astar
 -->
 <template>
@@ -20,7 +20,7 @@
       <!-- <p>公告：明天不能迟到</p> -->
     </section>
     <section class="chat-info-section">
-      <div class="chat-info-section_header">群成员({{info.members.length}})</div>
+      <div class="chat-info-section_header">群成员({{info.members && info.members.length}})</div>
       <ul class="flex user-list">
         <li v-for="item in info.members" :key="item._id" @click="showUserInfo=true;currentUser=item">
           <s-avatar :src="item.avatar" shape="circle"></s-avatar>

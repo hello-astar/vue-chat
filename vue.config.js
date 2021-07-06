@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2021-06-26 21:53:40
+ * @LastEditTime: 2021-07-06 15:35:38
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -11,9 +11,11 @@ const resolve = (dir) => path.join(__dirname, dir);
 const judgeEnv = env => process.env.NODE_ENV === env;
 const IS_DEVELOPMENT = judgeEnv('development');
 // const IS_PRODUCTION = judgeEnv('production');
+const PrerenderSPAPlugin = require('prerender-spa-plugin');
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
 
 module.exports = {
-  publicPath: './',
+  publicPath: '/',
   lintOnSave: IS_DEVELOPMENT,
   productionSourceMap: false,
   devServer: {
@@ -55,7 +57,19 @@ module.exports = {
   configureWebpack: {
     externals: {
       jsEncrypt: 'JSEncrypt'
-    }
+    },
+    plugins: [
+      new PrerenderSPAPlugin({
+        staticDir: path.join(__dirname, 'dist'),
+        routes: [ '/login' ],
+        renderer: new Renderer({
+          inject: {
+            foo: 'bar'
+          },
+          renderAfterDocumentEvent: 'render-event'
+        })
+      })
+    ]
   },
   chainWebpack (config) {
     // 配置svgIcons，https://juejin.cn/post/6844903517564436493#heading-0

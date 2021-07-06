@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-24 11:33:14
  * @LastEditors: astar
- * @LastEditTime: 2021-03-31 16:39:24
+ * @LastEditTime: 2021-07-06 16:02:53
  * @Description: 汇总路由
  * @FilePath: \vue-chat\src\router\index.js
  */
@@ -26,6 +26,7 @@ export default Vue => {
   const sort = ['default', 'app', 'test', 'error'];
   Vue.use(Router);
   const router = new Router({
+    mode: 'history',
     routes: sort.reduce((all, key) => all.concat(allRoutes[key]), [])
   });
   
