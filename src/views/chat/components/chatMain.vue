@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-06 18:09:05
  * @LastEditors: astar
- * @LastEditTime: 2021-07-04 21:58:52
+ * @LastEditTime: 2021-07-06 19:29:39
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatMain.vue
 -->
@@ -76,6 +76,7 @@ export default {
      */
     initSocket () {
       this.$socket = io(baseUrl, {
+        path: baseUrl.split('/')[1] || '', // 兼容base_url
         withCredentials: true,
         extraHeaders: {
           'authorization': getAuthorization()
