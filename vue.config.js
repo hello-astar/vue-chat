@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2021-07-06 15:35:38
+ * @LastEditTime: 2021-07-06 16:20:35
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -66,7 +66,8 @@ module.exports = {
           inject: {
             foo: 'bar'
           },
-          renderAfterDocumentEvent: 'render-event'
+          renderAfterDocumentEvent: 'render-event',
+          args: ['--no-sandbox', '--disable-setuid-sandbox']
         })
       })
     ]
