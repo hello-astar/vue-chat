@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-10-13 14:39:31
  * @LastEditors: astar
- * @LastEditTime: 2021-07-04 21:08:55
+ * @LastEditTime: 2021-11-30 15:51:03
  * @Description: layout
  * @FilePath: \vue-chat\src\views\layout\index.vue
 -->
@@ -25,6 +25,9 @@
     <main class="layout-main">
       <router-view></router-view>
     </main>
+    <footer class="layout-footer">
+      备案号：<a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2021088341号</a>
+    </footer>
     <s-dialog title="退出登录" v-model="showLogoutDialog" @confirm="logout" @cancel="showLogoutDialog=false">
       真的要离开吗亲？
     </s-dialog>
@@ -88,6 +91,16 @@ export default {
   &-main {
     flex: 1;
     overflow: auto;
+  }
+  &-footer {
+    padding: 10px 2%;
+    box-shadow: rgba(255,255,255,.2)  0 1px 5px 0px;
+    text-align: center;
+    color: rgb(223, 215, 215);
+    font-size: 13px;
+    a {
+      color: rgb(223, 215, 215);
+    }
   }
 }
 </style>

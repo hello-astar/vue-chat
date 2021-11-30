@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2020-09-09 17:27:10
  * @LastEditors: astar
- * @LastEditTime: 2021-06-26 18:18:45
+ * @LastEditTime: 2021-11-30 15:18:02
  * @Description: 定义拦截器
  * @FilePath: \vue-chat\src\axios\interceptors.js
  */
@@ -18,7 +18,7 @@ const CUSTOM_CODE_MAP = {
 }
 const instance = axios.create({
   baseURL,
-  timeout: 3000,
+  timeout: 10000,
   headers: {
     'content-type': 'application/json'
   },
