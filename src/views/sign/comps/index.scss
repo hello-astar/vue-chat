@@ -1,6 +1,13 @@
 .sign-page {
   background: url('~@/assets/images/bg.jpg') no-repeat center;
   background-size: cover;
+  &__footer {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
 }
 .panel-wrapper {
   position: absolute;

@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-07-04 17:43:02
+ * @LastEditTime: 2021-11-30 16:37:35
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -22,6 +22,9 @@
       <div class="panel-container__tip" @click="linkTo">{{ mapTip }}</div>
     </div>
   </div>
+  <footer class="sign-page__footer">
+    备案号：<a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2021088341号</a>
+  </footer>
 </div>
 </template>
 <script>
