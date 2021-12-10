@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2021-12-10 22:49:25
+ * @LastEditTime: 2021-12-10 22:54:08
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -13,10 +13,9 @@ const IS_DEVELOPMENT = judgeEnv('development');
 // const IS_PRODUCTION = judgeEnv('production');
 const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
-const isProduction = process.env.NODE_ENV === 'production'
 
 module.exports = {
-  publicPath: isProduction ? './' : '/',
+  publicPath: '/',
   lintOnSave: IS_DEVELOPMENT,
   productionSourceMap: false,
   devServer: {
