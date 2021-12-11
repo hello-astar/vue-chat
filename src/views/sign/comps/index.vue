@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-11-30 16:37:35
+ * @LastEditTime: 2021-12-11 15:06:09
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -115,7 +115,7 @@ export default {
       userLoginReq(formData).then(res => {
         setToken(res.data.token);
         this.$store.commit('user/SET_USER_INFO', res.data);
-        this.$router.push('/home');
+        this.$router.push('/');
       }).catch(() => {
         this.getCaptchaImg();
       })

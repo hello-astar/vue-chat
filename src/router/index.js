@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-24 11:33:14
  * @LastEditors: astar
- * @LastEditTime: 2021-07-06 16:02:53
+ * @LastEditTime: 2021-12-11 14:59:05
  * @Description: 汇总路由
  * @FilePath: \vue-chat\src\router\index.js
  */
@@ -23,7 +23,7 @@ export default Vue => {
     all[item.default.name] = item.default.routes;
     return all;
   }, {});
-  const sort = ['default', 'app', 'test', 'error'];
+  const sort = ['default', 'test', 'error'];
   Vue.use(Router);
   const router = new Router({
     mode: 'history',

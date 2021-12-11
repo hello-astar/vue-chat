@@ -2,13 +2,13 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-07-04 19:47:45
- * @LastEditTime: 2021-07-05 17:08:18
+ * @LastEditTime: 2021-12-11 15:55:01
  * @LastEditors: astar
 -->
 <template>
   <div class="me-page">
     <main class="me-page__container">
-      <header class="header">修改个人信息</header> 
+      <header class="header">个人信息</header> 
       <s-input-cell label-width="60px" no-border label="用户名" v-model="formData.userName" type="text" placeholder="请输入用户名"></s-input-cell>
       <s-input-cell label-width="60px" no-border label="头像" type="none">
         <s-upload-img ref="pickImg" size="large" v-model="formData.avatar"></s-upload-img>
@@ -17,9 +17,17 @@
       <s-input-cell label-width="60px" no-border label="新密码" v-model="formData.newPassword" placeholder="请输入新密码" type="password"></s-input-cell>
       <s-input-cell label-width="60px" no-border label="签名" v-model="formData.signature" placeholder="请输入个性签名" type="textarea"></s-input-cell>
       <div class="footer">
-        <s-button class="footer" type="danger" @click="submit">保存</s-button>
+        <s-button type="danger" @click="submit">保存</s-button>
+        <s-button type="danger" plain @click="$router.back()">取消</s-button>
+        <s-button type="primary" @click="showLogoutDialog=true">
+          <svg-icon class="icon" icon-name="logout"></svg-icon>
+          退出登录
+        </s-button>
       </div>
     </main>
+    <s-dialog title="退出登录" v-model="showLogoutDialog" @confirm="logout" @cancel="showLogoutDialog=false">
+      真的要离开吗亲？
+    </s-dialog>
   </div>
 </template>
 <script>
@@ -27,7 +35,7 @@ import { mapGetters } from 'vuex';
 import PUBLIC_KEY from '@/config/rsaPublicKey';
 import asyncLoadJS from '@/utils/asyncLoadJS';
 import { userDetailReq, editUser } from '@/request';
-import { setToken } from '@/utils/token';
+import { setToken, removeToken } from '@/utils/token';
 
 export default {
   data () {
@@ -38,7 +46,8 @@ export default {
         oldPassword: '',
         newPassword: '',
         signature: ''
-      }
+      },
+      showLogoutDialog: false
     }
   },
   created () {
@@ -85,6 +94,10 @@ export default {
         setToken(data);
         this.$store.dispatch('user/getUserInfoByToken');
       })
+    },
+    logout () {
+      removeToken();
+      this.$router.push('/login');
     }
   },
   computed: {
@@ -97,6 +110,7 @@ export default {
   position: relative;
   height: 100%;
   overflow: auto;
+  background: #fff;
   &__container {
     position: absolute;
     left: 50%;
@@ -117,6 +131,12 @@ export default {
     .footer {
       margin: 50px 0;
       text-align: center;
+      .s-button {
+        margin: 0 10px 20px;
+      }
+      .icon {
+        width: 20px;
+      }
     }
   }
 }

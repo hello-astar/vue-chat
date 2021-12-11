@@ -2,19 +2,19 @@
  * @Author: astar
  * @Date: 2021-05-06 18:08:54
  * @LastEditors: astar
- * @LastEditTime: 2021-07-05 18:19:26
+ * @LastEditTime: 2021-12-11 15:53:39
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatAside.vue
 -->
 <template>
   <aside class="chat-aside">
     <div class="userinfo">
-      <s-avatar shape="circle" :src="userInfo.avatar" size="large" @click="$router.push('/home')"/>
+      <s-avatar shape="circle" :src="userInfo.avatar" size="large" @click="$router.push('/me')"/>
       <div class="username">
         <span>{{userInfo.userName}}</span><br>
         <span class="signature">{{userInfo.signature}}</span>
       </div>
-      <i class="iconfont icon-zhifeiji" style="float: right" @click="$router.push('/chat/detail')"></i>
+      <i class="iconfont icon-zhifeiji" style="float: right" @click="$router.push('/contactList')"></i>
     </div>
     <div class="search">
       <s-search-box v-model="formData.searchPerson"></s-search-box>

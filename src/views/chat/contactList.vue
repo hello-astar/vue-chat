@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-08 10:38:53
  * @LastEditors: astar
- * @LastEditTime: 2021-07-05 19:00:44
+ * @LastEditTime: 2021-12-11 15:08:03
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\userDetail.vue
 -->
@@ -71,7 +71,7 @@ export default {
     */
     chatWidth (item) {
       this.$router.replace({
-        name: 'chat-index',
+        name: 'chat-main',
         params: {
           receiver: {
             name: item.groupName || item.userName,
