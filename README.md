@@ -3,6 +3,8 @@
 
 [服务端项目(koa-chat)](https://github.com/hello-astar/koa-chat)
 
+[项目在线展示](https://hello-astar.asia/chat/main)
+
 # 功能
 1. 注册登录功能，使用rsa非对称加密传输用户登录注册信息至服务端，对密码进行sha256加密后存储用户信息至数据库。
 2. 聊天室在线聊天功能，基于socket.io-client实现。
