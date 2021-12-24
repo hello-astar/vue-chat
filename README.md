@@ -30,15 +30,41 @@
 1. 拉取项目
 ```
 git clone git@github.com:hello-astar/vue-chat.git
+git clone git@github.com:hello-astar/koa-chat.git
 ```
-2. 安装依赖
+2. 分别为两个项目安装依赖
 ```
 npm install
 ```
 3. 运行项目
+打开vue-chat项目位置，运行
 ```
 npm run serve
 ```
+打开koa-chat项目位置，运行
+```
+npm run dev
+```
+4. 打开https://localhost:2000
+5. 若本地调试，在登录页面获取不到图片验证码，可打开https://localhost:3001链接（接口地址），点击信任页面
 # 项目截图
+最新版
+![PC端效果图-登录页面](/doc/screenshots/pc-login.png)
+![PC端效果图-主页](/doc/screenshots/pc-main.png)
+![PC端效果图-群组](/doc/screenshots/pc-group.png)
+![PC端效果图-联系人页面](/doc/screenshots/pc-contact.png)
+![PC端效果图-个人信息编辑页面](/doc/screenshots/pc-me.png)
+![PC端效果图-404页面](/doc/screenshots/pc-404.png)
+![PC端效果图-401页面](/doc/screenshots/pc-401.png)
+![移动端效果图](/doc/screenshots/mobile-login.png)
+![移动端效果图](/doc/screenshots/mobile-main.png)
+![移动端效果图](/doc/screenshots/mobile-main2.png)
+![移动端效果图](/doc/screenshots/mobile-group.png)
+![移动端效果图](/doc/screenshots/mobile-contact.png)
+![移动端效果图](/doc/screenshots/mobile-me.png)
+![移动端效果图](/doc/screenshots/mobile-404.png)
+![移动端效果图](/doc/screenshots/mobile-401.png)
+
+旧版
 ![PC端效果图](/doc/screenshots/pc.png)
 ![移动端效果图](/doc/screenshots/mobile.png)
