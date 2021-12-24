@@ -30,23 +30,18 @@
 1. 拉取项目
 ```
 git clone git@github.com:hello-astar/vue-chat.git
-git clone git@github.com:hello-astar/koa-chat.git
 ```
-2. 分别为两个项目安装依赖
+2. 安装依赖
 ```
 npm install
 ```
 3. 运行项目
-打开vue-chat项目位置，运行
 ```
 npm run serve
 ```
-打开koa-chat项目位置，运行
-```
-npm run dev
-```
 4. 打开https://localhost:2000
-5. 若本地调试，在登录页面获取不到图片验证码，可打开https://localhost:3001链接（接口地址），点击信任页面
+5. 拉取并运行服务端项目（[服务端项目(koa-chat)](https://github.com/hello-astar/koa-chat)）
+6. 若本地调试，在登录页面获取不到图片验证码，可打开https://localhost:3001链接（接口地址），点击信任页面
 # 项目截图
 最新版
 ![PC端效果图-登录页面](/doc/screenshots/pc-login.png)
