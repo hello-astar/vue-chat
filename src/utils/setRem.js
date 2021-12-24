@@ -2,36 +2,28 @@
  * @Description: 
  * @Author: astar
  * @Date: 2020-09-16 20:07:43
- * @LastEditTime: 2021-06-17 00:10:46
+ * @LastEditTime: 2021-12-24 14:17:38
  * @LastEditors: astar
  */
 import { os } from '@/utils/browser';
 const getDpr = function () {
-  let dpr = 0;
-  // 对iOS设备进行dpr的判断，对于Android系列，始终认为其dpr为1
   let devicePixelRatio = window.devicePixelRatio;
-  
-  if(os.ios || os.android) {
-    dpr = devicePixelRatio;
-  } else {
-    dpr = 1;
-  }
-  return dpr;
+  return os.ios || os.android ? parseInt(devicePixelRatio) : 1;
 }
 
 export const getSize = function (win, doc) {
   let clientWidth = win.innerWidth // visual viewport
   || doc.documentElement.clientWidth // layout viewport
   || doc.body.clientWidth;
+  let dpr = getDpr();
   if (!clientWidth) {
     console.warn('cannot get client width');
+    return;
   }
-  let width = clientWidth;
-  let dpr = getDpr();
   return {
-    baseWidth: width >= 500 * dpr ? (width >= 1000 * dpr ? 1520 : 900) : 375,
-    clientWidth: width,
-    isLarge: width >= 500 * dpr
+    baseWidth: clientWidth >= 500 * dpr ? (clientWidth >= 1000 * dpr ? 1520 : 900) : 375,
+    clientWidth,
+    isLarge: clientWidth >= 500 * dpr
   }
 }
 export default function (doc, win) {
@@ -49,9 +41,8 @@ export default function (doc, win) {
     } else {
       metaEl.setAttribute('content', 'width=device-width, initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no');
     }
-    let fz;
     let { clientWidth, baseWidth } = getSize(win, doc);
-    fz = 100 * clientWidth / baseWidth;
+    let fz = 100 * clientWidth / baseWidth;
     docEl.style.fontSize = fz + 'px';
   };
 
