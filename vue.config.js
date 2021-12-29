@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2021-12-10 22:54:08
+ * @LastEditTime: 2021-12-29 23:27:16
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -10,12 +10,13 @@ const path = require('path');
 const resolve = (dir) => path.join(__dirname, dir);
 const judgeEnv = env => process.env.NODE_ENV === env;
 const IS_DEVELOPMENT = judgeEnv('development');
-// const IS_PRODUCTION = judgeEnv('production');
+const IS_PRODUCTION = judgeEnv('production');
 const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
-
+const publicPath = IS_PRODUCTION ? '/chat' : '/';
 module.exports = {
-  publicPath: '/',
+  publicPath,
+  outputDir: path.join(__dirname, 'dist', publicPath),
   lintOnSave: IS_DEVELOPMENT,
   productionSourceMap: false,
   devServer: {
@@ -58,10 +59,11 @@ module.exports = {
     externals: {
       jsEncrypt: 'JSEncrypt'
     },
-    plugins: [
-      new PrerenderSPAPlugin({
+    plugins: IS_PRODUCTION ? [new PrerenderSPAPlugin({
         staticDir: path.join(__dirname, 'dist'),
-        routes: [ '/login' ],
+        outputDir: path.join(__dirname, 'dist', publicPath),
+        indexPath: path.join(__dirname, 'dist', publicPath, '/index.html'),
+        routes: ['/login', '/register'],
         renderer: new Renderer({
           inject: {
             foo: 'bar'
@@ -70,7 +72,7 @@ module.exports = {
           args: ['--no-sandbox', '--disable-setuid-sandbox']
         })
       })
-    ]
+    ] : []
   },
   chainWebpack (config) {
     // 配置svgIcons，https://juejin.cn/post/6844903517564436493#heading-0
