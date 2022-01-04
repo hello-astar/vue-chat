@@ -1,3 +1,49 @@
+## [1.0.1](https://github.com/hello-astar/vue-chat/compare/v0.1.0...v1.0.1) (2022-01-04)
+
+
+### Bug Fixes
+
+* 修改nginx配置 ([a4e2c41](https://github.com/hello-astar/vue-chat/commit/a4e2c41c23f0946375880018b92cc459e01af521))
+* 移动端键盘收起留白问题 ([b018eaf](https://github.com/hello-astar/vue-chat/commit/b018eaf1c865ac32203228e98420046e13b3e857))
+* 组件报错 ([bfc09b2](https://github.com/hello-astar/vue-chat/commit/bfc09b258f8efcf58e6b2dbe7edfc8913890edf3))
+* fail to launch chrome ([909c22e](https://github.com/hello-astar/vue-chat/commit/909c22e0b06910e93efbc82d88fc18541866205d))
+* get chat history ([3f5130c](https://github.com/hello-astar/vue-chat/commit/3f5130c75d6b3c88e01369a39d4afbf895afb47c))
+* get userinfo error ([0d39e3f](https://github.com/hello-astar/vue-chat/commit/0d39e3f127a9cdb50a27f5e143fa29b7ccc3789b))
+* get userinfo error ([2ee4b95](https://github.com/hello-astar/vue-chat/commit/2ee4b95bb39449a3d4ea04f9ec50faef5eaccf97))
+* invalid url ([c6f6edf](https://github.com/hello-astar/vue-chat/commit/c6f6edf6c10ea4a2014bbb4307dac6ee4b048402))
+* ios add htmlbrelement automatically ([b9dbe75](https://github.com/hello-astar/vue-chat/commit/b9dbe75d067aeb83dbf3bbc25307b588200856d6))
+* judge sendertype ([d246908](https://github.com/hello-astar/vue-chat/commit/d2469085d58898f6852de7632140829dbeab46de))
+* socket connect ([071254c](https://github.com/hello-astar/vue-chat/commit/071254c6bd193a90f2c13da4bf362345a057463d))
+
+
+### Features
+
+* 测试环境不要api ([eb1dd85](https://github.com/hello-astar/vue-chat/commit/eb1dd859fb0066e0bd8eb59f7b3e0d2ab4a87ce7))
+* 个人信息修改 ([44a64ed](https://github.com/hello-astar/vue-chat/commit/44a64ed185bce82edd058cd457ac0578932a4b82))
+* 接口修改 ([da1f56b](https://github.com/hello-astar/vue-chat/commit/da1f56bf9c50e1b8d11b97d0ec336ca30faa12d2))
+* 解耦REQUEST_CONTACT_LIST和CHANGE_CURRENT_RECEIVER ([318bc61](https://github.com/hello-astar/vue-chat/commit/318bc61a37141297a21ef9decba6307d915376aa))
+* 连接socket ([2b195f4](https://github.com/hello-astar/vue-chat/commit/2b195f4c1ebbcc45c56855e482c48e2bc6e283b2))
+* 使用prerender-spa-plugin提升首屏渲染速度 ([4923648](https://github.com/hello-astar/vue-chat/commit/4923648d6a0282f0c25585a7881729d122f0153f))
+* 修改个人信息 ([3f9ea13](https://github.com/hello-astar/vue-chat/commit/3f9ea13fb31376ac5478ffeec93ca3295986cc8c))
+* 修改图片 ([4715e68](https://github.com/hello-astar/vue-chat/commit/4715e68cc40bc12c28131a5e46f9f51efce6ef1b))
+* 修改页面结构 ([539b0b7](https://github.com/hello-astar/vue-chat/commit/539b0b716fccbd008ed870efa74910e354bd124d))
+* 压缩首页背景 ([66f56ba](https://github.com/hello-astar/vue-chat/commit/66f56ba5df3333aec289dd0c11afb8e9330f34ad))
+* 增加个签展示 ([2976f4a](https://github.com/hello-astar/vue-chat/commit/2976f4af8588f84a6f5327af4c79a9afcb6860c4))
+* 增加个人信息页 ([f448adb](https://github.com/hello-astar/vue-chat/commit/f448adb722653c763d3ed5ed11cddbec12601396))
+* 增加meta description, seo优化 ([0ef80cc](https://github.com/hello-astar/vue-chat/commit/0ef80cc8c96a3b03845ae42221b2b279a940fbf8))
+* change production baseURL ([1bf0c96](https://github.com/hello-astar/vue-chat/commit/1bf0c9692f5262e788b6e508afaa8caca060d378))
+* fix prerender bug ([dc7e36d](https://github.com/hello-astar/vue-chat/commit/dc7e36dd90a4aaff765173d84d6ba38f4ac9501d))
+* improve readme ([4d693d2](https://github.com/hello-astar/vue-chat/commit/4d693d2a0a42e8b9da3716ac1d192047068308e4))
+* improve readme ([e68d182](https://github.com/hello-astar/vue-chat/commit/e68d1825b7c4cec42a7ba595b5fdf8a80b9adfe5))
+* improve readme ([2c3d470](https://github.com/hello-astar/vue-chat/commit/2c3d4702c72bb4f0f8ee8772c6b441c6732d61a2))
+* improve rem ([1612941](https://github.com/hello-astar/vue-chat/commit/1612941964537ede959130645314c77641034a08))
+* preload iconfont ([8a2934b](https://github.com/hello-astar/vue-chat/commit/8a2934b76dc45aff7d9ba8dc452d8eca7d846fee))
+* pwa ([ed3f90b](https://github.com/hello-astar/vue-chat/commit/ed3f90bc3c967ab3bcf011951f2d5d2edee40822))
+* set baseurl in config ([a0faf11](https://github.com/hello-astar/vue-chat/commit/a0faf11751e3598517ea8dd87cf4921161acb155))
+* socket增加path ([32549f3](https://github.com/hello-astar/vue-chat/commit/32549f3128190a9d5f184c0be66c2e18a8ac2663))
+
+
+
 # [1.0.0](https://github.com/hello-astar/vue-chat/compare/v0.1.0...v1.0.0) (2021-07-05)
 
 
