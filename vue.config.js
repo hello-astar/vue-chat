@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2021-12-29 23:27:16
+ * @LastEditTime: 2022-01-16 22:32:11
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -35,8 +35,8 @@ module.exports = {
   pwa: {
     workboxOptions: {
       // https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
-      skipWaiting: true,
-      clientsClaim: true,
+      skipWaiting: true, // 是否跳过waiting状态,激活sw
+      clientsClaim: true, // 通知让新的sw立即在页面上取得控制权
       importWorkboxFrom: 'local',
       importsDirectory: 'js',
       navigateFallback: '/',
@@ -75,6 +75,30 @@ module.exports = {
     ] : []
   },
   chainWebpack (config) {
+    IS_PRODUCTION && config.module
+      .rule('images')
+      .test(/\.(gif|png|jpe?g|svg)$/i)
+      .use('image-webpack-loader')
+      .loader('image-webpack-loader')
+      .options({
+        mozjpeg: {
+          progressive: true,
+        },
+        optipng: {
+          enabled: false,
+        },    
+        pngquant: {
+          quality: [0.65, 0.90],
+          speed: 4
+        },
+        gifsicle: {
+          interlaced: false,
+        },
+        webp: {
+          quality: 75
+        }
+      })
+      .end()
     // 配置svgIcons，https://juejin.cn/post/6844903517564436493#heading-0
     config.module
       .rule('svg')
@@ -102,7 +126,7 @@ module.exports = {
       })
       .end()
     config
-      .when(IS_DEVELOPMENT && process.env.VUE_APP_OPEN_ANALYZER === 'true', config => {
+      .when(process.env.VUE_APP_OPEN_ANALYZER, config => {
         config
           .plugin('webpack-bundle-analyzer')
           .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
