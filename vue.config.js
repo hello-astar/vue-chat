@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2022-01-16 22:32:11
+ * @LastEditTime: 2022-01-17 20:21:46
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -13,7 +13,7 @@ const IS_DEVELOPMENT = judgeEnv('development');
 const IS_PRODUCTION = judgeEnv('production');
 const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
-const publicPath = IS_PRODUCTION ? '/chat' : '/';
+const publicPath = IS_PRODUCTION ? '/chat/' : '/';
 module.exports = {
   publicPath,
   outputDir: path.join(__dirname, 'dist', publicPath),
@@ -75,30 +75,30 @@ module.exports = {
     ] : []
   },
   chainWebpack (config) {
-    IS_PRODUCTION && config.module
-      .rule('images')
-      .test(/\.(gif|png|jpe?g|svg)$/i)
-      .use('image-webpack-loader')
-      .loader('image-webpack-loader')
-      .options({
-        mozjpeg: {
-          progressive: true,
-        },
-        optipng: {
-          enabled: false,
-        },    
-        pngquant: {
-          quality: [0.65, 0.90],
-          speed: 4
-        },
-        gifsicle: {
-          interlaced: false,
-        },
-        webp: {
-          quality: 75
-        }
-      })
-      .end()
+    // IS_PRODUCTION && config.module
+    //   .rule('images')
+    //   .test(/\.(gif|png|jpe?g|svg)$/i)
+    //   .use('image-webpack-loader')
+    //   .loader('image-webpack-loader')
+    //   .options({
+    //     mozjpeg: {
+    //       progressive: true,
+    //     },
+    //     optipng: {
+    //       enabled: false,
+    //     },    
+    //     pngquant: {
+    //       quality: [0.65, 0.90],
+    //       speed: 4
+    //     },
+    //     gifsicle: {
+    //       interlaced: false,
+    //     },
+    //     webp: {
+    //       quality: 75
+    //     }
+    //   })
+    //   .end()
     // 配置svgIcons，https://juejin.cn/post/6844903517564436493#heading-0
     config.module
       .rule('svg')

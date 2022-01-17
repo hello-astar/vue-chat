@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-24 11:33:14
  * @LastEditors: astar
- * @LastEditTime: 2021-12-11 14:59:05
+ * @LastEditTime: 2022-01-17 20:23:37
  * @Description: 汇总路由
  * @FilePath: \vue-chat\src\router\index.js
  */
@@ -27,6 +27,7 @@ export default Vue => {
   Vue.use(Router);
   const router = new Router({
     mode: 'history',
+    base: process.env.BASE_URL,
     routes: sort.reduce((all, key) => all.concat(allRoutes[key]), [])
   });
   
