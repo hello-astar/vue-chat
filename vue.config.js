@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2022-01-17 20:21:46
+ * @LastEditTime: 2022-01-18 11:06:12
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -33,6 +33,13 @@ module.exports = {
     }
   },
   pwa: {
+    iconPath: {
+      favicon32: 'img/icons/icon.png',
+      favicon16: 'img/icons/icon.png',
+      appleTouchIcon: 'img/icons/icon.png',
+      maskIcon: 'img/icons/icon.png',
+      msTileImage: 'img/icons/icon.png'
+    },
     workboxOptions: {
       // https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
       skipWaiting: true, // 是否跳过waiting状态,激活sw
