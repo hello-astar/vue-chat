@@ -1,6 +1,7 @@
+@import "@/assets/styles/mixin.scss";
 .sign-page {
-  background: url('~@/assets/images/bg.jpg') no-repeat center;
   background-size: cover;
+  @include bg-filter('~@/assets/images/bg.jpg');
   &__footer {
     position: fixed;
     bottom: 10px;
