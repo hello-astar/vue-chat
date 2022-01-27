@@ -2,7 +2,7 @@
  * @Description: 上传图片
  * @Author: astar
  * @Date: 2020-09-20 18:24:39
- * @LastEditTime: 2021-07-05 00:58:51
+ * @LastEditTime: 2022-01-27 18:08:52
  * @LastEditors: astar
 -->
 <template>
@@ -81,7 +81,7 @@ export default {
       // })
       const formData = new FormData();
       formData.append('file', this.file);
-      return uploadImg(formData, { headers: { 'content-type': 'multipart/form-data' }, responseType: 'blob', emulateJSON: true });
+      return uploadImg(formData, { headers: { 'content-type': 'multipart/form-data' }, responseType: 'blob', emulateJSON: true }).then(res => res.data);
     }
   }
 }

@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2021-12-11 15:06:09
+ * @LastEditTime: 2022-01-27 18:08:21
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -12,6 +12,7 @@
     <div class="panel-container">
       <i class="panel-container__header iconfont icon-Welcome"></i>
       <div class="panel-container__input">
+        <s-upload-img ref="pickImg" size="large" class="input__cell" v-model="formData.avatar" v-if="formConfig.avatar.show"></s-upload-img>
         <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.userName" placeholder="请输入用户名" v-if="formConfig.userName.show"></s-input-cell>
         <s-input-cell type="password" autocomplete="off" class="input__cell" v-model="formData.password" placeholder="请输入密码" v-if="formConfig.password.show"></s-input-cell>
         <s-input-cell type="text" autocomplete="off" class="input__cell" v-model="formData.captcha" placeholder="请输入验证码" v-if="formConfig.captcha.show">
@@ -44,6 +45,9 @@ export default {
     }
   },
   computed: {
+    isLogin () {
+      return this.type === LOGIN
+    },
     mapTypeName () {
       return this.type === LOGIN ? '登录' : '注册'
     },
@@ -55,24 +59,37 @@ export default {
     return {
       captchaImg: '', // 验证图片
       formData: {
+        avatar: '',
         userName: '',
         password: '',
         captcha: ''
       },
       formConfig: {
+        avatar: {
+          show: this.type === REGISTER,
+          validate: value => value,
+          getValue: async () => {
+            let res = await this.$refs.pickImg.upload()
+            return res
+          },
+          msg: '请选择头像',
+        },
         userName: {
           show: true,
           validate: value => value && value.trim(),
+          getValue: value => value.trim(),
           msg: '请输入用户名'
         },
         password: {
           show: true,
           validate: value => value && value.trim(),
+          getValue: value => value.trim(),
           msg: '请输入密码'
         },
         captcha: {
           show: true,
           validate: value => value && value.trim(),
+          getValue: value => value.trim(),
           msg: '请输入验证码'
         }
       }
@@ -86,7 +103,7 @@ export default {
     getCaptchaImg () {
       this.captchaImg = `${captchaGetImg}?timer=${new Date().getTime()}`
     },
-    submit () {
+    async submit () {
       // 校验数据
       let formData = {}
       for (let key in this.formData) {
@@ -94,7 +111,7 @@ export default {
         if (this.formConfig[key].show && !this.formConfig[key].validate(this.formData[key])) {
           return this.$toast.text(this.formConfig[key].msg, 'top')
         }
-        formData[key] = this.formData[key].trim()
+        formData[key] = await this.formConfig[key].getValue(this.formData[key])
       }
       asyncLoadJS('jsEncrypt').then(() => {
         import('jsEncrypt').then(module => {
@@ -121,15 +138,12 @@ export default {
       })
     },
     register (formData) {
-      // this.$refs.avatar.upload().then(res => {
-      //   console.log(res)
-        userRegisterReq(formData).then(() => {
-          this.$toast.text('注册成功');
-          this.$router.push('/login');
-        }).catch(() => {
-          this.getCaptchaImg();
-        })
-      // });
+      userRegisterReq(formData).then(() => {
+        this.$toast.text('注册成功');
+        this.$router.push('/login');
+      }).catch(() => {
+        this.getCaptchaImg();
+      })
     }
   }
 }

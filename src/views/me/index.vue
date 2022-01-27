@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-07-04 19:47:45
- * @LastEditTime: 2021-12-11 15:55:01
+ * @LastEditTime: 2022-01-27 18:09:28
  * @LastEditors: astar
 -->
 <template>
@@ -67,7 +67,7 @@ export default {
       }
       if (this.formData.avatar !== this.userInfo.avatar) {
         let res = await this.$refs.pickImg.upload()
-        this.formData.avatar = res.data || ''
+        this.formData.avatar = res || ''
       }
       let formData = {}
       for (let key in this.formData) {
