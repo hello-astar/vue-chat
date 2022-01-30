@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-01-25 17:06:52
  * @LastEditors: astar
- * @LastEditTime: 2022-01-27 18:08:21
+ * @LastEditTime: 2022-01-30 18:36:52
  * @Description: 登录注册页面
  * @FilePath: \vue-chat\src\views\sign\comps\index.vue
 -->
@@ -32,7 +32,6 @@
 import { userRegisterReq, userLoginReq, captchaGetImg } from '@/request';
 import { setToken } from '@/utils/token';
 import PUBLIC_KEY from '@/config/rsaPublicKey';
-import asyncLoadJS from '@/utils/asyncLoadJS';
 const REGISTER = 'register'
 const LOGIN = 'login'
 
@@ -113,16 +112,11 @@ export default {
         }
         formData[key] = await this.formConfig[key].getValue(this.formData[key])
       }
-      asyncLoadJS('jsEncrypt').then(() => {
-        import('jsEncrypt').then(module => {
-          let jsEncrypt = module.default;
-          let encrypt = new jsEncrypt();
-          encrypt.setPublicKey(PUBLIC_KEY);
-          formData.password = encrypt.encrypt(formData.password);
-          this.type === LOGIN ? this.login(formData) : this.register(formData);
-        })
-      }).catch(e => {
-        console.log('js加载失败', e);
+      import('@/utils/jsencrypt.min.js').then(({ default: jsEncrypt }) => {
+        let encrypt = new jsEncrypt();
+        encrypt.setPublicKey(PUBLIC_KEY);
+        formData.password = encrypt.encrypt(formData.password);
+        this.type === LOGIN ? this.login(formData) : this.register(formData);
       })
     },
     linkTo () {

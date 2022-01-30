@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-23 10:16:42
  * @LastEditors: astar
- * @LastEditTime: 2022-01-18 11:06:12
+ * @LastEditTime: 2022-01-30 18:40:45
  * @Description: webpack配置
  * @FilePath: \vue-chat\vue.config.js
  */
@@ -63,9 +63,7 @@ module.exports = {
     }
   },
   configureWebpack: {
-    externals: {
-      jsEncrypt: 'JSEncrypt'
-    },
+    externals: {},
     plugins: IS_PRODUCTION ? [new PrerenderSPAPlugin({
         staticDir: path.join(__dirname, 'dist'),
         outputDir: path.join(__dirname, 'dist', publicPath),

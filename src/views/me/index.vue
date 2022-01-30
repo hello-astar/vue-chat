@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-07-04 19:47:45
- * @LastEditTime: 2022-01-27 18:09:28
+ * @LastEditTime: 2022-01-30 18:38:14
  * @LastEditors: astar
 -->
 <template>
@@ -33,7 +33,6 @@
 <script>
 import { mapGetters } from 'vuex';
 import PUBLIC_KEY from '@/config/rsaPublicKey';
-import asyncLoadJS from '@/utils/asyncLoadJS';
 import { userDetailReq, editUser } from '@/request';
 import { setToken, removeToken } from '@/utils/token';
 
@@ -77,9 +76,7 @@ export default {
       }
       // 修改新密码必须输入旧密码
       if (formData.oldPassword && formData.newPassword) {
-        await asyncLoadJS('jsEncrypt');
-        let module = await import('jsEncrypt')
-        let jsEncrypt = module.default;
+        let { default: jsEncrypt } = await import('@/utils/jsencrypt.min.js')
         let encrypt = new jsEncrypt();
         encrypt.setPublicKey(PUBLIC_KEY);
         formData.oldPassword = encrypt.encrypt(formData.oldPassword);

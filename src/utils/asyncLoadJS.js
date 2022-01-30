@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-02-25 18:08:42
  * @LastEditors: astar
- * @LastEditTime: 2021-03-29 15:49:47
+ * @LastEditTime: 2022-01-30 16:27:21
  * @Description: 加载js文件，返回promise
  * @FilePath: \vue-chat\src\utils\asyncLoadJS.js
  */
@@ -33,7 +33,7 @@ const loadFunc = function (key, success, fail) {
   }
   
   loadScript(target.depUrl, (res) => {
-    target.isReady = true;
+    target.isReady = res;
     res ? success(key) : fail(`模块${key}加载失败`);
     return;
   });
