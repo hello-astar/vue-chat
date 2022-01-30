@@ -1,3 +1,19 @@
+## [1.0.2](https://github.com/hello-astar/vue-chat/compare/v1.0.1...v1.0.2) (2022-01-30)
+
+
+### Bug Fixes
+
+* router base on baseurl ([814071f](https://github.com/hello-astar/vue-chat/commit/814071fdc60f48b5b5a363c6e04d7946d9b3a15a))
+
+
+### Features
+
+* 维护jsencrypt ([20bbdf7](https://github.com/hello-astar/vue-chat/commit/20bbdf7779aae731901d383a29c986ebc251de48))
+* 修改图标 ([ae21a59](https://github.com/hello-astar/vue-chat/commit/ae21a59e9c34a3de4636ded9af4303d3886e7989))
+* 注册上传头像 ([a5758d3](https://github.com/hello-astar/vue-chat/commit/a5758d36f7b895e2ab2591ea4cd45d0b7c317701))
+
+
+
 ## [1.0.1](https://github.com/hello-astar/vue-chat/compare/v0.1.0...v1.0.1) (2022-01-04)
 
 
