@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: astar
  * @Date: 2021-04-22 22:08:36
- * @LastEditTime: 2021-07-06 16:04:30
+ * @LastEditTime: 2022-01-30 19:10:01
  * @LastEditors: astar
 -->
 <template>
@@ -141,7 +141,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .chat-info {
-  position: relative;
   background: #fff;
   color: #666;
   padding: 20px;
@@ -190,10 +189,7 @@ export default {
     }
   }
   .chat-info-footer {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    text-align: center;
   }
 }
 </style>
