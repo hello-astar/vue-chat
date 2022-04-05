@@ -22,10 +22,10 @@ module.exports = {
   devServer: {
     port: 2000,
     open: false,
-    https: true,
+    // https: true,
     proxy: {
       '/test-proxy': {
-        target: 'http://192.168.22.173:3000',                                          
+        target: 'http://localhost:3000',                                          
         pathRewrite: {
           '^/test-proxy': ''
         }

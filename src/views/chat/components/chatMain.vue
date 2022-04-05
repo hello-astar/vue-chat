@@ -44,7 +44,7 @@ import { getSimpleMessageFromJSON, KINDS } from '@/utils/editor.js';
 import { getHistoryChatByCount } from '@/request';
 import eventBus from '@/views/chat/eventBus';
 import { mapGetters } from 'vuex';
-import baseUrl from '@/config';
+import baseURL from '@/config';
 
 export default {
   data () {
@@ -75,9 +75,9 @@ export default {
      * @date 2021-05-07 14:49
      */
     initSocket () {
-      let url = new URL(baseUrl);
+      const url = new URL(baseURL);
       this.$socket = io(url.origin, {
-        path: '/chat-room',
+        path: `${url.pathname}/chat-room`,
         withCredentials: true,
         extraHeaders: {
           'authorization': getAuthorization()

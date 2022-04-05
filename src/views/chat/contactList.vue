@@ -2,7 +2,7 @@
  * @Author: astar
  * @Date: 2021-05-08 10:38:53
  * @LastEditors: astar
- * @LastEditTime: 2021-12-11 15:08:03
+ * @LastEditTime: 2022-01-31 22:39:54
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\userDetail.vue
 -->
@@ -19,7 +19,7 @@
         <s-avatar class="list-item__avatar" :src="item.avatar" size="large"></s-avatar>
         <div class="list-item__info">
           <p>{{item.groupName || item.userName}}<span class="ptxt" v-if="item.members">({{item.members.length}})</span></p>
-          <p class="ptxt" v-if="item.signature">个性签名：{{item.signature}}</p>
+          <p class="ptxt" v-if="item.signature">个性签名:{{item.signature}}</p>
         </div>
       </li>
     </ul>
@@ -109,16 +109,6 @@ export default {
     &-button {
       &.active {
         font-weight: bold;
-        // position: relative;
-        // &:after {
-        //   position: absolute;
-        //   bottom: 0;
-        //   left: 10%;
-        //   content: '\20';
-        //   height: 2px;
-        //   width: 80%;
-        //   background: #110d3d;
-        // }
       }
     }
   }
@@ -128,13 +118,14 @@ export default {
     background: #fff;
     padding: 0 20px;
     .list-item {
+      display: flex;
       margin: 10px 0;
       cursor: pointer;
       &__avatar {
+        flex-shrink: 0;
         margin-right: 15px;
       }
       &__info {
-        display: inline-block;
         vertical-align: middle;
         .ptxt {
           color: #999;

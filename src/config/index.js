@@ -7,7 +7,7 @@
  */
 let baseURL = ''
 if (process.env.NODE_ENV === 'development') {
-  baseURL = 'https://localhost:3001'
+  baseURL = 'http://localhost:2000/test-proxy'
 } else {
   baseURL = 'https://hello-astar.asia/api'
 }

@@ -2,14 +2,14 @@
  * @Author: astar
  * @Date: 2021-05-06 18:08:54
  * @LastEditors: astar
- * @LastEditTime: 2021-12-11 15:53:39
+ * @LastEditTime: 2022-02-23 11:09:08
  * @Description: 文件描述
  * @FilePath: \vue-chat\src\views\chat\components\chatAside.vue
 -->
 <template>
   <aside class="chat-aside">
     <div class="userinfo">
-      <s-avatar shape="circle" :src="userInfo.avatar" size="large" @click="$router.push('/me')"/>
+      <s-avatar class="avatar" shape="circle" :src="userInfo.avatar" size="large" @click="$router.push('/me')"/>
       <div class="username">
         <span>{{userInfo.userName}}</span><br>
         <span class="signature">{{userInfo.signature}}</span>
@@ -127,12 +127,17 @@ export default {
   display: flex;
   flex-direction: column;
   .userinfo {
+    display: flex;
     color: rgb(244, 244, 244);
     padding: 10px;
+    .avatar {
+      flex-shrink: 0;
+    }
     .username {
       display: inline-block;
       margin-left: 10px;
       vertical-align: middle;
+      width: 100%;
       .signature {
         font-size: 12px;
         color: rgb(201, 197, 197);
