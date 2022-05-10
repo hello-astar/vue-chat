@@ -25,7 +25,7 @@ module.exports = {
     // https: true,
     proxy: {
       '/test-proxy': {
-        target: 'http://localhost:3000',                                          
+        target: 'http://192.168.0.100:3000',                                          
         pathRewrite: {
           '^/test-proxy': ''
         }
