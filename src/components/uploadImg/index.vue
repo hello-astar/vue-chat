@@ -62,26 +62,43 @@ export default {
       this.$refs.input.click();
     },
     change (e) {
-      const _this = this;
-      var fileReader = new FileReader();
       this.file = e.target.files[0];
-      fileReader.readAsDataURL(this.file);
-      fileReader.onload = function () {
-        _this.dataURL = this.result;
-        _this.$emit('change', this.result);
-      }
+      this.dataURL.startsWith('blob:') && URL.revokeObjectURL(this.dataURL)
+      this.dataURL = URL.createObjectURL(this.file);
+      this.$emit('change', this.dataURL);
     },
-    upload () {
-      // return qiniuTokenReq().then((res) => {
-      //   let token = res.data.token;
-      //   const formData = new FormData();
-      //   formData.append('token', token);
-      //   formData.append('file', this.file);
-      //   return qiniuUploadReq(formData);
-      // })
-      const formData = new FormData();
-      formData.append('file', this.file);
-      return uploadImg(formData, { headers: { 'content-type': 'multipart/form-data' }, responseType: 'blob', emulateJSON: true }).then(res => res.data);
+    // 切片
+    sliceToChunks (file, piece = 1024 * 1024 * 5) {
+      console.log(file)
+      let totalSize = file.size
+      let start = 0
+      let end = piece
+      let chunks = []
+      while (start < totalSize) {
+        chunks.push(file.slice(start, end))
+        start = end
+        end = end + piece
+      }
+      return chunks
+    },
+    // 分片上传
+    async upload () {
+      let file = this.file
+      let chunks = this.sliceToChunks(file)
+      let promises = []
+      for (let i = 0, len = chunks.length; i < len; i++) {
+        let formData = new FormData();
+        formData.append('total', file.size)
+        formData.append('file', chunks[i])
+        formData.append('index', i)
+        // 可以算个哈希值
+        formData.append('sign', `${file.lastModified}${file.size}.${file.name.split('.').pop()}`)
+        promises.push(uploadImg(formData, { headers: { 'content-type': 'multipart/form-data' } }).then(({ data }) => data))
+      }
+      const res = await Promise.all(promises.map(p => p.catch(e => {
+        console.log(e)
+      })));
+      return res[0];
     }
   }
 }
